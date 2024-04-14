@@ -692,8 +692,9 @@ new (0, _p5Default.default)((sketch)=>{
         sketch.pop();
         let centerX = sketch.width / 2 + quads[0].vertices[quads[0].centralIndex];
         let centerY = sketch.height / 2 + quads[0].vertices[quads[0].centralIndex + 1];
+        let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
         sketch.fill(0);
-        sketch.ellipse(quads[0].vertices[quads[0].centralIndex], quads[0].vertices[quads[0].centralIndex + 1], 36, 36);
+        sketch.ellipse(quads[0].vertices[quads[0].centralIndex], quads[0].vertices[quads[0].centralIndex + 1], pulse, pulse);
         if (sketch.dist(sketch.mouseX, sketch.mouseY, centerX, centerY) < 18) sketch.cursor(sketch.HAND);
         else sketch.cursor(sketch.ARROW);
     // sketch.push();
