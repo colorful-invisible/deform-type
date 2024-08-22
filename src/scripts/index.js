@@ -14,7 +14,6 @@ new p5((sketch) => {
   const createTexture = (char) => {
     let graphics = sketch.createGraphics(sketch.width / 2, sketch.height);
     graphics.fill(0, 106, 219);
-    // graphics.translate(0, -graphics.height / 8);
     graphics.textFont(type);
     graphics.textAlign(graphics.CENTER, graphics.CENTER);
     let fontSize = Math.min(graphics.width, graphics.height);
@@ -41,7 +40,7 @@ new p5((sketch) => {
     sketch.background(0, 106, 219);
 
     // Create textures for each character
-    const chars = ["Z", "O", "O"];
+    const chars = ["H", "I", "E", "B"];
     chars.forEach((char) => textures.push(createTexture(char)));
 
     console.log(textures);
@@ -51,6 +50,10 @@ new p5((sketch) => {
 
   sketch.draw = () => {
     sketch.background(38, 153, 0);
+    let centerX = sketch.width / 2 + quads[0].vertices[quads[0].centralIndex];
+    let centerY =
+      sketch.height / 2 + quads[0].vertices[quads[0].centralIndex + 1];
+    let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
 
     sketch.push();
     sketch.noStroke();
@@ -60,7 +63,6 @@ new p5((sketch) => {
       } else {
         sketch.noFill();
       }
-
       sketch.quad(
         quad.vertices[0],
         quad.vertices[1],
@@ -74,13 +76,7 @@ new p5((sketch) => {
     });
     sketch.pop();
 
-    let centerX = sketch.width / 2 + quads[0].vertices[quads[0].centralIndex];
-    let centerY =
-      sketch.height / 2 + quads[0].vertices[quads[0].centralIndex + 1];
-
-    let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
-
-    sketch.fill(0);
+    sketch.fill(7, 0, 40);
     sketch.ellipse(
       quads[0].vertices[quads[0].centralIndex],
       quads[0].vertices[quads[0].centralIndex + 1],

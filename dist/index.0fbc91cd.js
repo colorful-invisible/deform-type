@@ -600,7 +600,6 @@ new (0, _p5Default.default)((sketch)=>{
     const createTexture = (char)=>{
         let graphics = sketch.createGraphics(sketch.width / 2, sketch.height);
         graphics.fill(0, 106, 219);
-        // graphics.translate(0, -graphics.height / 8);
         graphics.textFont(type);
         graphics.textAlign(graphics.CENTER, graphics.CENTER);
         let fontSize = Math.min(graphics.width, graphics.height);
@@ -672,9 +671,10 @@ new (0, _p5Default.default)((sketch)=>{
         sketch.background(0, 106, 219);
         // Create textures for each character
         const chars = [
-            "Z",
-            "O",
-            "O"
+            "H",
+            "I",
+            "E",
+            "B"
         ];
         chars.forEach((char)=>textures.push(createTexture(char)));
         console.log(textures);
@@ -682,6 +682,9 @@ new (0, _p5Default.default)((sketch)=>{
     };
     sketch.draw = ()=>{
         sketch.background(38, 153, 0);
+        let centerX = sketch.width / 2 + quads[0].vertices[quads[0].centralIndex];
+        let centerY = sketch.height / 2 + quads[0].vertices[quads[0].centralIndex + 1];
+        let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
         sketch.push();
         sketch.noStroke();
         quads.forEach((quad, index)=>{
@@ -690,10 +693,7 @@ new (0, _p5Default.default)((sketch)=>{
             sketch.quad(quad.vertices[0], quad.vertices[1], quad.vertices[2], quad.vertices[3], quad.vertices[4], quad.vertices[5], quad.vertices[6], quad.vertices[7]);
         });
         sketch.pop();
-        let centerX = sketch.width / 2 + quads[0].vertices[quads[0].centralIndex];
-        let centerY = sketch.height / 2 + quads[0].vertices[quads[0].centralIndex + 1];
-        let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
-        sketch.fill(0);
+        sketch.fill(7, 0, 40);
         sketch.ellipse(quads[0].vertices[quads[0].centralIndex], quads[0].vertices[quads[0].centralIndex + 1], pulse, pulse);
         if (sketch.dist(sketch.mouseX, sketch.mouseY, centerX, centerY) < 18) sketch.cursor(sketch.HAND);
         else sketch.cursor(sketch.ARROW);
@@ -733,8 +733,8 @@ new (0, _p5Default.default)((sketch)=>{
     };
 });
 
-},{"p5":"7Uk5U","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../assets/fonts/BlackSla.otf":"gxcUo"}],"7Uk5U":[function(require,module,exports) {
-/*! p5.js v1.9.2 March 19, 2024 */ var global = arguments[3];
+},{"p5":"7Uk5U","../assets/fonts/BlackSla.otf":"gxcUo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7Uk5U":[function(require,module,exports) {
+/*! p5.js v1.10.0 July 31, 2024 */ var global = arguments[3];
 !function(e1) {
     module.exports = e1();
 }(function() {
@@ -831,7 +831,7 @@ new (0, _p5Default.default)((sketch)=>{
                         }
                         if (ArrayBuffer.isView(e1)) return u(e1);
                         if (null != e1) {
-                            if (C(e1, ArrayBuffer) || e1 && C(e1.buffer, ArrayBuffer)) {
+                            if (O(e1, ArrayBuffer) || e1 && O(e1.buffer, ArrayBuffer)) {
                                 var s = e1, o = t, i = r;
                                 if (o < 0 || s.byteLength < o) throw new RangeError('"offset" is outside of buffer bounds');
                                 if (s.byteLength < o + (i || 0)) throw new RangeError('"length" is outside of buffer bounds');
@@ -843,7 +843,7 @@ new (0, _p5Default.default)((sketch)=>{
                             var a = function(e1) {
                                 var t, r;
                                 if (d.isBuffer(e1)) return t = 0 | c(e1.length), 0 !== (r = l(t)).length && e1.copy(r, 0, 0, t), r;
-                                if (void 0 !== e1.length) return "number" != typeof e1.length || O(e1.length) ? l(0) : u(e1);
+                                if (void 0 !== e1.length) return "number" != typeof e1.length || C(e1.length) ? l(0) : u(e1);
                                 if ("Buffer" === e1.type && Array.isArray(e1.data)) return u(e1.data);
                             }(e1);
                             if (a) return a;
@@ -868,7 +868,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     function h(e1, t) {
                         if (d.isBuffer(e1)) return e1.length;
-                        if (ArrayBuffer.isView(e1) || C(e1, ArrayBuffer)) return e1.byteLength;
+                        if (ArrayBuffer.isView(e1) || O(e1, ArrayBuffer)) return e1.byteLength;
                         if ("string" != typeof e1) throw new TypeError('The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type ' + typeof e1);
                         var r = e1.length, o = 2 < arguments.length && !0 === arguments[2];
                         if (!o && 0 === r) return 0;
@@ -920,12 +920,12 @@ new (0, _p5Default.default)((sketch)=>{
                                 for(var v = i; v < y; ++v)g += String.fromCharCode(m[v]);
                                 return g;
                             case "base64":
-                                return b = this, o = r, 0 === (_ = t) && o === b.length ? S.fromByteArray(b) : S.fromByteArray(b.slice(_, o));
+                                return b = this, o = r, 0 === (j = t) && o === b.length ? S.fromByteArray(b) : S.fromByteArray(b.slice(j, o));
                             case "ucs2":
                             case "ucs-2":
                             case "utf16le":
                             case "utf-16le":
-                                for(var b = t, _ = r, j = this.slice(b, _), x = "", w = 0; w < j.length; w += 2)x += String.fromCharCode(j[w] + 256 * j[w + 1]);
+                                for(var b = t, j = r, _ = this.slice(b, j), x = "", w = 0; w < _.length; w += 2)x += String.fromCharCode(_[w] + 256 * _[w + 1]);
                                 return x;
                             default:
                                 if (n) throw new TypeError("Unknown encoding: " + e1);
@@ -938,7 +938,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     function f(e1, t, r, o, n) {
                         if (0 === e1.length) return -1;
-                        if ("string" == typeof r ? (o = r, r = 0) : 2147483647 < r ? r = 2147483647 : r < -2147483648 && (r = -2147483648), (r = (r = O(r = +r) ? n ? 0 : e1.length - 1 : r) < 0 ? e1.length + r : r) >= e1.length) {
+                        if ("string" == typeof r ? (o = r, r = 0) : 2147483647 < r ? r = 2147483647 : r < -2147483648 && (r = -2147483648), (r = (r = C(r = +r) ? n ? 0 : e1.length - 1 : r) < 0 ? e1.length + r : r) >= e1.length) {
                             if (n) return -1;
                             r = e1.length - 1;
                         } else if (r < 0) {
@@ -1039,7 +1039,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }, d.allocUnsafe = i, d.allocUnsafeSlow = i, d.isBuffer = function(e1) {
                         return null != e1 && !0 === e1._isBuffer && e1 !== d.prototype;
                     }, d.compare = function(e1, t) {
-                        if (C(e1, Uint8Array) && (e1 = d.from(e1, e1.offset, e1.byteLength)), C(t, Uint8Array) && (t = d.from(t, t.offset, t.byteLength)), !d.isBuffer(e1) || !d.isBuffer(t)) throw new TypeError('The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array');
+                        if (O(e1, Uint8Array) && (e1 = d.from(e1, e1.offset, e1.byteLength)), O(t, Uint8Array) && (t = d.from(t, t.offset, t.byteLength)), !d.isBuffer(e1) || !d.isBuffer(t)) throw new TypeError('The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array');
                         if (e1 === t) return 0;
                         for(var r = e1.length, o = t.length, n = 0, s = Math.min(r, o); n < s; ++n)if (e1[n] !== t[n]) {
                             r = e1[n], o = t[n];
@@ -1069,7 +1069,7 @@ new (0, _p5Default.default)((sketch)=>{
                         if (void 0 === t) for(n = t = 0; n < e1.length; ++n)t += e1[n].length;
                         for(var r = d.allocUnsafe(t), o = 0, n = 0; n < e1.length; ++n){
                             var s = e1[n];
-                            if (C(s, Uint8Array) && (s = d.from(s)), !d.isBuffer(s)) throw new TypeError('"list" argument must be an Array of Buffers');
+                            if (O(s, Uint8Array) && (s = d.from(s)), !d.isBuffer(s)) throw new TypeError('"list" argument must be an Array of Buffers');
                             s.copy(r, o), o += s.length;
                         }
                         return r;
@@ -1098,7 +1098,7 @@ new (0, _p5Default.default)((sketch)=>{
                         var e1 = "", t = L.INSPECT_MAX_BYTES, e1 = this.toString("hex", 0, t).replace(/(.{2})/g, "$1 ").trim();
                         return this.length > t && (e1 += " ... "), "<Buffer " + e1 + ">";
                     }, e1 && (d.prototype[e1] = d.prototype.inspect), d.prototype.compare = function(e1, t, r, o, n) {
-                        if (C(e1, Uint8Array) && (e1 = d.from(e1, e1.offset, e1.byteLength)), !d.isBuffer(e1)) throw new TypeError('The "target" argument must be one of type Buffer or Uint8Array. Received type ' + typeof e1);
+                        if (O(e1, Uint8Array) && (e1 = d.from(e1, e1.offset, e1.byteLength)), !d.isBuffer(e1)) throw new TypeError('The "target" argument must be one of type Buffer or Uint8Array. Received type ' + typeof e1);
                         if (void 0 === r && (r = e1 ? e1.length : 0), void 0 === o && (o = 0), void 0 === n && (n = this.length), (t = void 0 === t ? 0 : t) < 0 || r > e1.length || o < 0 || n > this.length) throw new RangeError("out of range index");
                         if (n <= o && r <= t) return 0;
                         if (n <= o) return -1;
@@ -1131,7 +1131,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 (!h || f < (h = Number(h))) && (h = f), (f = c.length) / 2 < h && (h = f / 2);
                                 for(var p = 0; p < h; ++p){
                                     var m = parseInt(c.substr(2 * p, 2), 16);
-                                    if (O(m)) return p;
+                                    if (C(m)) return p;
                                     u[d + p] = m;
                                 }
                                 return p;
@@ -1170,15 +1170,15 @@ new (0, _p5Default.default)((sketch)=>{
                         if (n < t || t < s) throw new RangeError('"value" argument is out of bounds');
                         if (r + o > e1.length) throw new RangeError("Index out of range");
                     }
-                    function _(e1, t, r, o) {
+                    function j(e1, t, r, o) {
                         if (r + o > e1.length) throw new RangeError("Index out of range");
                         if (r < 0) throw new RangeError("Index out of range");
                     }
-                    function j(e1, t, r, o, n) {
-                        return t = +t, r >>>= 0, n || _(e1, 0, r, 4), s.write(e1, t, r, o, 23, 4), r + 4;
+                    function _(e1, t, r, o, n) {
+                        return t = +t, r >>>= 0, n || j(e1, 0, r, 4), s.write(e1, t, r, o, 23, 4), r + 4;
                     }
                     function x(e1, t, r, o, n) {
-                        return t = +t, r >>>= 0, n || _(e1, 0, r, 8), s.write(e1, t, r, o, 52, 8), r + 8;
+                        return t = +t, r >>>= 0, n || j(e1, 0, r, 8), s.write(e1, t, r, o, 52, 8), r + 8;
                     }
                     d.prototype.slice = function(e1, t) {
                         var r = this.length, r = ((e1 = ~~e1) < 0 ? (e1 += r) < 0 && (e1 = 0) : r < e1 && (e1 = r), (t = void 0 === t ? r : ~~t) < 0 ? (t += r) < 0 && (t = 0) : r < t && (t = r), t < e1 && (t = e1), this.subarray(e1, t));
@@ -1272,9 +1272,9 @@ new (0, _p5Default.default)((sketch)=>{
                     }, d.prototype.writeInt32BE = function(e1, t, r) {
                         return e1 = +e1, t >>>= 0, r || b(this, e1, t, 4, 2147483647, -2147483648), this[t] = (e1 = e1 < 0 ? 4294967295 + e1 + 1 : e1) >>> 24, this[t + 1] = e1 >>> 16, this[t + 2] = e1 >>> 8, this[t + 3] = 255 & e1, t + 4;
                     }, d.prototype.writeFloatLE = function(e1, t, r) {
-                        return j(this, e1, t, !0, r);
+                        return _(this, e1, t, !0, r);
                     }, d.prototype.writeFloatBE = function(e1, t, r) {
-                        return j(this, e1, t, !1, r);
+                        return _(this, e1, t, !1, r);
                     }, d.prototype.writeDoubleLE = function(e1, t, r) {
                         return x(this, e1, t, !0, r);
                     }, d.prototype.writeDoubleBE = function(e1, t, r) {
@@ -1362,10 +1362,10 @@ new (0, _p5Default.default)((sketch)=>{
                         for(var n = 0; n < o && !(n + r >= t.length || n >= e1.length); ++n)t[n + r] = e1[n];
                         return n;
                     }
-                    function C(e1, t) {
+                    function O(e1, t) {
                         return e1 instanceof t || null != e1 && null != e1.constructor && null != e1.constructor.name && e1.constructor.name === t.name;
                     }
-                    function O(e1) {
+                    function C(e1) {
                         return e1 != e1;
                     }
                     var A = function() {
@@ -1377,7 +1377,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "base64-js": 1,
                 buffer: 4,
-                ieee754: 251
+                ieee754: 254
             }
         ],
         5: [
@@ -1414,7 +1414,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/object-create": 91,
                 "../internals/object-define-property": 93,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         8: [
@@ -1426,7 +1426,7 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/string-multibyte": 124
+                "../internals/string-multibyte": 125
             }
         ],
         9: [
@@ -1462,7 +1462,7 @@ new (0, _p5Default.default)((sketch)=>{
                 function o(e1) {
                     return l(e1) && u(E, c(e1));
                 }
-                var n, s = e1("../internals/array-buffer-native"), i = e1("../internals/descriptors"), a = e1("../internals/global"), l = e1("../internals/is-object"), u = e1("../internals/has"), c = e1("../internals/classof"), d = e1("../internals/create-non-enumerable-property"), h = e1("../internals/redefine"), f = e1("../internals/object-define-property").f, p = e1("../internals/object-get-prototype-of"), m = e1("../internals/object-set-prototype-of"), y = e1("../internals/well-known-symbol"), e1 = e1("../internals/uid"), g = a.Int8Array, v = g && g.prototype, b = a.Uint8ClampedArray, b = b && b.prototype, _ = g && p(g), j = v && p(v), x = Object.prototype, w = x.isPrototypeOf, y = y("toStringTag"), S = e1("TYPED_ARRAY_TAG"), T = s && !!m && "Opera" !== c(a.opera), e1 = !1, E = {
+                var n, s = e1("../internals/array-buffer-native"), i = e1("../internals/descriptors"), a = e1("../internals/global"), l = e1("../internals/is-object"), u = e1("../internals/has"), c = e1("../internals/classof"), d = e1("../internals/create-non-enumerable-property"), h = e1("../internals/redefine"), f = e1("../internals/object-define-property").f, p = e1("../internals/object-get-prototype-of"), m = e1("../internals/object-set-prototype-of"), y = e1("../internals/well-known-symbol"), e1 = e1("../internals/uid"), g = a.Int8Array, v = g && g.prototype, b = a.Uint8ClampedArray, b = b && b.prototype, j = g && p(g), _ = v && p(v), x = Object.prototype, w = x.isPrototypeOf, y = y("toStringTag"), S = e1("TYPED_ARRAY_TAG"), T = s && !!m && "Opera" !== c(a.opera), e1 = !1, E = {
                     Int8Array: 1,
                     Uint8Array: 1,
                     Uint8ClampedArray: 1,
@@ -1474,11 +1474,11 @@ new (0, _p5Default.default)((sketch)=>{
                     Float64Array: 8
                 };
                 for(n in E)a[n] || (T = !1);
-                if ((!T || "function" != typeof _ || _ === Function.prototype) && (_ = function() {
+                if ((!T || "function" != typeof j || j === Function.prototype) && (j = function() {
                     throw TypeError("Incorrect invocation");
-                }, T)) for(n in E)a[n] && m(a[n], _);
-                if ((!T || !j || j === x) && (j = _.prototype, T)) for(n in E)a[n] && m(a[n].prototype, j);
-                if (T && p(b) !== j && m(b, j), i && !u(j, y)) for(n in e1 = !0, f(j, y, {
+                }, T)) for(n in E)a[n] && m(a[n], j);
+                if ((!T || !_ || _ === x) && (_ = j.prototype, T)) for(n in E)a[n] && m(a[n].prototype, _);
+                if (T && p(b) !== _ && m(b, _), i && !u(_, y)) for(n in e1 = !0, f(_, y, {
                     get: function() {
                         return l(this) ? this[S] : void 0;
                     }
@@ -1492,7 +1492,7 @@ new (0, _p5Default.default)((sketch)=>{
                     },
                     aTypedArrayConstructor: function(e1) {
                         if (m) {
-                            if (w.call(_, e1)) return e1;
+                            if (w.call(j, e1)) return e1;
                         } else for(var t in E)if (u(E, n)) {
                             t = a[t];
                             if (t && (e1 === t || w.call(t, e1))) return e1;
@@ -1505,7 +1505,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 o = a[o];
                                 o && u(o.prototype, e1) && delete o.prototype[e1];
                             }
-                            j[e1] && !r || h(j, e1, !r && T && v[e1] || t);
+                            _[e1] && !r || h(_, e1, !r && T && v[e1] || t);
                         }
                     },
                     exportTypedArrayStaticMethod: function(e1, t, r) {
@@ -1513,9 +1513,9 @@ new (0, _p5Default.default)((sketch)=>{
                         if (i) {
                             if (m) {
                                 if (r) for(o in E)(n = a[o]) && u(n, e1) && delete n[e1];
-                                if (_[e1] && !r) return;
+                                if (j[e1] && !r) return;
                                 try {
-                                    return h(_, e1, !r && T && g[e1] || t);
+                                    return h(j, e1, !r && T && g[e1] || t);
                                 } catch (e1) {}
                             }
                             for(o in E)!(n = a[o]) || n[e1] && !r || h(n, e1, t);
@@ -1526,8 +1526,8 @@ new (0, _p5Default.default)((sketch)=>{
                         return "DataView" === e1 || u(E, e1);
                     },
                     isTypedArray: o,
-                    TypedArray: _,
-                    TypedArrayPrototype: j
+                    TypedArray: j,
+                    TypedArrayPrototype: _
                 };
             },
             {
@@ -1541,9 +1541,9 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-define-property": 93,
                 "../internals/object-get-prototype-of": 98,
                 "../internals/object-set-prototype-of": 102,
-                "../internals/redefine": 109,
-                "../internals/uid": 146,
-                "../internals/well-known-symbol": 149
+                "../internals/redefine": 110,
+                "../internals/uid": 147,
+                "../internals/well-known-symbol": 150
             }
         ],
         13: [
@@ -1572,10 +1572,10 @@ new (0, _p5Default.default)((sketch)=>{
                     return e1[3] << 24 | e1[2] << 16 | e1[1] << 8 | e1[0];
                 }
                 function i(e1) {
-                    return O(e1, 23, 4);
+                    return C(e1, 23, 4);
                 }
                 function F(e1) {
-                    return O(e1, 52, 8);
+                    return C(e1, 52, 8);
                 }
                 function a(e1, t) {
                     H(e1[w], t, {
@@ -1585,22 +1585,22 @@ new (0, _p5Default.default)((sketch)=>{
                     });
                 }
                 function l(e1, t, r, o) {
-                    if (r = m(r), e1 = b(e1), r + t > e1.byteLength) throw C(S);
+                    if (r = m(r), e1 = b(e1), r + t > e1.byteLength) throw O(S);
                     var n = b(e1.buffer).bytes, r = r + e1.byteOffset, e1 = n.slice(r, r + t);
                     return o ? e1 : e1.reverse();
                 }
                 function u(e1, t, r, o, n, s) {
-                    if (r = m(r), e1 = b(e1), r + t > e1.byteLength) throw C(S);
+                    if (r = m(r), e1 = b(e1), r + t > e1.byteLength) throw O(S);
                     for(var i = b(e1.buffer).bytes, a = r + e1.byteOffset, l = o(+n), u = 0; u < t; u++)i[a + u] = l[s ? u : t - u - 1];
                 }
-                var c = e1("../internals/global"), d = e1("../internals/descriptors"), U = e1("../internals/array-buffer-native"), N = e1("../internals/create-non-enumerable-property"), h = e1("../internals/redefine-all"), f = e1("../internals/fails"), p = e1("../internals/an-instance"), B = e1("../internals/to-integer"), G = e1("../internals/to-length"), m = e1("../internals/to-index"), y = e1("../internals/ieee754"), V = e1("../internals/object-get-prototype-of"), g = e1("../internals/object-set-prototype-of"), z = e1("../internals/object-get-own-property-names").f, H = e1("../internals/object-define-property").f, W = e1("../internals/array-fill"), v = e1("../internals/set-to-string-tag"), e1 = e1("../internals/internal-state"), b = e1.get, _ = e1.set, j = "ArrayBuffer", x = "DataView", w = "prototype", S = "Wrong index", T = c[j], E = T, M = c[x], e1 = M && M[w], k = Object.prototype, C = c.RangeError, O = y.pack, A = y.unpack;
+                var c = e1("../internals/global"), d = e1("../internals/descriptors"), U = e1("../internals/array-buffer-native"), N = e1("../internals/create-non-enumerable-property"), h = e1("../internals/redefine-all"), f = e1("../internals/fails"), p = e1("../internals/an-instance"), B = e1("../internals/to-integer"), G = e1("../internals/to-length"), m = e1("../internals/to-index"), y = e1("../internals/ieee754"), V = e1("../internals/object-get-prototype-of"), g = e1("../internals/object-set-prototype-of"), z = e1("../internals/object-get-own-property-names").f, H = e1("../internals/object-define-property").f, W = e1("../internals/array-fill"), v = e1("../internals/set-to-string-tag"), e1 = e1("../internals/internal-state"), b = e1.get, j = e1.set, _ = "ArrayBuffer", x = "DataView", w = "prototype", S = "Wrong index", T = c[_], E = T, M = c[x], e1 = M && M[w], k = Object.prototype, O = c.RangeError, C = y.pack, A = y.unpack;
                 if (U) {
                     if (!f(function() {
                         T(1);
                     }) || !f(function() {
                         new T(-1);
                     }) || f(function() {
-                        return new T, new T(1.5), new T(NaN), T.name != j;
+                        return new T, new T(1.5), new T(NaN), T.name != _;
                     })) {
                         for(var P, c = (E = function(e1) {
                             return p(this, E), new T(m(e1));
@@ -1620,18 +1620,18 @@ new (0, _p5Default.default)((sketch)=>{
                         unsafe: !0
                     });
                 } else E = function(e1) {
-                    p(this, E, j);
+                    p(this, E, _);
                     e1 = m(e1);
-                    _(this, {
+                    j(this, {
                         bytes: W.call(new Array(e1), 0),
                         byteLength: e1
                     }), d || (this.byteLength = e1);
                 }, M = function(e1, t, r) {
                     p(this, M, x), p(e1, E, x);
                     var o = b(e1).byteLength, t = B(t);
-                    if (t < 0 || o < t) throw C("Wrong offset");
-                    if (o < t + (r = void 0 === r ? o - t : G(r))) throw C("Wrong length");
-                    _(this, {
+                    if (t < 0 || o < t) throw O("Wrong offset");
+                    if (o < t + (r = void 0 === r ? o - t : G(r))) throw O("Wrong length");
+                    j(this, {
                         buffer: e1,
                         byteLength: r,
                         byteOffset: t
@@ -1688,7 +1688,7 @@ new (0, _p5Default.default)((sketch)=>{
                         u(this, 8, e1, F, t, 2 < arguments.length ? arguments[2] : void 0);
                     }
                 });
-                v(E, j), v(M, x), t.exports = {
+                v(E, _), v(M, x), t.exports = {
                     ArrayBuffer: E,
                     DataView: M
                 };
@@ -1707,11 +1707,11 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-own-property-names": 96,
                 "../internals/object-get-prototype-of": 98,
                 "../internals/object-set-prototype-of": 102,
-                "../internals/redefine-all": 108,
-                "../internals/set-to-string-tag": 118,
-                "../internals/to-index": 134,
-                "../internals/to-integer": 136,
-                "../internals/to-length": 137
+                "../internals/redefine-all": 109,
+                "../internals/set-to-string-tag": 119,
+                "../internals/to-index": 135,
+                "../internals/to-integer": 137,
+                "../internals/to-length": 138
             }
         ],
         14: [
@@ -1725,9 +1725,9 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-absolute-index": 133,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-absolute-index": 134,
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
         15: [
@@ -1740,9 +1740,9 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-absolute-index": 133,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-absolute-index": 134,
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
         16: [
@@ -1779,8 +1779,8 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/function-bind-context": 55,
                 "../internals/get-iterator-method": 58,
                 "../internals/is-array-iterator-method": 72,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
         18: [
@@ -1801,9 +1801,9 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-absolute-index": 133,
-                "../internals/to-indexed-object": 135,
-                "../internals/to-length": 137
+                "../internals/to-absolute-index": 134,
+                "../internals/to-indexed-object": 136,
+                "../internals/to-length": 138
             }
         ],
         19: [
@@ -1811,7 +1811,7 @@ new (0, _p5Default.default)((sketch)=>{
                 function o(h) {
                     var f = 1 == h, p = 2 == h, m = 3 == h, y = 4 == h, g = 6 == h, v = 5 == h || g;
                     return function(e1, t, r, o) {
-                        for(var n, s, i = j(e1), a = _(i), l = b(t, r, 3), u = x(a.length), c = 0, t = o || w, d = f ? t(e1, u) : p ? t(e1, 0) : void 0; c < u; c++)if ((v || c in a) && (s = l(n = a[c], c, i), h)) {
+                        for(var n, s, i = _(e1), a = j(i), l = b(t, r, 3), u = x(a.length), c = 0, t = o || w, d = f ? t(e1, u) : p ? t(e1, 0) : void 0; c < u; c++)if ((v || c in a) && (s = l(n = a[c], c, i), h)) {
                             if (f) d[c] = s;
                             else if (s) switch(h){
                                 case 3:
@@ -1828,7 +1828,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return g ? -1 : m || y ? y : d;
                     };
                 }
-                var b = e1("../internals/function-bind-context"), _ = e1("../internals/indexed-object"), j = e1("../internals/to-object"), x = e1("../internals/to-length"), w = e1("../internals/array-species-create"), S = [].push;
+                var b = e1("../internals/function-bind-context"), j = e1("../internals/indexed-object"), _ = e1("../internals/to-object"), x = e1("../internals/to-length"), w = e1("../internals/array-species-create"), S = [].push;
                 t.exports = {
                     forEach: o(0),
                     map: o(1),
@@ -1843,8 +1843,8 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-species-create": 25,
                 "../internals/function-bind-context": 55,
                 "../internals/indexed-object": 67,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
         20: [
@@ -1866,9 +1866,9 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/array-method-is-strict": 22,
                 "../internals/array-method-uses-to-length": 23,
-                "../internals/to-indexed-object": 135,
-                "../internals/to-integer": 136,
-                "../internals/to-length": 137
+                "../internals/to-indexed-object": 136,
+                "../internals/to-integer": 137,
+                "../internals/to-length": 138
             }
         ],
         21: [
@@ -1888,7 +1888,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/engine-v8-version": 48,
                 "../internals/fails": 51,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         22: [
@@ -1960,8 +1960,8 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/a-function": 5,
                 "../internals/indexed-object": 67,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
         25: [
@@ -1975,7 +1975,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/is-array": 73,
                 "../internals/is-object": 75,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         26: [
@@ -2033,7 +2033,7 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         28: [
@@ -2061,8 +2061,8 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/classof-raw": 28,
-                "../internals/to-string-tag-support": 142,
-                "../internals/well-known-symbol": 149
+                "../internals/to-string-tag-support": 143,
+                "../internals/well-known-symbol": 150
             }
         ],
         30: [
@@ -2171,8 +2171,8 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/iterate": 78,
                 "../internals/object-create": 91,
                 "../internals/object-define-property": 93,
-                "../internals/redefine-all": 108,
-                "../internals/set-species": 117
+                "../internals/redefine-all": 109,
+                "../internals/set-species": 118
             }
         ],
         31: [
@@ -2258,13 +2258,13 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/internal-state": 71,
                 "../internals/is-object": 75,
                 "../internals/iterate": 78,
-                "../internals/redefine-all": 108
+                "../internals/redefine-all": 109
             }
         ],
         32: [
             function(e1, t, r) {
                 "use strict";
-                var y = e1("../internals/export"), g = e1("../internals/global"), v = e1("../internals/is-forced"), b = e1("../internals/redefine"), _ = e1("../internals/internal-metadata"), j = e1("../internals/iterate"), x = e1("../internals/an-instance"), w = e1("../internals/is-object"), S = e1("../internals/fails"), T = e1("../internals/check-correctness-of-iteration"), E = e1("../internals/set-to-string-tag"), M = e1("../internals/inherit-if-required");
+                var y = e1("../internals/export"), g = e1("../internals/global"), v = e1("../internals/is-forced"), b = e1("../internals/redefine"), j = e1("../internals/internal-metadata"), _ = e1("../internals/iterate"), x = e1("../internals/an-instance"), w = e1("../internals/is-object"), S = e1("../internals/fails"), T = e1("../internals/check-correctness-of-iteration"), E = e1("../internals/set-to-string-tag"), M = e1("../internals/inherit-if-required");
                 t.exports = function(r, e1, t) {
                     function o(e1) {
                         var r = f[e1];
@@ -2283,7 +2283,7 @@ new (0, _p5Default.default)((sketch)=>{
                     var n, s, i, a, l, u = -1 !== r.indexOf("Map"), c = -1 !== r.indexOf("Weak"), d = u ? "set" : "add", h = g[r], f = h && h.prototype, p = h, m = {};
                     return v(r, "function" != typeof h || !(c || f.forEach && !S(function() {
                         (new h).entries().next();
-                    }))) ? (p = t.getConstructor(e1, r, u, d), _.REQUIRED = !0) : v(r, !0) && (s = (n = new p)[d](c ? {} : -0, 1) != n, i = S(function() {
+                    }))) ? (p = t.getConstructor(e1, r, u, d), j.REQUIRED = !0) : v(r, !0) && (s = (n = new p)[d](c ? {} : -0, 1) != n, i = S(function() {
                         n.has(1);
                     }), a = T(function(e1) {
                         new h(e1);
@@ -2293,7 +2293,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }), a || (((p = e1(function(e1, t) {
                         x(e1, p, r);
                         e1 = M(new h, e1, p);
-                        return null != t && j(t, e1[d], e1, u), e1;
+                        return null != t && _(t, e1[d], e1, u), e1;
                     })).prototype = f).constructor = p), (i || l) && (o("delete"), o("has"), u && o("get")), (l || s) && o(d), c && f.clear && delete f.clear), m[r] = p, y({
                         global: !0,
                         forced: p != h
@@ -2311,8 +2311,8 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/is-forced": 74,
                 "../internals/is-object": 75,
                 "../internals/iterate": 78,
-                "../internals/redefine": 109,
-                "../internals/set-to-string-tag": 118
+                "../internals/redefine": 110,
+                "../internals/set-to-string-tag": 119
             }
         ],
         33: [
@@ -2329,7 +2329,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/has": 61,
                 "../internals/object-define-property": 93,
                 "../internals/object-get-own-property-descriptor": 94,
-                "../internals/own-keys": 104
+                "../internals/own-keys": 105
             }
         ],
         34: [
@@ -2348,7 +2348,7 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         35: [
@@ -2372,7 +2372,7 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/require-object-coercible": 114
+                "../internals/require-object-coercible": 115
             }
         ],
         37: [
@@ -2394,7 +2394,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/iterators": 80,
                 "../internals/iterators-core": 79,
                 "../internals/object-create": 91,
-                "../internals/set-to-string-tag": 118
+                "../internals/set-to-string-tag": 119
             }
         ],
         38: [
@@ -2437,7 +2437,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/create-property-descriptor": 39,
                 "../internals/object-define-property": 93,
-                "../internals/to-primitive": 141
+                "../internals/to-primitive": 142
             }
         ],
         41: [
@@ -2446,7 +2446,7 @@ new (0, _p5Default.default)((sketch)=>{
                 function m() {
                     return this;
                 }
-                var y = e1("../internals/export"), g = e1("../internals/create-iterator-constructor"), v = e1("../internals/object-get-prototype-of"), b = e1("../internals/object-set-prototype-of"), _ = e1("../internals/set-to-string-tag"), j = e1("../internals/create-non-enumerable-property"), x = e1("../internals/redefine"), o = e1("../internals/well-known-symbol"), w = e1("../internals/is-pure"), S = e1("../internals/iterators"), e1 = e1("../internals/iterators-core"), T = e1.IteratorPrototype, E = e1.BUGGY_SAFARI_ITERATORS, M = o("iterator"), k = "values", C = "entries";
+                var y = e1("../internals/export"), g = e1("../internals/create-iterator-constructor"), v = e1("../internals/object-get-prototype-of"), b = e1("../internals/object-set-prototype-of"), j = e1("../internals/set-to-string-tag"), _ = e1("../internals/create-non-enumerable-property"), x = e1("../internals/redefine"), o = e1("../internals/well-known-symbol"), w = e1("../internals/is-pure"), S = e1("../internals/iterators"), e1 = e1("../internals/iterators-core"), T = e1.IteratorPrototype, E = e1.BUGGY_SAFARI_ITERATORS, M = o("iterator"), k = "values", O = "entries";
                 t.exports = function(e1, t, r, o, n, s, i) {
                     g(r, t, o);
                     function a(e1) {
@@ -2455,7 +2455,7 @@ new (0, _p5Default.default)((sketch)=>{
                         switch(e1){
                             case "keys":
                             case k:
-                            case C:
+                            case O:
                                 return function() {
                                     return new r(this, e1);
                                 };
@@ -2465,13 +2465,13 @@ new (0, _p5Default.default)((sketch)=>{
                         };
                     }
                     var l, u, o = t + " Iterator", c = !1, d = e1.prototype, h = d[M] || d["@@iterator"] || n && d[n], f = !E && h || a(n), p = "Array" == t && d.entries || h;
-                    if (p && (p = v(p.call(new e1)), T !== Object.prototype && p.next && (w || v(p) === T || (b ? b(p, T) : "function" != typeof p[M] && j(p, M, m)), _(p, o, !0, !0), w && (S[o] = m))), n == k && h && h.name !== k && (c = !0, f = function() {
+                    if (p && (p = v(p.call(new e1)), T !== Object.prototype && p.next && (w || v(p) === T || (b ? b(p, T) : "function" != typeof p[M] && _(p, M, m)), j(p, o, !0, !0), w && (S[o] = m))), n == k && h && h.name !== k && (c = !0, f = function() {
                         return h.call(this);
-                    }), w && !i || d[M] === f || j(d, M, f), S[t] = f, n) {
+                    }), w && !i || d[M] === f || _(d, M, f), S[t] = f, n) {
                         if (l = {
                             values: a(k),
                             keys: s ? f : a("keys"),
-                            entries: a(C)
+                            entries: a(O)
                         }, i) for(u in l)!E && !c && u in d || x(d, u, l[u]);
                         else y({
                             target: t,
@@ -2491,9 +2491,9 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/iterators-core": 79,
                 "../internals/object-get-prototype-of": 98,
                 "../internals/object-set-prototype-of": 102,
-                "../internals/redefine": 109,
-                "../internals/set-to-string-tag": 118,
-                "../internals/well-known-symbol": 149
+                "../internals/redefine": 110,
+                "../internals/set-to-string-tag": 119,
+                "../internals/well-known-symbol": 150
             }
         ],
         42: [
@@ -2509,8 +2509,8 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/has": 61,
                 "../internals/object-define-property": 93,
-                "../internals/path": 105,
-                "../internals/well-known-symbol-wrapped": 148
+                "../internals/path": 106,
+                "../internals/well-known-symbol-wrapped": 149
             }
         ],
         43: [
@@ -2640,8 +2640,8 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60,
                 "../internals/is-forced": 74,
                 "../internals/object-get-own-property-descriptor": 94,
-                "../internals/redefine": 109,
-                "../internals/set-global": 116
+                "../internals/redefine": 110,
+                "../internals/set-global": 117
             }
         ],
         51: [
@@ -2713,10 +2713,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/create-non-enumerable-property": 38,
                 "../internals/fails": 51,
-                "../internals/redefine": 109,
-                "../internals/regexp-exec": 111,
-                "../internals/well-known-symbol": 149,
-                "../modules/es.regexp.exec": 192
+                "../internals/redefine": 110,
+                "../internals/regexp-exec": 112,
+                "../internals/well-known-symbol": 150,
+                "../modules/es.regexp.exec": 195
             }
         ],
         53: [
@@ -2742,7 +2742,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/function-bind-context": 55,
                 "../internals/is-array": 73,
-                "../internals/to-length": 137
+                "../internals/to-length": 138
             }
         ],
         54: [
@@ -2825,7 +2825,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/global": 60,
-                "../internals/path": 105
+                "../internals/path": 106
             }
         ],
         58: [
@@ -2838,7 +2838,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/classof": 29,
                 "../internals/iterators": 80,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         59: [
@@ -2978,7 +2978,7 @@ new (0, _p5Default.default)((sketch)=>{
                 }), t.exports = e1.inspectSource;
             },
             {
-                "../internals/shared-store": 120
+                "../internals/shared-store": 121
             }
         ],
         70: [
@@ -3024,7 +3024,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/hidden-keys": 62,
                 "../internals/is-object": 75,
                 "../internals/object-define-property": 93,
-                "../internals/uid": 146
+                "../internals/uid": 147
             }
         ],
         71: [
@@ -3064,7 +3064,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/hidden-keys": 62,
                 "../internals/is-object": 75,
                 "../internals/native-weak-map": 86,
-                "../internals/shared-key": 119
+                "../internals/shared-key": 120
             }
         ],
         72: [
@@ -3076,7 +3076,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/iterators": 80,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         73: [
@@ -3129,7 +3129,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/classof-raw": 28,
                 "../internals/is-object": 75,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         78: [
@@ -3161,7 +3161,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/function-bind-context": 55,
                 "../internals/get-iterator-method": 58,
                 "../internals/is-array-iterator-method": 72,
-                "../internals/to-length": 137
+                "../internals/to-length": 138
             }
         ],
         79: [
@@ -3180,7 +3180,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/has": 61,
                 "../internals/is-pure": 76,
                 "../internals/object-get-prototype-of": 98,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         80: [
@@ -3234,7 +3234,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/engine-is-ios": 46,
                 "../internals/global": 60,
                 "../internals/object-get-own-property-descriptor": 94,
-                "../internals/task": 131
+                "../internals/task": 132
             }
         ],
         83: [
@@ -3270,7 +3270,7 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/fails": 51,
                 "../internals/is-pure": 76,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
         86: [
@@ -3358,7 +3358,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-own-property-symbols": 97,
                 "../internals/object-keys": 100,
                 "../internals/object-property-is-enumerable": 101,
-                "../internals/to-object": 138
+                "../internals/to-object": 139
             }
         ],
         91: [
@@ -3386,7 +3386,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/hidden-keys": 62,
                 "../internals/html": 64,
                 "../internals/object-define-properties": 92,
-                "../internals/shared-key": 119
+                "../internals/shared-key": 120
             }
         ],
         92: [
@@ -3420,7 +3420,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/an-object": 10,
                 "../internals/descriptors": 43,
                 "../internals/ie8-dom-define": 65,
-                "../internals/to-primitive": 141
+                "../internals/to-primitive": 142
             }
         ],
         94: [
@@ -3439,8 +3439,8 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/has": 61,
                 "../internals/ie8-dom-define": 65,
                 "../internals/object-property-is-enumerable": 101,
-                "../internals/to-indexed-object": 135,
-                "../internals/to-primitive": 141
+                "../internals/to-indexed-object": 136,
+                "../internals/to-primitive": 142
             }
         ],
         95: [
@@ -3457,7 +3457,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/object-get-own-property-names": 96,
-                "../internals/to-indexed-object": 135
+                "../internals/to-indexed-object": 136
             }
         ],
         96: [
@@ -3488,8 +3488,8 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/correct-prototype-getter": 35,
                 "../internals/has": 61,
-                "../internals/shared-key": 119,
-                "../internals/to-object": 138
+                "../internals/shared-key": 120,
+                "../internals/to-object": 139
             }
         ],
         99: [
@@ -3506,7 +3506,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-includes": 18,
                 "../internals/has": 61,
                 "../internals/hidden-keys": 62,
-                "../internals/to-indexed-object": 135
+                "../internals/to-indexed-object": 136
             }
         ],
         100: [
@@ -3554,6 +3554,30 @@ new (0, _p5Default.default)((sketch)=>{
         ],
         103: [
             function(e1, t, r) {
+                function o(a) {
+                    return function(e1) {
+                        for(var t, r = c(e1), o = u(r), n = o.length, s = 0, i = []; s < n;)t = o[s++], l && !d.call(r, t) || i.push(a ? [
+                            t,
+                            r[t]
+                        ] : r[t]);
+                        return i;
+                    };
+                }
+                var l = e1("../internals/descriptors"), u = e1("../internals/object-keys"), c = e1("../internals/to-indexed-object"), d = e1("../internals/object-property-is-enumerable").f;
+                t.exports = {
+                    entries: o(!0),
+                    values: o(!1)
+                };
+            },
+            {
+                "../internals/descriptors": 43,
+                "../internals/object-keys": 100,
+                "../internals/object-property-is-enumerable": 101,
+                "../internals/to-indexed-object": 136
+            }
+        ],
+        104: [
+            function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/to-string-tag-support"), n = e1("../internals/classof");
                 t.exports = o ? ({}).toString : function() {
@@ -3562,10 +3586,10 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/classof": 29,
-                "../internals/to-string-tag-support": 142
+                "../internals/to-string-tag-support": 143
             }
         ],
-        104: [
+        105: [
             function(e1, t, r) {
                 var o = e1("../internals/get-built-in"), n = e1("../internals/object-get-own-property-names"), s = e1("../internals/object-get-own-property-symbols"), i = e1("../internals/an-object");
                 t.exports = o("Reflect", "ownKeys") || function(e1) {
@@ -3580,7 +3604,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-own-property-symbols": 97
             }
         ],
-        105: [
+        106: [
             function(e1, t, r) {
                 e1 = e1("../internals/global");
                 t.exports = e1;
@@ -3589,7 +3613,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60
             }
         ],
-        106: [
+        107: [
             function(e1, t, r) {
                 t.exports = function(e1) {
                     try {
@@ -3607,7 +3631,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        107: [
+        108: [
             function(e1, t, r) {
                 var o = e1("../internals/an-object"), n = e1("../internals/is-object"), s = e1("../internals/new-promise-capability");
                 t.exports = function(e1, t) {
@@ -3620,7 +3644,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/new-promise-capability": 87
             }
         ],
-        108: [
+        109: [
             function(e1, t, r) {
                 var n = e1("../internals/redefine");
                 t.exports = function(e1, t, r) {
@@ -3629,10 +3653,10 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/redefine": 109
+                "../internals/redefine": 110
             }
         ],
-        109: [
+        110: [
             function(e1, t, r) {
                 var i = e1("../internals/global"), a = e1("../internals/create-non-enumerable-property"), l = e1("../internals/has"), u = e1("../internals/set-global"), o = e1("../internals/inspect-source"), e1 = e1("../internals/internal-state"), n = e1.get, c = e1.enforce, d = String(String).split("String");
                 (t.exports = function(e1, t, r, o) {
@@ -3648,10 +3672,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/has": 61,
                 "../internals/inspect-source": 69,
                 "../internals/internal-state": 71,
-                "../internals/set-global": 116
+                "../internals/set-global": 117
             }
         ],
-        110: [
+        111: [
             function(e1, t, r) {
                 var o = e1("./classof-raw"), n = e1("./regexp-exec");
                 t.exports = function(e1, t) {
@@ -3667,10 +3691,10 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "./classof-raw": 28,
-                "./regexp-exec": 111
+                "./regexp-exec": 112
             }
         ],
-        111: [
+        112: [
             function(e1, t, r) {
                 "use strict";
                 var o, n, d = e1("./regexp-flags"), e1 = e1("./regexp-sticky-helpers"), h = RegExp.prototype.exec, f = String.prototype.replace, s = h, p = (o = /a/, n = /b*/g, h.call(o, "a"), h.call(n, "a"), 0 !== o.lastIndex || 0 !== n.lastIndex), m = e1.UNSUPPORTED_Y || e1.BROKEN_CARET, y = void 0 !== /()??/.exec("")[1];
@@ -3682,11 +3706,11 @@ new (0, _p5Default.default)((sketch)=>{
                 } : s;
             },
             {
-                "./regexp-flags": 112,
-                "./regexp-sticky-helpers": 113
+                "./regexp-flags": 113,
+                "./regexp-sticky-helpers": 114
             }
         ],
-        112: [
+        113: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/an-object");
@@ -3699,7 +3723,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/an-object": 10
             }
         ],
-        113: [
+        114: [
             function(e1, t, r) {
                 "use strict";
                 e1 = e1("./fails");
@@ -3718,7 +3742,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "./fails": 51
             }
         ],
-        114: [
+        115: [
             function(e1, t, r) {
                 t.exports = function(e1) {
                     if (null == e1) throw TypeError("Can't call method on " + e1);
@@ -3727,7 +3751,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        115: [
+        116: [
             function(e1, t, r) {
                 t.exports = Object.is || function(e1, t) {
                     return e1 === t ? 0 !== e1 || 1 / e1 == 1 / t : e1 != e1 && t != t;
@@ -3735,7 +3759,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        116: [
+        117: [
             function(e1, t, r) {
                 var o = e1("../internals/global"), n = e1("../internals/create-non-enumerable-property");
                 t.exports = function(t, r) {
@@ -3752,7 +3776,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60
             }
         ],
-        117: [
+        118: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/get-built-in"), n = e1("../internals/object-define-property"), s = e1("../internals/well-known-symbol"), i = e1("../internals/descriptors"), a = s("species");
@@ -3770,10 +3794,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/descriptors": 43,
                 "../internals/get-built-in": 57,
                 "../internals/object-define-property": 93,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
-        118: [
+        119: [
             function(e1, t, r) {
                 var o = e1("../internals/object-define-property").f, n = e1("../internals/has"), s = e1("../internals/well-known-symbol")("toStringTag");
                 t.exports = function(e1, t, r) {
@@ -3786,10 +3810,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/has": 61,
                 "../internals/object-define-property": 93,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
-        119: [
+        120: [
             function(e1, t, r) {
                 var o = e1("../internals/shared"), n = e1("../internals/uid"), s = o("keys");
                 t.exports = function(e1) {
@@ -3797,21 +3821,21 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/shared": 121,
-                "../internals/uid": 146
+                "../internals/shared": 122,
+                "../internals/uid": 147
             }
         ],
-        120: [
+        121: [
             function(e1, t, r) {
                 var o = e1("../internals/global"), e1 = e1("../internals/set-global"), n = "__core-js_shared__", o = o[n] || e1(n, {});
                 t.exports = o;
             },
             {
                 "../internals/global": 60,
-                "../internals/set-global": 116
+                "../internals/set-global": 117
             }
         ],
-        121: [
+        122: [
             function(e1, t, r) {
                 var o = e1("../internals/is-pure"), n = e1("../internals/shared-store");
                 (t.exports = function(e1, t) {
@@ -3824,10 +3848,10 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/is-pure": 76,
-                "../internals/shared-store": 120
+                "../internals/shared-store": 121
             }
         ],
-        122: [
+        123: [
             function(e1, t, r) {
                 var o = e1("../internals/an-object"), n = e1("../internals/a-function"), s = e1("../internals/well-known-symbol")("species");
                 t.exports = function(e1, t) {
@@ -3838,10 +3862,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/a-function": 5,
                 "../internals/an-object": 10,
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
-        123: [
+        124: [
             function(e1, t, r) {
                 var o = e1("../internals/fails");
                 t.exports = function(t) {
@@ -3855,7 +3879,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/fails": 51
             }
         ],
-        124: [
+        125: [
             function(e1, t, r) {
                 function o(n) {
                     return function(e1, t) {
@@ -3870,11 +3894,11 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/require-object-coercible": 114,
-                "../internals/to-integer": 136
+                "../internals/require-object-coercible": 115,
+                "../internals/to-integer": 137
             }
         ],
-        125: [
+        126: [
             function(e1, t, r) {
                 e1 = e1("../internals/engine-user-agent");
                 t.exports = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(e1);
@@ -3883,7 +3907,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/engine-user-agent": 47
             }
         ],
-        126: [
+        127: [
             function(e1, t, r) {
                 function o(n) {
                     return function(e1, t, r) {
@@ -3898,12 +3922,12 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/require-object-coercible": 114,
-                "../internals/string-repeat": 128,
-                "../internals/to-length": 137
+                "../internals/require-object-coercible": 115,
+                "../internals/string-repeat": 129,
+                "../internals/to-length": 138
             }
         ],
-        127: [
+        128: [
             function(e1, t, r) {
                 "use strict";
                 function g(e1) {
@@ -3927,15 +3951,15 @@ new (0, _p5Default.default)((sketch)=>{
                             if ((t = e1[c]) < n && ++s > v) throw RangeError(w);
                             if (t == n) {
                                 for(var h = s, f = b;; f += b){
-                                    var p = f <= i ? 1 : i + _ <= f ? _ : f - i;
+                                    var p = f <= i ? 1 : i + j <= f ? j : f - i;
                                     if (h < p) break;
                                     var m = h - p, y = b - p;
                                     r.push(E(g(p + m % y))), h = T(m / y);
                                 }
                                 r.push(E(g(h))), i = function(e1, t, r) {
                                     var o = 0;
-                                    for(e1 = r ? T(e1 / x) : e1 >> 1, e1 += T(e1 / t); S * _ >> 1 < e1; o += b)e1 = T(e1 / S);
-                                    return T(o + (S + 1) * e1 / (e1 + j));
+                                    for(e1 = r ? T(e1 / x) : e1 >> 1, e1 += T(e1 / t); S * j >> 1 < e1; o += b)e1 = T(e1 / S);
+                                    return T(o + (S + 1) * e1 / (e1 + _));
                                 }(s, d, l == a), s = 0, ++l;
                             }
                         }
@@ -3943,7 +3967,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     return r.join("");
                 }
-                var v = 2147483647, b = 36, _ = 26, j = 38, x = 700, i = /[^\0-\u007E]/, a = /[.\u3002\uFF0E\uFF61]/g, w = "Overflow: input needs wider integers to process", S = b - 1, T = Math.floor, E = String.fromCharCode;
+                var v = 2147483647, b = 36, j = 26, _ = 38, x = 700, i = /[^\0-\u007E]/, a = /[.\u3002\uFF0E\uFF61]/g, w = "Overflow: input needs wider integers to process", S = b - 1, T = Math.floor, E = String.fromCharCode;
                 t.exports = function(e1) {
                     for(var t, r = [], o = e1.toLowerCase().replace(a, ".").split("."), n = 0; n < o.length; n++)t = o[n], r.push(i.test(t) ? "xn--" + s(t) : t);
                     return r.join(".");
@@ -3951,7 +3975,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        128: [
+        129: [
             function(e1, t, r) {
                 "use strict";
                 var n = e1("../internals/to-integer"), s = e1("../internals/require-object-coercible");
@@ -3963,11 +3987,11 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/require-object-coercible": 114,
-                "../internals/to-integer": 136
+                "../internals/require-object-coercible": 115,
+                "../internals/to-integer": 137
             }
         ],
-        129: [
+        130: [
             function(e1, t, r) {
                 var o = e1("../internals/fails"), n = e1("../internals/whitespaces");
                 t.exports = function(e1) {
@@ -3978,10 +4002,10 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/fails": 51,
-                "../internals/whitespaces": 150
+                "../internals/whitespaces": 151
             }
         ],
-        130: [
+        131: [
             function(e1, t, r) {
                 function o(t) {
                     return function(e1) {
@@ -3997,11 +4021,11 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/require-object-coercible": 114,
-                "../internals/whitespaces": 150
+                "../internals/require-object-coercible": 115,
+                "../internals/whitespaces": 151
             }
         ],
-        131: [
+        132: [
             function(e1, t, r) {
                 function o(e1) {
                     return function() {
@@ -4014,23 +4038,23 @@ new (0, _p5Default.default)((sketch)=>{
                 function s(e1) {
                     a.postMessage(e1 + "", f.protocol + "//" + f.host);
                 }
-                var i, a = e1("../internals/global"), l = e1("../internals/fails"), u = e1("../internals/classof-raw"), c = e1("../internals/function-bind-context"), d = e1("../internals/html"), h = e1("../internals/document-create-element"), e1 = e1("../internals/engine-is-ios"), f = a.location, p = a.setImmediate, m = a.clearImmediate, y = a.process, g = a.MessageChannel, v = a.Dispatch, b = 0, _ = {}, j = "onreadystatechange", x = function(e1) {
+                var i, a = e1("../internals/global"), l = e1("../internals/fails"), u = e1("../internals/classof-raw"), c = e1("../internals/function-bind-context"), d = e1("../internals/html"), h = e1("../internals/document-create-element"), e1 = e1("../internals/engine-is-ios"), f = a.location, p = a.setImmediate, m = a.clearImmediate, y = a.process, g = a.MessageChannel, v = a.Dispatch, b = 0, j = {}, _ = "onreadystatechange", x = function(e1) {
                     var t;
-                    _.hasOwnProperty(e1) && (t = _[e1], delete _[e1], t());
+                    j.hasOwnProperty(e1) && (t = j[e1], delete j[e1], t());
                 };
                 p && m || (p = function(e1) {
                     for(var t = [], r = 1; r < arguments.length;)t.push(arguments[r++]);
-                    return _[++b] = function() {
+                    return j[++b] = function() {
                         ("function" == typeof e1 ? e1 : Function(e1)).apply(void 0, t);
                     }, i(b), b;
                 }, m = function(e1) {
-                    delete _[e1];
+                    delete j[e1];
                 }, "process" == u(y) ? i = function(e1) {
                     y.nextTick(o(e1));
                 } : v && v.now ? i = function(e1) {
                     v.now(o(e1));
-                } : g && !e1 ? (e1 = (u = new g).port2, u.port1.onmessage = n, i = c(e1.postMessage, e1, 1)) : !a.addEventListener || "function" != typeof postMessage || a.importScripts || l(s) || "file:" === f.protocol ? i = j in h("script") ? function(e1) {
-                    d.appendChild(h("script"))[j] = function() {
+                } : g && !e1 ? (e1 = (u = new g).port2, u.port1.onmessage = n, i = c(e1.postMessage, e1, 1)) : !a.addEventListener || "function" != typeof postMessage || a.importScripts || l(s) || "file:" === f.protocol ? i = _ in h("script") ? function(e1) {
+                    d.appendChild(h("script"))[_] = function() {
                         d.removeChild(this), x(e1);
                     };
                 } : function(e1) {
@@ -4050,7 +4074,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/html": 64
             }
         ],
-        132: [
+        133: [
             function(e1, t, r) {
                 var o = e1("../internals/classof-raw");
                 t.exports = function(e1) {
@@ -4062,7 +4086,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/classof-raw": 28
             }
         ],
-        133: [
+        134: [
             function(e1, t, r) {
                 var o = e1("../internals/to-integer"), n = Math.max, s = Math.min;
                 t.exports = function(e1, t) {
@@ -4071,10 +4095,10 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-integer": 136
+                "../internals/to-integer": 137
             }
         ],
-        134: [
+        135: [
             function(e1, t, r) {
                 var o = e1("../internals/to-integer"), n = e1("../internals/to-length");
                 t.exports = function(e1) {
@@ -4085,11 +4109,11 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-integer": 136,
-                "../internals/to-length": 137
+                "../internals/to-integer": 137,
+                "../internals/to-length": 138
             }
         ],
-        135: [
+        136: [
             function(e1, t, r) {
                 var o = e1("../internals/indexed-object"), n = e1("../internals/require-object-coercible");
                 t.exports = function(e1) {
@@ -4098,10 +4122,10 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/indexed-object": 67,
-                "../internals/require-object-coercible": 114
+                "../internals/require-object-coercible": 115
             }
         ],
-        136: [
+        137: [
             function(e1, t, r) {
                 var o = Math.ceil, n = Math.floor;
                 t.exports = function(e1) {
@@ -4110,7 +4134,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        137: [
+        138: [
             function(e1, t, r) {
                 var o = e1("../internals/to-integer"), n = Math.min;
                 t.exports = function(e1) {
@@ -4118,10 +4142,10 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-integer": 136
+                "../internals/to-integer": 137
             }
         ],
-        138: [
+        139: [
             function(e1, t, r) {
                 var o = e1("../internals/require-object-coercible");
                 t.exports = function(e1) {
@@ -4129,10 +4153,10 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/require-object-coercible": 114
+                "../internals/require-object-coercible": 115
             }
         ],
-        139: [
+        140: [
             function(e1, t, r) {
                 var o = e1("../internals/to-positive-integer");
                 t.exports = function(e1, t) {
@@ -4142,10 +4166,10 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-positive-integer": 140
+                "../internals/to-positive-integer": 141
             }
         ],
-        140: [
+        141: [
             function(e1, t, r) {
                 var o = e1("../internals/to-integer");
                 t.exports = function(e1) {
@@ -4155,10 +4179,10 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../internals/to-integer": 136
+                "../internals/to-integer": 137
             }
         ],
-        141: [
+        142: [
             function(e1, t, r) {
                 var n = e1("../internals/is-object");
                 t.exports = function(e1, t) {
@@ -4172,16 +4196,16 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/is-object": 75
             }
         ],
-        142: [
+        143: [
             function(e1, t, r) {
                 var o = {};
                 o[e1("../internals/well-known-symbol")("toStringTag")] = "z", t.exports = "[object z]" === String(o);
             },
             {
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
-        143: [
+        144: [
             function(e1, t, D) {
                 "use strict";
                 function f(e1, t) {
@@ -4207,11 +4231,11 @@ new (0, _p5Default.default)((sketch)=>{
                 function s(e1, t, r) {
                     return !(o(e1, t = d(t, !0)) && b(r) && h(r, "value")) || h(r, "get") || h(r, "set") || r.configurable || h(r, "writable") && !r.writable || h(r, "enumerable") && !r.enumerable ? E(e1, t, r) : (e1[t] = r.value, e1);
                 }
-                var a = e1("../internals/export"), l = e1("../internals/global"), i = e1("../internals/descriptors"), F = e1("../internals/typed-array-constructors-require-wrappers"), u = e1("../internals/array-buffer-view-core"), c = e1("../internals/array-buffer"), m = e1("../internals/an-instance"), U = e1("../internals/create-property-descriptor"), y = e1("../internals/create-non-enumerable-property"), N = e1("../internals/to-length"), g = e1("../internals/to-index"), v = e1("../internals/to-offset"), d = e1("../internals/to-primitive"), h = e1("../internals/has"), B = e1("../internals/classof"), b = e1("../internals/is-object"), G = e1("../internals/object-create"), _ = e1("../internals/object-set-prototype-of"), V = e1("../internals/object-get-own-property-names").f, j = e1("../internals/typed-array-from"), z = e1("../internals/array-iteration").forEach, H = e1("../internals/set-species"), x = e1("../internals/object-define-property"), w = e1("../internals/object-get-own-property-descriptor"), S = e1("../internals/internal-state"), W = e1("../internals/inherit-if-required"), T = S.get, q = S.set, E = x.f, X = w.f, Y = Math.round, M = l.RangeError, k = c.ArrayBuffer, Z = c.DataView, C = u.NATIVE_ARRAY_BUFFER_VIEWS, O = u.TYPED_ARRAY_TAG, A = u.TypedArray, P = u.TypedArrayPrototype, Q = u.aTypedArrayConstructor, L = u.isTypedArray, R = "BYTES_PER_ELEMENT", I = "Wrong length";
-                i ? (C || (w.f = n, x.f = s, r(P, "buffer"), r(P, "byteOffset"), r(P, "byteLength"), r(P, "length")), a({
+                var a = e1("../internals/export"), l = e1("../internals/global"), i = e1("../internals/descriptors"), F = e1("../internals/typed-array-constructors-require-wrappers"), u = e1("../internals/array-buffer-view-core"), c = e1("../internals/array-buffer"), m = e1("../internals/an-instance"), U = e1("../internals/create-property-descriptor"), y = e1("../internals/create-non-enumerable-property"), N = e1("../internals/to-length"), g = e1("../internals/to-index"), v = e1("../internals/to-offset"), d = e1("../internals/to-primitive"), h = e1("../internals/has"), B = e1("../internals/classof"), b = e1("../internals/is-object"), G = e1("../internals/object-create"), j = e1("../internals/object-set-prototype-of"), V = e1("../internals/object-get-own-property-names").f, _ = e1("../internals/typed-array-from"), z = e1("../internals/array-iteration").forEach, H = e1("../internals/set-species"), x = e1("../internals/object-define-property"), w = e1("../internals/object-get-own-property-descriptor"), S = e1("../internals/internal-state"), W = e1("../internals/inherit-if-required"), T = S.get, q = S.set, E = x.f, X = w.f, Y = Math.round, M = l.RangeError, k = c.ArrayBuffer, Z = c.DataView, O = u.NATIVE_ARRAY_BUFFER_VIEWS, C = u.TYPED_ARRAY_TAG, A = u.TypedArray, P = u.TypedArrayPrototype, Q = u.aTypedArrayConstructor, L = u.isTypedArray, R = "BYTES_PER_ELEMENT", I = "Wrong length";
+                i ? (O || (w.f = n, x.f = s, r(P, "buffer"), r(P, "byteOffset"), r(P, "byteLength"), r(P, "length")), a({
                     target: "Object",
                     stat: !0,
-                    forced: !C
+                    forced: !O
                 }, {
                     getOwnPropertyDescriptor: n,
                     defineProperty: s
@@ -4230,15 +4254,15 @@ new (0, _p5Default.default)((sketch)=>{
                         });
                     }
                     var c = e1.match(/\d+$/)[0] / 8, d = e1 + (n ? "Clamped" : "") + "Array", r = "get" + e1, s = "set" + e1, i = l[d], h = i, e1 = h && h.prototype, o = {};
-                    C ? F && (h = t(function(e1, t, r, o) {
-                        return m(e1, h, d), W(b(t) ? p(t) ? void 0 !== o ? new i(t, v(r, c), o) : void 0 !== r ? new i(t, v(r, c)) : new i(t) : L(t) ? f(h, t) : j.call(h, t) : new i(g(t)), e1, h);
-                    }), _ && _(h, A), z(V(i), function(e1) {
+                    O ? F && (h = t(function(e1, t, r, o) {
+                        return m(e1, h, d), W(b(t) ? p(t) ? void 0 !== o ? new i(t, v(r, c), o) : void 0 !== r ? new i(t, v(r, c)) : new i(t) : L(t) ? f(h, t) : _.call(h, t) : new i(g(t)), e1, h);
+                    }), j && j(h, A), z(V(i), function(e1) {
                         e1 in h || y(h, e1, i[e1]);
                     }), h.prototype = e1) : (h = t(function(e1, t, r, o) {
                         m(e1, h, d);
                         var n, s, i = 0, a = 0;
                         if (b(t)) {
-                            if (!p(t)) return L(t) ? f(h, t) : j.call(h, t);
+                            if (!p(t)) return L(t) ? f(h, t) : _.call(h, t);
                             var l = t, a = v(r, c), r = t.byteLength;
                             if (void 0 === o) {
                                 if (r % c) throw M(I);
@@ -4253,10 +4277,10 @@ new (0, _p5Default.default)((sketch)=>{
                             length: s,
                             view: new Z(l)
                         }); i < s;)u(e1, i++);
-                    }), _ && _(h, A), e1 = h.prototype = G(P)), e1.constructor !== h && y(e1, "constructor", h), O && y(e1, O, d), o[d] = h, a({
+                    }), j && j(h, A), e1 = h.prototype = G(P)), e1.constructor !== h && y(e1, "constructor", h), C && y(e1, C, d), o[d] = h, a({
                         global: !0,
                         forced: h != i,
-                        sham: !C
+                        sham: !O
                     }, o), R in h || y(h, R, c), R in e1 || y(e1, R, c), H(d);
                 }) : t.exports = function() {};
             },
@@ -4280,16 +4304,16 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-own-property-descriptor": 94,
                 "../internals/object-get-own-property-names": 96,
                 "../internals/object-set-prototype-of": 102,
-                "../internals/set-species": 117,
-                "../internals/to-index": 134,
-                "../internals/to-length": 137,
-                "../internals/to-offset": 139,
-                "../internals/to-primitive": 141,
-                "../internals/typed-array-constructors-require-wrappers": 144,
-                "../internals/typed-array-from": 145
+                "../internals/set-species": 118,
+                "../internals/to-index": 135,
+                "../internals/to-length": 138,
+                "../internals/to-offset": 140,
+                "../internals/to-primitive": 142,
+                "../internals/typed-array-constructors-require-wrappers": 145,
+                "../internals/typed-array-from": 146
             }
         ],
-        144: [
+        145: [
             function(e1, t, r) {
                 var o = e1("../internals/global"), n = e1("../internals/fails"), s = e1("../internals/check-correctness-of-iteration"), e1 = e1("../internals/array-buffer-view-core").NATIVE_ARRAY_BUFFER_VIEWS, i = o.ArrayBuffer, a = o.Int8Array;
                 t.exports = !e1 || !n(function() {
@@ -4309,7 +4333,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60
             }
         ],
-        145: [
+        146: [
             function(e1, t, r) {
                 var h = e1("../internals/to-object"), f = e1("../internals/to-length"), p = e1("../internals/get-iterator-method"), m = e1("../internals/is-array-iterator-method"), y = e1("../internals/function-bind-context"), g = e1("../internals/array-buffer-view-core").aTypedArrayConstructor;
                 t.exports = function(e1) {
@@ -4324,11 +4348,11 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/function-bind-context": 55,
                 "../internals/get-iterator-method": 58,
                 "../internals/is-array-iterator-method": 72,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
-        146: [
+        147: [
             function(e1, t, r) {
                 var o = 0, n = Math.random();
                 t.exports = function(e1) {
@@ -4337,7 +4361,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        147: [
+        148: [
             function(e1, t, r) {
                 e1 = e1("../internals/native-symbol");
                 t.exports = e1 && !Symbol.sham && "symbol" == typeof Symbol.iterator;
@@ -4346,16 +4370,16 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/native-symbol": 84
             }
         ],
-        148: [
+        149: [
             function(e1, t, r) {
                 e1 = e1("../internals/well-known-symbol");
                 r.f = e1;
             },
             {
-                "../internals/well-known-symbol": 149
+                "../internals/well-known-symbol": 150
             }
         ],
-        149: [
+        150: [
             function(e1, t, r) {
                 var o = e1("../internals/global"), n = e1("../internals/shared"), s = e1("../internals/has"), i = e1("../internals/uid"), a = e1("../internals/native-symbol"), e1 = e1("../internals/use-symbol-as-uid"), l = n("wks"), u = o.Symbol, c = e1 ? u : u && u.withoutSetter || i;
                 t.exports = function(e1) {
@@ -4366,18 +4390,18 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60,
                 "../internals/has": 61,
                 "../internals/native-symbol": 84,
-                "../internals/shared": 121,
-                "../internals/uid": 146,
-                "../internals/use-symbol-as-uid": 147
+                "../internals/shared": 122,
+                "../internals/uid": 147,
+                "../internals/use-symbol-as-uid": 148
             }
         ],
-        150: [
+        151: [
             function(e1, t, r) {
                 t.exports = "	\n\v\f\r \xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF";
             },
             {}
         ],
-        151: [
+        152: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/global"), s = e1("../internals/array-buffer"), e1 = e1("../internals/set-species"), i = "ArrayBuffer", s = s[i];
@@ -4392,10 +4416,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-buffer": 13,
                 "../internals/export": 50,
                 "../internals/global": 60,
-                "../internals/set-species": 117
+                "../internals/set-species": 118
             }
         ],
-        152: [
+        153: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/fails"), d = e1("../internals/is-array"), h = e1("../internals/is-object"), f = e1("../internals/to-object"), p = e1("../internals/to-length"), m = e1("../internals/create-property"), y = e1("../internals/array-species-create"), s = e1("../internals/array-method-has-species-support"), i = e1("../internals/well-known-symbol"), e1 = e1("../internals/engine-v8-version"), g = i("isConcatSpreadable"), v = 9007199254740991, b = "Maximum allowed index exceeded", i = 51 <= e1 || !n(function() {
@@ -4428,12 +4452,12 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/fails": 51,
                 "../internals/is-array": 73,
                 "../internals/is-object": 75,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138,
-                "../internals/well-known-symbol": 149
+                "../internals/to-length": 138,
+                "../internals/to-object": 139,
+                "../internals/well-known-symbol": 150
             }
         ],
-        153: [
+        154: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/array-copy-within"), e1 = e1("../internals/add-to-unscopables");
                 o({
@@ -4449,7 +4473,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        154: [
+        155: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-iteration").every, s = e1("../internals/array-method-is-strict"), e1 = e1("../internals/array-method-uses-to-length"), s = s("every"), e1 = e1("every");
@@ -4470,7 +4494,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        155: [
+        156: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/array-fill"), e1 = e1("../internals/add-to-unscopables");
                 o({
@@ -4486,7 +4510,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        156: [
+        157: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-iteration").filter, s = e1("../internals/array-method-has-species-support"), e1 = e1("../internals/array-method-uses-to-length"), s = s("filter"), e1 = e1("filter");
@@ -4507,7 +4531,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        157: [
+        158: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-iteration").findIndex, s = e1("../internals/add-to-unscopables"), e1 = e1("../internals/array-method-uses-to-length"), i = "findIndex", a = !0, e1 = e1(i);
@@ -4530,7 +4554,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        158: [
+        159: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/flatten-into-array"), s = e1("../internals/to-object"), i = e1("../internals/to-length"), a = e1("../internals/a-function"), l = e1("../internals/array-species-create");
@@ -4549,11 +4573,11 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-species-create": 25,
                 "../internals/export": 50,
                 "../internals/flatten-into-array": 53,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
-        159: [
+        160: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/flatten-into-array"), s = e1("../internals/to-object"), i = e1("../internals/to-length"), a = e1("../internals/to-integer"), l = e1("../internals/array-species-create");
@@ -4571,12 +4595,12 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-species-create": 25,
                 "../internals/export": 50,
                 "../internals/flatten-into-array": 53,
-                "../internals/to-integer": 136,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-integer": 137,
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
-        160: [
+        161: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), e1 = e1("../internals/array-for-each");
@@ -4593,7 +4617,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        161: [
+        162: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/array-from");
                 o({
@@ -4612,7 +4636,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        162: [
+        163: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-includes").includes, s = e1("../internals/add-to-unscopables");
@@ -4636,7 +4660,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        163: [
+        164: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-includes").indexOf, s = e1("../internals/array-method-is-strict"), e1 = e1("../internals/array-method-uses-to-length"), i = [].indexOf, a = !!i && 1 / [
@@ -4662,7 +4686,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        164: [
+        165: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/to-indexed-object"), n = e1("../internals/add-to-unscopables"), s = e1("../internals/iterators"), i = e1("../internals/internal-state"), e1 = e1("../internals/define-iterator"), a = "Array Iterator", l = i.set, u = i.getterFor(a);
@@ -4698,10 +4722,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/define-iterator": 41,
                 "../internals/internal-state": 71,
                 "../internals/iterators": 80,
-                "../internals/to-indexed-object": 135
+                "../internals/to-indexed-object": 136
             }
         ],
-        165: [
+        166: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/indexed-object"), s = e1("../internals/to-indexed-object"), e1 = e1("../internals/array-method-is-strict"), i = [].join, n = n != Object, e1 = e1("join", ",");
@@ -4719,10 +4743,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-method-is-strict": 22,
                 "../internals/export": 50,
                 "../internals/indexed-object": 67,
-                "../internals/to-indexed-object": 135
+                "../internals/to-indexed-object": 136
             }
         ],
-        166: [
+        167: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), e1 = e1("../internals/array-last-index-of");
                 o({
@@ -4738,7 +4762,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        167: [
+        168: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-iteration").map, s = e1("../internals/array-method-has-species-support"), e1 = e1("../internals/array-method-uses-to-length"), s = s("map"), e1 = e1("map");
@@ -4759,7 +4783,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        168: [
+        169: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), u = e1("../internals/is-object"), c = e1("../internals/is-array"), d = e1("../internals/to-absolute-index"), h = e1("../internals/to-length"), f = e1("../internals/to-indexed-object"), p = e1("../internals/create-property"), n = e1("../internals/well-known-symbol"), s = e1("../internals/array-method-has-species-support"), e1 = e1("../internals/array-method-uses-to-length"), s = s("slice"), e1 = e1("slice", {
@@ -4787,13 +4811,13 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50,
                 "../internals/is-array": 73,
                 "../internals/is-object": 75,
-                "../internals/to-absolute-index": 133,
-                "../internals/to-indexed-object": 135,
-                "../internals/to-length": 137,
-                "../internals/well-known-symbol": 149
+                "../internals/to-absolute-index": 134,
+                "../internals/to-indexed-object": 136,
+                "../internals/to-length": 138,
+                "../internals/well-known-symbol": 150
             }
         ],
-        169: [
+        170: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/array-iteration").some, s = e1("../internals/array-method-is-strict"), e1 = e1("../internals/array-method-uses-to-length"), s = s("some"), e1 = e1("some");
@@ -4814,7 +4838,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        170: [
+        171: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), d = e1("../internals/to-absolute-index"), h = e1("../internals/to-integer"), f = e1("../internals/to-length"), p = e1("../internals/to-object"), m = e1("../internals/array-species-create"), y = e1("../internals/create-property"), n = e1("../internals/array-method-has-species-support"), e1 = e1("../internals/array-method-uses-to-length"), n = n("splice"), e1 = e1("splice", {
@@ -4846,13 +4870,13 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-species-create": 25,
                 "../internals/create-property": 40,
                 "../internals/export": 50,
-                "../internals/to-absolute-index": 133,
-                "../internals/to-integer": 136,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/to-absolute-index": 134,
+                "../internals/to-integer": 137,
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
-        171: [
+        172: [
             function(e1, t, r) {
                 e1("../internals/add-to-unscopables")("flatMap");
             },
@@ -4860,7 +4884,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/add-to-unscopables": 7
             }
         ],
-        172: [
+        173: [
             function(e1, t, r) {
                 e1("../internals/add-to-unscopables")("flat");
             },
@@ -4868,7 +4892,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/add-to-unscopables": 7
             }
         ],
-        173: [
+        174: [
             function(e1, t, r) {
                 var o = e1("../internals/descriptors"), e1 = e1("../internals/object-define-property").f, n = Function.prototype, s = n.toString, i = /^\s*function ([^ (]*)/;
                 !o || "name" in n || e1(n, "name", {
@@ -4887,7 +4911,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-define-property": 93
             }
         ],
-        174: [
+        175: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/collection"), e1 = e1("../internals/collection-strong");
@@ -4902,7 +4926,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/collection-strong": 30
             }
         ],
-        175: [
+        176: [
             function(e1, t, r) {
                 var e1 = e1("../internals/export"), o = Math.hypot, l = Math.abs, u = Math.sqrt;
                 e1({
@@ -4920,7 +4944,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        176: [
+        177: [
             function(e1, t, r) {
                 var e1 = e1("../internals/export"), o = Math.log, n = Math.LN2;
                 e1({
@@ -4936,7 +4960,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50
             }
         ],
-        177: [
+        178: [
             function(e1, t, r) {
                 e1("../internals/export")({
                     target: "Math",
@@ -4950,7 +4974,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/math-sign": 81
             }
         ],
-        178: [
+        179: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -4977,15 +5001,15 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     return +l;
                 }
-                var n = e1("../internals/descriptors"), s = e1("../internals/global"), i = e1("../internals/is-forced"), a = e1("../internals/redefine"), l = e1("../internals/has"), u = e1("../internals/classof-raw"), c = e1("../internals/inherit-if-required"), d = e1("../internals/to-primitive"), h = e1("../internals/fails"), f = e1("../internals/object-create"), p = e1("../internals/object-get-own-property-names").f, m = e1("../internals/object-get-own-property-descriptor").f, y = e1("../internals/object-define-property").f, g = e1("../internals/string-trim").trim, v = "Number", b = s[v], _ = b.prototype, j = u(f(_)) == v;
+                var n = e1("../internals/descriptors"), s = e1("../internals/global"), i = e1("../internals/is-forced"), a = e1("../internals/redefine"), l = e1("../internals/has"), u = e1("../internals/classof-raw"), c = e1("../internals/inherit-if-required"), d = e1("../internals/to-primitive"), h = e1("../internals/fails"), f = e1("../internals/object-create"), p = e1("../internals/object-get-own-property-names").f, m = e1("../internals/object-get-own-property-descriptor").f, y = e1("../internals/object-define-property").f, g = e1("../internals/string-trim").trim, v = "Number", b = s[v], j = b.prototype, _ = u(f(j)) == v;
                 if (i(v, !b(" 0o1") || !b("0b1") || b("+0x1"))) {
                     for(var x, w = function(e1) {
                         var e1 = arguments.length < 1 ? 0 : e1, t = this;
-                        return t instanceof w && (j ? h(function() {
-                            _.valueOf.call(t);
+                        return t instanceof w && (_ ? h(function() {
+                            j.valueOf.call(t);
                         }) : u(t) != v) ? c(new b(o(e1)), t, w) : o(e1);
                     }, S = n ? p(b) : "MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger".split(","), T = 0; S.length > T; T++)l(b, x = S[T]) && !l(w, x) && y(w, x, m(b, x));
-                    (w.prototype = _).constructor = w, a(s, v, w);
+                    (w.prototype = j).constructor = w, a(s, v, w);
                 }
             },
             {
@@ -5000,12 +5024,25 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-define-property": 93,
                 "../internals/object-get-own-property-descriptor": 94,
                 "../internals/object-get-own-property-names": 96,
-                "../internals/redefine": 109,
-                "../internals/string-trim": 130,
-                "../internals/to-primitive": 141
+                "../internals/redefine": 110,
+                "../internals/string-trim": 131,
+                "../internals/to-primitive": 142
             }
         ],
-        179: [
+        180: [
+            function(e1, t, r) {
+                e1("../internals/export")({
+                    target: "Number",
+                    stat: !0
+                }, {
+                    EPSILON: Math.pow(2, -52)
+                });
+            },
+            {
+                "../internals/export": 50
+            }
+        ],
+        181: [
             function(e1, t, r) {
                 e1("../internals/export")({
                     target: "Number",
@@ -5019,7 +5056,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/number-is-finite": 89
             }
         ],
-        180: [
+        182: [
             function(e1, t, r) {
                 "use strict";
                 function c(e1, t, r) {
@@ -5073,12 +5110,12 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/export": 50,
                 "../internals/fails": 51,
-                "../internals/string-repeat": 128,
-                "../internals/this-number-value": 132,
-                "../internals/to-integer": 136
+                "../internals/string-repeat": 129,
+                "../internals/this-number-value": 133,
+                "../internals/to-integer": 137
             }
         ],
-        181: [
+        183: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), e1 = e1("../internals/object-assign");
                 o({
@@ -5094,7 +5131,24 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-assign": 90
             }
         ],
-        182: [
+        184: [
+            function(e1, t, r) {
+                var o = e1("../internals/export"), n = e1("../internals/object-to-array").entries;
+                o({
+                    target: "Object",
+                    stat: !0
+                }, {
+                    entries: function(e1) {
+                        return n(e1);
+                    }
+                });
+            },
+            {
+                "../internals/export": 50,
+                "../internals/object-to-array": 103
+            }
+        ],
+        185: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/iterate"), s = e1("../internals/create-property");
                 o({
@@ -5115,7 +5169,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/iterate": 78
             }
         ],
-        183: [
+        186: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/fails"), s = e1("../internals/to-indexed-object"), i = e1("../internals/object-get-own-property-descriptor").f, e1 = e1("../internals/descriptors"), n = n(function() {
                     i(1);
@@ -5136,10 +5190,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50,
                 "../internals/fails": 51,
                 "../internals/object-get-own-property-descriptor": 94,
-                "../internals/to-indexed-object": 135
+                "../internals/to-indexed-object": 136
             }
         ],
-        184: [
+        187: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/fails"), e1 = e1("../internals/object-get-own-property-names-external").f;
                 o({
@@ -5158,7 +5212,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-own-property-names-external": 95
             }
         ],
-        185: [
+        188: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/fails"), s = e1("../internals/to-object"), i = e1("../internals/object-get-prototype-of"), e1 = e1("../internals/correct-prototype-getter");
                 o({
@@ -5179,10 +5233,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50,
                 "../internals/fails": 51,
                 "../internals/object-get-prototype-of": 98,
-                "../internals/to-object": 138
+                "../internals/to-object": 139
             }
         ],
-        186: [
+        189: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/to-object"), s = e1("../internals/object-keys");
                 o({
@@ -5201,10 +5255,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/export": 50,
                 "../internals/fails": 51,
                 "../internals/object-keys": 100,
-                "../internals/to-object": 138
+                "../internals/to-object": 139
             }
         ],
-        187: [
+        190: [
             function(e1, t, r) {
                 var o = e1("../internals/to-string-tag-support"), n = e1("../internals/redefine"), e1 = e1("../internals/object-to-string");
                 o || n(Object.prototype, "toString", e1, {
@@ -5212,15 +5266,15 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/object-to-string": 103,
-                "../internals/redefine": 109,
-                "../internals/to-string-tag-support": 142
+                "../internals/object-to-string": 104,
+                "../internals/redefine": 110,
+                "../internals/to-string-tag-support": 143
             }
         ],
-        188: [
+        191: [
             function(e1, D, F) {
                 "use strict";
-                var r, t, o, n, s = e1("../internals/export"), i = e1("../internals/is-pure"), g = e1("../internals/global"), a = e1("../internals/get-built-in"), l = e1("../internals/native-promise-constructor"), U = e1("../internals/redefine"), N = e1("../internals/redefine-all"), B = e1("../internals/set-to-string-tag"), G = e1("../internals/set-species"), V = e1("../internals/is-object"), c = e1("../internals/a-function"), z = e1("../internals/an-instance"), H = e1("../internals/classof-raw"), W = e1("../internals/inspect-source"), d = e1("../internals/iterate"), q = e1("../internals/check-correctness-of-iteration"), X = e1("../internals/species-constructor"), v = e1("../internals/task").set, u = e1("../internals/microtask"), h = e1("../internals/promise-resolve"), Y = e1("../internals/host-report-errors"), f = e1("../internals/new-promise-capability"), b = e1("../internals/perform"), p = e1("../internals/internal-state"), Z = e1("../internals/is-forced"), m = e1("../internals/well-known-symbol"), y = e1("../internals/engine-v8-version"), Q = m("species"), _ = "Promise", j = p.get, K = p.set, J = p.getterFor(_), x = l, w = g.TypeError, S = g.document, T = g.process, E = a("fetch"), M = f.f, $ = M, k = "process" == H(T), ee = !!(S && S.createEvent && g.dispatchEvent), C = "unhandledrejection", te = "rejectionhandled", O = 1, re = 2, A = 1, oe = 2, e1 = Z(_, function() {
+                var r, t, o, n, s = e1("../internals/export"), i = e1("../internals/is-pure"), g = e1("../internals/global"), a = e1("../internals/get-built-in"), l = e1("../internals/native-promise-constructor"), U = e1("../internals/redefine"), N = e1("../internals/redefine-all"), B = e1("../internals/set-to-string-tag"), G = e1("../internals/set-species"), V = e1("../internals/is-object"), c = e1("../internals/a-function"), z = e1("../internals/an-instance"), H = e1("../internals/classof-raw"), W = e1("../internals/inspect-source"), d = e1("../internals/iterate"), q = e1("../internals/check-correctness-of-iteration"), X = e1("../internals/species-constructor"), v = e1("../internals/task").set, u = e1("../internals/microtask"), h = e1("../internals/promise-resolve"), Y = e1("../internals/host-report-errors"), f = e1("../internals/new-promise-capability"), b = e1("../internals/perform"), p = e1("../internals/internal-state"), Z = e1("../internals/is-forced"), m = e1("../internals/well-known-symbol"), y = e1("../internals/engine-v8-version"), Q = m("species"), j = "Promise", _ = p.get, K = p.set, J = p.getterFor(j), x = l, w = g.TypeError, S = g.document, T = g.process, E = a("fetch"), M = f.f, $ = M, k = "process" == H(T), ee = !!(S && S.createEvent && g.dispatchEvent), O = "unhandledrejection", te = "rejectionhandled", C = 1, re = 2, A = 1, oe = 2, e1 = Z(j, function() {
                     var e1, t;
                     if (!(W(x) !== String(x))) {
                         if (66 === y) return !0;
@@ -5237,7 +5291,7 @@ new (0, _p5Default.default)((sketch)=>{
                 }, P = function(f, p, m) {
                     var y;
                     p.notified || (p.notified = !0, y = p.reactions, u(function() {
-                        for(var r, o, e1 = p.value, t = p.state == O, n = 0; y.length > n;){
+                        for(var r, o, e1 = p.value, t = p.state == C, n = 0; y.length > n;){
                             var s, i, a, l = y[n++], u = t ? l.ok : l.fail, c = l.resolve, d = l.reject, h = l.domain;
                             try {
                                 u ? (t || (p.rejection === oe && function(e1, t) {
@@ -5253,7 +5307,7 @@ new (0, _p5Default.default)((sketch)=>{
                         p.reactions = [], p.notified = !1, m && !p.rejection && (r = f, o = p, v.call(g, function() {
                             var e1 = o.value, t = ie(o);
                             if (t && (t = b(function() {
-                                k ? T.emit("unhandledRejection", e1, r) : se(C, r, e1);
+                                k ? T.emit("unhandledRejection", e1, r) : se(O, r, e1);
                             }), o.rejection = k || ie(o) ? oe : A, t.error)) throw t.value;
                         }));
                     }));
@@ -5262,7 +5316,7 @@ new (0, _p5Default.default)((sketch)=>{
                     ee ? ((o = S.createEvent("Event")).promise = t, o.reason = r, o.initEvent(e1, !1, !0), g.dispatchEvent(o)) : o = {
                         promise: t,
                         reason: r
-                    }, (t = g["on" + e1]) ? t(o) : e1 === C && Y("Unhandled promise rejection", r);
+                    }, (t = g["on" + e1]) ? t(o) : e1 === O && Y("Unhandled promise rejection", r);
                 }, ie = function(e1) {
                     return e1.rejection !== A && !e1.parent;
                 }, L = function(t, r, o, n) {
@@ -5286,7 +5340,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 } catch (e1) {
                                     R(r, t, e1, o);
                                 }
-                            }) : (o.value = e1, o.state = O, P(r, o, !1));
+                            }) : (o.value = e1, o.state = C, P(r, o, !1));
                         } catch (e1) {
                             R(r, {
                                 done: !1
@@ -5295,8 +5349,8 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                 };
                 e1 && (x = function(e1) {
-                    z(this, x, _), c(e1), r.call(this);
-                    var t = j(this);
+                    z(this, x, j), c(e1), r.call(this);
+                    var t = _(this);
                     try {
                         e1(L(I, this, t), L(R, this, t));
                     } catch (e1) {
@@ -5304,7 +5358,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                 }, (r = function(e1) {
                     K(this, {
-                        type: _,
+                        type: j,
                         done: !1,
                         notified: !1,
                         parent: !1,
@@ -5322,7 +5376,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return this.then(void 0, e1);
                     }
                 }), t = function() {
-                    var e1 = new r, t = j(e1);
+                    var e1 = new r, t = _(e1);
                     this.promise = e1, this.resolve = L(I, e1, t), this.reject = L(R, e1, t);
                 }, f.f = M = function(e1) {
                     return e1 === x || e1 === o ? new t : $(e1);
@@ -5347,8 +5401,8 @@ new (0, _p5Default.default)((sketch)=>{
                     forced: e1
                 }, {
                     Promise: x
-                }), B(x, _, !1, !0), G(_), o = a(_), s({
-                    target: _,
+                }), B(x, j, !1, !0), G(j), o = a(j), s({
+                    target: j,
                     stat: !0,
                     forced: e1
                 }, {
@@ -5357,7 +5411,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return t.reject.call(void 0, e1), t.promise;
                     }
                 }), s({
-                    target: _,
+                    target: j,
                     stat: !0,
                     forced: i || e1
                 }, {
@@ -5365,7 +5419,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return h(i && this === o ? x : this, e1);
                     }
                 }), s({
-                    target: _,
+                    target: j,
                     stat: !0,
                     forced: m
                 }, {
@@ -5411,18 +5465,18 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/microtask": 82,
                 "../internals/native-promise-constructor": 83,
                 "../internals/new-promise-capability": 87,
-                "../internals/perform": 106,
-                "../internals/promise-resolve": 107,
-                "../internals/redefine": 109,
-                "../internals/redefine-all": 108,
-                "../internals/set-species": 117,
-                "../internals/set-to-string-tag": 118,
-                "../internals/species-constructor": 122,
-                "../internals/task": 131,
-                "../internals/well-known-symbol": 149
+                "../internals/perform": 107,
+                "../internals/promise-resolve": 108,
+                "../internals/redefine": 110,
+                "../internals/redefine-all": 109,
+                "../internals/set-species": 118,
+                "../internals/set-to-string-tag": 119,
+                "../internals/species-constructor": 123,
+                "../internals/task": 132,
+                "../internals/well-known-symbol": 150
             }
         ],
-        189: [
+        192: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), n = e1("../internals/get-built-in"), s = e1("../internals/a-function"), i = e1("../internals/an-object"), a = e1("../internals/is-object"), l = e1("../internals/object-create"), u = e1("../internals/function-bind"), e1 = e1("../internals/fails"), c = n("Reflect", "construct"), d = e1(function() {
                     function e1() {}
@@ -5474,7 +5528,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-create": 91
             }
         ],
-        190: [
+        193: [
             function(e1, t, r) {
                 var o = e1("../internals/export"), s = e1("../internals/is-object"), i = e1("../internals/an-object"), a = e1("../internals/has"), l = e1("../internals/object-get-own-property-descriptor"), u = e1("../internals/object-get-prototype-of");
                 o({
@@ -5496,17 +5550,17 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-prototype-of": 98
             }
         ],
-        191: [
+        194: [
             function(e1, t, r) {
-                var o = e1("../internals/descriptors"), n = e1("../internals/global"), s = e1("../internals/is-forced"), i = e1("../internals/inherit-if-required"), a = e1("../internals/object-define-property").f, l = e1("../internals/object-get-own-property-names").f, u = e1("../internals/is-regexp"), c = e1("../internals/regexp-flags"), d = e1("../internals/regexp-sticky-helpers"), h = e1("../internals/redefine"), f = e1("../internals/fails"), p = e1("../internals/internal-state").set, m = e1("../internals/set-species"), y = e1("../internals/well-known-symbol")("match"), g = n.RegExp, v = g.prototype, b = /a/g, _ = /a/g, j = new g(b) !== b, x = d.UNSUPPORTED_Y;
-                if (o && s("RegExp", !j || x || f(function() {
-                    return _[y] = !1, g(b) != b || g(_) == _ || "/a/i" != g(b, "i");
+                var o = e1("../internals/descriptors"), n = e1("../internals/global"), s = e1("../internals/is-forced"), i = e1("../internals/inherit-if-required"), a = e1("../internals/object-define-property").f, l = e1("../internals/object-get-own-property-names").f, u = e1("../internals/is-regexp"), c = e1("../internals/regexp-flags"), d = e1("../internals/regexp-sticky-helpers"), h = e1("../internals/redefine"), f = e1("../internals/fails"), p = e1("../internals/internal-state").set, m = e1("../internals/set-species"), y = e1("../internals/well-known-symbol")("match"), g = n.RegExp, v = g.prototype, b = /a/g, j = /a/g, _ = new g(b) !== b, x = d.UNSUPPORTED_Y;
+                if (o && s("RegExp", !_ || x || f(function() {
+                    return j[y] = !1, g(b) != b || g(j) == j || "/a/i" != g(b, "i");
                 }))) {
                     for(var w = function(e1, t) {
                         var r, o = this instanceof w, n = u(e1), s = void 0 === t;
                         if (!o && n && e1.constructor === w && s) return e1;
-                        j ? n && !s && (e1 = e1.source) : e1 instanceof w && (s && (t = c.call(e1)), e1 = e1.source), x && (r = !!t && -1 < t.indexOf("y")) && (t = t.replace(/y/g, ""));
-                        n = i(j ? new g(e1, t) : g(e1, t), o ? this : v, w);
+                        _ ? n && !s && (e1 = e1.source) : e1 instanceof w && (s && (t = c.call(e1)), e1 = e1.source), x && (r = !!t && -1 < t.indexOf("y")) && (t = t.replace(/y/g, ""));
+                        n = i(_ ? new g(e1, t) : g(e1, t), o ? this : v, w);
                         return x && r && p(n, {
                             sticky: r
                         }), n;
@@ -5535,14 +5589,14 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/is-regexp": 77,
                 "../internals/object-define-property": 93,
                 "../internals/object-get-own-property-names": 96,
-                "../internals/redefine": 109,
-                "../internals/regexp-flags": 112,
-                "../internals/regexp-sticky-helpers": 113,
-                "../internals/set-species": 117,
-                "../internals/well-known-symbol": 149
+                "../internals/redefine": 110,
+                "../internals/regexp-flags": 113,
+                "../internals/regexp-sticky-helpers": 114,
+                "../internals/set-species": 118,
+                "../internals/well-known-symbol": 150
             }
         ],
-        192: [
+        195: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), e1 = e1("../internals/regexp-exec");
@@ -5556,10 +5610,10 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/export": 50,
-                "../internals/regexp-exec": 111
+                "../internals/regexp-exec": 112
             }
         ],
-        193: [
+        196: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/redefine"), n = e1("../internals/an-object"), s = e1("../internals/fails"), i = e1("../internals/regexp-flags"), e1 = "toString", a = RegExp.prototype, l = a[e1], s = s(function() {
@@ -5578,11 +5632,11 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/an-object": 10,
                 "../internals/fails": 51,
-                "../internals/redefine": 109,
-                "../internals/regexp-flags": 112
+                "../internals/redefine": 110,
+                "../internals/regexp-flags": 113
             }
         ],
-        194: [
+        197: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/collection"), e1 = e1("../internals/collection-strong");
@@ -5597,7 +5651,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/collection-strong": 30
             }
         ],
-        195: [
+        198: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/object-get-own-property-descriptor").f, s = e1("../internals/to-length"), i = e1("../internals/not-a-regexp"), a = e1("../internals/require-object-coercible"), l = e1("../internals/correct-is-regexp-logic"), e1 = e1("../internals/is-pure"), u = "".endsWith, c = Math.min, l = l("endsWith");
@@ -5618,11 +5672,11 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/is-pure": 76,
                 "../internals/not-a-regexp": 88,
                 "../internals/object-get-own-property-descriptor": 94,
-                "../internals/require-object-coercible": 114,
-                "../internals/to-length": 137
+                "../internals/require-object-coercible": 115,
+                "../internals/to-length": 138
             }
         ],
-        196: [
+        199: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/not-a-regexp"), s = e1("../internals/require-object-coercible");
@@ -5640,10 +5694,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/correct-is-regexp-logic": 34,
                 "../internals/export": 50,
                 "../internals/not-a-regexp": 88,
-                "../internals/require-object-coercible": 114
+                "../internals/require-object-coercible": 115
             }
         ],
-        197: [
+        200: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/string-multibyte").charAt, n = e1("../internals/internal-state"), e1 = e1("../internals/define-iterator"), s = "String Iterator", i = n.set, a = n.getterFor(s);
@@ -5667,10 +5721,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/define-iterator": 41,
                 "../internals/internal-state": 71,
-                "../internals/string-multibyte": 124
+                "../internals/string-multibyte": 125
             }
         ],
-        198: [
+        201: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/fix-regexp-well-known-symbol-logic"), c = e1("../internals/an-object"), d = e1("../internals/to-length"), n = e1("../internals/require-object-coercible"), h = e1("../internals/advance-string-index"), f = e1("../internals/regexp-exec-abstract");
@@ -5698,12 +5752,12 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/advance-string-index": 8,
                 "../internals/an-object": 10,
                 "../internals/fix-regexp-well-known-symbol-logic": 52,
-                "../internals/regexp-exec-abstract": 110,
-                "../internals/require-object-coercible": 114,
-                "../internals/to-length": 137
+                "../internals/regexp-exec-abstract": 111,
+                "../internals/require-object-coercible": 115,
+                "../internals/to-length": 138
             }
         ],
-        199: [
+        202: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/string-pad").start;
@@ -5719,11 +5773,11 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/export": 50,
-                "../internals/string-pad": 126,
-                "../internals/string-pad-webkit-bug": 125
+                "../internals/string-pad": 127,
+                "../internals/string-pad-webkit-bug": 126
             }
         ],
-        200: [
+        203: [
             function(e1, t, r) {
                 e1("../internals/export")({
                     target: "String",
@@ -5734,26 +5788,26 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/export": 50,
-                "../internals/string-repeat": 128
+                "../internals/string-repeat": 129
             }
         ],
-        201: [
+        204: [
             function(e1, t, r) {
                 "use strict";
-                var o = e1("../internals/fix-regexp-well-known-symbol-logic"), T = e1("../internals/an-object"), E = e1("../internals/to-object"), M = e1("../internals/to-length"), k = e1("../internals/to-integer"), s = e1("../internals/require-object-coercible"), C = e1("../internals/advance-string-index"), O = e1("../internals/regexp-exec-abstract"), A = Math.max, P = Math.min, L = Math.floor, R = /\$([$&'`]|\d\d?|<[^>]*>)/g, I = /\$([$&'`]|\d\d?)/g;
-                o("replace", 2, function(n, _, j, e1) {
+                var o = e1("../internals/fix-regexp-well-known-symbol-logic"), T = e1("../internals/an-object"), E = e1("../internals/to-object"), M = e1("../internals/to-length"), k = e1("../internals/to-integer"), s = e1("../internals/require-object-coercible"), O = e1("../internals/advance-string-index"), C = e1("../internals/regexp-exec-abstract"), A = Math.max, P = Math.min, L = Math.floor, R = /\$([$&'`]|\d\d?|<[^>]*>)/g, I = /\$([$&'`]|\d\d?)/g;
+                o("replace", 2, function(n, j, _, e1) {
                     var x = e1.REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE, w = e1.REPLACE_KEEPS_$0, S = x ? "$" : "$0";
                     return [
                         function(e1, t) {
                             var r = s(this), o = null == e1 ? void 0 : e1[n];
-                            return void 0 !== o ? o.call(e1, r, t) : _.call(String(r), e1, t);
+                            return void 0 !== o ? o.call(e1, r, t) : j.call(String(r), e1, t);
                         },
                         function(e1, t) {
                             if (!x && w || "string" == typeof t && -1 === t.indexOf(S)) {
-                                var r = j(_, e1, this, t);
+                                var r = _(j, e1, this, t);
                                 if (r.done) return r.value;
                             }
-                            for(var o, n = T(e1), s = String(this), i = "function" == typeof t, a = (i || (t = String(t)), n.global), l = (a && (o = n.unicode, n.lastIndex = 0), []); null !== (f = O(n, s)) && (l.push(f), a);)"" === String(f[0]) && (n.lastIndex = C(s, M(n.lastIndex), o));
+                            for(var o, n = T(e1), s = String(this), i = "function" == typeof t, a = (i || (t = String(t)), n.global), l = (a && (o = n.unicode, n.lastIndex = 0), []); null !== (f = C(n, s)) && (l.push(f), a);)"" === String(f[0]) && (n.lastIndex = O(s, M(n.lastIndex), o));
                             for(var u, c = "", d = 0, h = 0; h < l.length; h++){
                                 for(var f = l[h], p = String(f[0]), m = A(P(k(f.index), s.length), 0), y = [], g = 1; g < f.length; g++)y.push(void 0 === (u = f[g]) ? u : String(u));
                                 var v = f.groups, b = i ? (b = [
@@ -5761,7 +5815,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 ].concat(y, m, s), void 0 !== v && b.push(v), String(t.apply(void 0, b))) : function(s, i, a, l, u, e1) {
                                     var c = a + s.length, d = l.length, t = I;
                                     void 0 !== u && (u = E(u), t = R);
-                                    return _.call(e1, t, function(e1, t) {
+                                    return j.call(e1, t, function(e1, t) {
                                         var r;
                                         switch(t.charAt(0)){
                                             case "$":
@@ -5795,14 +5849,14 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/advance-string-index": 8,
                 "../internals/an-object": 10,
                 "../internals/fix-regexp-well-known-symbol-logic": 52,
-                "../internals/regexp-exec-abstract": 110,
-                "../internals/require-object-coercible": 114,
-                "../internals/to-integer": 136,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138
+                "../internals/regexp-exec-abstract": 111,
+                "../internals/require-object-coercible": 115,
+                "../internals/to-integer": 137,
+                "../internals/to-length": 138,
+                "../internals/to-object": 139
             }
         ],
-        202: [
+        205: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/fix-regexp-well-known-symbol-logic"), i = e1("../internals/an-object"), a = e1("../internals/require-object-coercible"), l = e1("../internals/same-value"), u = e1("../internals/regexp-exec-abstract");
@@ -5822,15 +5876,15 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/an-object": 10,
                 "../internals/fix-regexp-well-known-symbol-logic": 52,
-                "../internals/regexp-exec-abstract": 110,
-                "../internals/require-object-coercible": 114,
-                "../internals/same-value": 115
+                "../internals/regexp-exec-abstract": 111,
+                "../internals/require-object-coercible": 115,
+                "../internals/same-value": 116
             }
         ],
-        203: [
+        206: [
             function(e1, t, r) {
                 "use strict";
-                var o = e1("../internals/fix-regexp-well-known-symbol-logic"), c = e1("../internals/is-regexp"), g = e1("../internals/an-object"), d = e1("../internals/require-object-coercible"), v = e1("../internals/species-constructor"), b = e1("../internals/advance-string-index"), _ = e1("../internals/to-length"), j = e1("../internals/regexp-exec-abstract"), h = e1("../internals/regexp-exec"), e1 = e1("../internals/fails"), f = [].push, x = Math.min, w = 4294967295, S = !e1(function() {
+                var o = e1("../internals/fix-regexp-well-known-symbol-logic"), c = e1("../internals/is-regexp"), g = e1("../internals/an-object"), d = e1("../internals/require-object-coercible"), v = e1("../internals/species-constructor"), b = e1("../internals/advance-string-index"), j = e1("../internals/to-length"), _ = e1("../internals/regexp-exec-abstract"), h = e1("../internals/regexp-exec"), e1 = e1("../internals/fails"), f = [].push, x = Math.min, w = 4294967295, S = !e1(function() {
                     return !RegExp(w, "y");
                 });
                 o("split", 2, function(n, p, m) {
@@ -5856,13 +5910,13 @@ new (0, _p5Default.default)((sketch)=>{
                             if (r.done) return r.value;
                             var r = g(e1), o = String(this), e1 = v(r, RegExp), n = r.unicode, s = (r.ignoreCase ? "i" : "") + (r.multiline ? "m" : "") + (r.unicode ? "u" : "") + (S ? "y" : "g"), i = new e1(S ? r : "^(?:" + r.source + ")", s), a = void 0 === t ? w : t >>> 0;
                             if (0 == a) return [];
-                            if (0 === o.length) return null === j(i, o) ? [
+                            if (0 === o.length) return null === _(i, o) ? [
                                 o
                             ] : [];
                             for(var l = 0, u = 0, c = []; u < o.length;){
                                 i.lastIndex = S ? u : 0;
-                                var d, h = j(i, S ? o : o.slice(u));
-                                if (null === h || (d = x(_(i.lastIndex + (S ? 0 : u)), o.length)) === l) u = b(o, u, n);
+                                var d, h = _(i, S ? o : o.slice(u));
+                                if (null === h || (d = x(j(i.lastIndex + (S ? 0 : u)), o.length)) === l) u = b(o, u, n);
                                 else {
                                     if (c.push(o.slice(l, u)), c.length === a) return c;
                                     for(var f = 1; f <= h.length - 1; f++)if (c.push(h[f]), c.length === a) return c;
@@ -5880,14 +5934,14 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/fails": 51,
                 "../internals/fix-regexp-well-known-symbol-logic": 52,
                 "../internals/is-regexp": 77,
-                "../internals/regexp-exec": 111,
-                "../internals/regexp-exec-abstract": 110,
-                "../internals/require-object-coercible": 114,
-                "../internals/species-constructor": 122,
-                "../internals/to-length": 137
+                "../internals/regexp-exec": 112,
+                "../internals/regexp-exec-abstract": 111,
+                "../internals/require-object-coercible": 115,
+                "../internals/species-constructor": 123,
+                "../internals/to-length": 138
             }
         ],
-        204: [
+        207: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/object-get-own-property-descriptor").f, s = e1("../internals/to-length"), i = e1("../internals/not-a-regexp"), a = e1("../internals/require-object-coercible"), l = e1("../internals/correct-is-regexp-logic"), e1 = e1("../internals/is-pure"), u = "".startsWith, c = Math.min, l = l("startsWith");
@@ -5908,11 +5962,11 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/is-pure": 76,
                 "../internals/not-a-regexp": 88,
                 "../internals/object-get-own-property-descriptor": 94,
-                "../internals/require-object-coercible": 114,
-                "../internals/to-length": 137
+                "../internals/require-object-coercible": 115,
+                "../internals/to-length": 138
             }
         ],
-        205: [
+        208: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/create-html");
@@ -5929,10 +5983,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/create-html": 36,
                 "../internals/export": 50,
-                "../internals/string-html-forced": 123
+                "../internals/string-html-forced": 124
             }
         ],
-        206: [
+        209: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/export"), n = e1("../internals/string-trim").trim;
@@ -5948,11 +6002,11 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/export": 50,
-                "../internals/string-trim": 130,
-                "../internals/string-trim-forced": 129
+                "../internals/string-trim": 131,
+                "../internals/string-trim-forced": 130
             }
         ],
-        207: [
+        210: [
             function(e1, t, r) {
                 "use strict";
                 var o, n, s, i, a, l = e1("../internals/export"), u = e1("../internals/descriptors"), c = e1("../internals/global"), d = e1("../internals/has"), h = e1("../internals/is-object"), f = e1("../internals/object-define-property").f, e1 = e1("../internals/copy-constructor-properties"), p = c.Symbol;
@@ -5982,7 +6036,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-define-property": 93
             }
         ],
-        208: [
+        211: [
             function(e1, t, r) {
                 e1("../internals/define-well-known-symbol")("iterator");
             },
@@ -5990,13 +6044,13 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/define-well-known-symbol": 42
             }
         ],
-        209: [
+        212: [
             function(e1, D, F) {
                 "use strict";
                 function o(e1, t) {
-                    var r = E[e1] = f(w[j]);
+                    var r = E[e1] = f(w[_]);
                     return ie(r, {
-                        type: _,
+                        type: j,
                         tag: e1,
                         description: t
                     }), s || (r.description = t), r;
@@ -6018,7 +6072,7 @@ new (0, _p5Default.default)((sketch)=>{
                         l(E, e1) || l(ee, e1) || t.push(e1);
                     }), t;
                 }
-                var n = e1("../internals/export"), N = e1("../internals/global"), B = e1("../internals/get-built-in"), G = e1("../internals/is-pure"), s = e1("../internals/descriptors"), i = e1("../internals/native-symbol"), V = e1("../internals/use-symbol-as-uid"), a = e1("../internals/fails"), l = e1("../internals/has"), z = e1("../internals/is-array"), H = e1("../internals/is-object"), u = e1("../internals/an-object"), W = e1("../internals/to-object"), c = e1("../internals/to-indexed-object"), d = e1("../internals/to-primitive"), h = e1("../internals/create-property-descriptor"), f = e1("../internals/object-create"), q = e1("../internals/object-keys"), X = e1("../internals/object-get-own-property-names"), Y = e1("../internals/object-get-own-property-names-external"), p = e1("../internals/object-get-own-property-symbols"), Z = e1("../internals/object-get-own-property-descriptor"), Q = e1("../internals/object-define-property"), K = e1("../internals/object-property-is-enumerable"), J = e1("../internals/create-non-enumerable-property"), m = e1("../internals/redefine"), y = e1("../internals/shared"), $ = e1("../internals/shared-key"), ee = e1("../internals/hidden-keys"), te = e1("../internals/uid"), re = e1("../internals/well-known-symbol"), oe = e1("../internals/well-known-symbol-wrapped"), ne = e1("../internals/define-well-known-symbol"), se = e1("../internals/set-to-string-tag"), g = e1("../internals/internal-state"), v = e1("../internals/array-iteration").forEach, b = $("hidden"), _ = "Symbol", j = "prototype", e1 = re("toPrimitive"), ie = g.set, ae = g.getterFor(_), x = Object[j], w = N.Symbol, S = B("JSON", "stringify"), le = Z.f, T = Q.f, ue = Y.f, ce = K.f, E = y("symbols"), M = y("op-symbols"), k = y("string-to-symbol-registry"), C = y("symbol-to-string-registry"), $ = y("wks"), g = N.QObject, O = !g || !g[j] || !g[j].findChild, A = s && a(function() {
+                var n = e1("../internals/export"), N = e1("../internals/global"), B = e1("../internals/get-built-in"), G = e1("../internals/is-pure"), s = e1("../internals/descriptors"), i = e1("../internals/native-symbol"), V = e1("../internals/use-symbol-as-uid"), a = e1("../internals/fails"), l = e1("../internals/has"), z = e1("../internals/is-array"), H = e1("../internals/is-object"), u = e1("../internals/an-object"), W = e1("../internals/to-object"), c = e1("../internals/to-indexed-object"), d = e1("../internals/to-primitive"), h = e1("../internals/create-property-descriptor"), f = e1("../internals/object-create"), q = e1("../internals/object-keys"), X = e1("../internals/object-get-own-property-names"), Y = e1("../internals/object-get-own-property-names-external"), p = e1("../internals/object-get-own-property-symbols"), Z = e1("../internals/object-get-own-property-descriptor"), Q = e1("../internals/object-define-property"), K = e1("../internals/object-property-is-enumerable"), J = e1("../internals/create-non-enumerable-property"), m = e1("../internals/redefine"), y = e1("../internals/shared"), $ = e1("../internals/shared-key"), ee = e1("../internals/hidden-keys"), te = e1("../internals/uid"), re = e1("../internals/well-known-symbol"), oe = e1("../internals/well-known-symbol-wrapped"), ne = e1("../internals/define-well-known-symbol"), se = e1("../internals/set-to-string-tag"), g = e1("../internals/internal-state"), v = e1("../internals/array-iteration").forEach, b = $("hidden"), j = "Symbol", _ = "prototype", e1 = re("toPrimitive"), ie = g.set, ae = g.getterFor(j), x = Object[_], w = N.Symbol, S = B("JSON", "stringify"), le = Z.f, T = Q.f, ue = Y.f, ce = K.f, E = y("symbols"), M = y("op-symbols"), k = y("string-to-symbol-registry"), O = y("symbol-to-string-registry"), $ = y("wks"), g = N.QObject, C = !g || !g[_] || !g[_].findChild, A = s && a(function() {
                     return 7 != f(T({}, "a", {
                         get: function() {
                             return T(this, "a", {
@@ -6053,17 +6107,17 @@ new (0, _p5Default.default)((sketch)=>{
                     var e1 = arguments.length && void 0 !== arguments[0] ? String(arguments[0]) : void 0, t = te(e1), r = function(e1) {
                         this === x && r.call(M, e1), l(this, b) && l(this[b], t) && (this[b][t] = !1), A(this, t, h(1, e1));
                     };
-                    return s && O && A(x, t, {
+                    return s && C && A(x, t, {
                         configurable: !0,
                         set: r
                     }), o(t, e1);
-                })[j], "toString", function() {
+                })[_], "toString", function() {
                     return ae(this).tag;
                 }), m(w, "withoutSetter", function(e1) {
                     return o(te(e1), e1);
                 }), K.f = R, Q.f = L, Z.f = t, X.f = Y.f = U, p.f = I, oe.f = function(e1) {
                     return o(re(e1), e1);
-                }, s && (T(w[j], "description", {
+                }, s && (T(w[_], "description", {
                     configurable: !0,
                     get: function() {
                         return ae(this).description;
@@ -6080,23 +6134,23 @@ new (0, _p5Default.default)((sketch)=>{
                 }), v(q($), function(e1) {
                     ne(e1);
                 }), n({
-                    target: _,
+                    target: j,
                     stat: !0,
                     forced: !i
                 }, {
                     for: function(e1) {
                         var t, e1 = String(e1);
-                        return l(k, e1) ? k[e1] : (t = w(e1), k[e1] = t, C[t] = e1, t);
+                        return l(k, e1) ? k[e1] : (t = w(e1), k[e1] = t, O[t] = e1, t);
                     },
                     keyFor: function(e1) {
                         if (!P(e1)) throw TypeError(e1 + " is not a symbol");
-                        if (l(C, e1)) return C[e1];
+                        if (l(O, e1)) return O[e1];
                     },
                     useSetter: function() {
-                        O = !0;
+                        C = !0;
                     },
                     useSimple: function() {
-                        O = !1;
+                        C = !1;
                     }
                 }), n({
                     target: "Object",
@@ -6147,7 +6201,7 @@ new (0, _p5Default.default)((sketch)=>{
                             if ("function" == typeof o && (t = o.call(this, e1, t)), !P(t)) return t;
                         }), n[1] = t, S.apply(null, n);
                     }
-                }), w[j][e1] || J(w[j], e1, w[j].valueOf), se(w, _), ee[b] = !0;
+                }), w[_][e1] || J(w[_], e1, w[_].valueOf), se(w, j), ee[b] = !0;
             },
             {
                 "../internals/an-object": 10,
@@ -6175,20 +6229,20 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/object-get-own-property-symbols": 97,
                 "../internals/object-keys": 100,
                 "../internals/object-property-is-enumerable": 101,
-                "../internals/redefine": 109,
-                "../internals/set-to-string-tag": 118,
-                "../internals/shared": 121,
-                "../internals/shared-key": 119,
-                "../internals/to-indexed-object": 135,
-                "../internals/to-object": 138,
-                "../internals/to-primitive": 141,
-                "../internals/uid": 146,
-                "../internals/use-symbol-as-uid": 147,
-                "../internals/well-known-symbol": 149,
-                "../internals/well-known-symbol-wrapped": 148
+                "../internals/redefine": 110,
+                "../internals/set-to-string-tag": 119,
+                "../internals/shared": 122,
+                "../internals/shared-key": 120,
+                "../internals/to-indexed-object": 136,
+                "../internals/to-object": 139,
+                "../internals/to-primitive": 142,
+                "../internals/uid": 147,
+                "../internals/use-symbol-as-uid": 148,
+                "../internals/well-known-symbol": 150,
+                "../internals/well-known-symbol-wrapped": 149
             }
         ],
-        210: [
+        213: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-copy-within"), s = o.aTypedArray;
@@ -6201,7 +6255,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-copy-within": 14
             }
         ],
-        211: [
+        214: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-iteration").every, s = o.aTypedArray;
@@ -6214,7 +6268,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-iteration": 19
             }
         ],
-        212: [
+        215: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-fill"), s = o.aTypedArray;
@@ -6227,7 +6281,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-fill": 15
             }
         ],
-        213: [
+        216: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), s = e1("../internals/array-iteration").filter, i = e1("../internals/species-constructor"), a = o.aTypedArray, l = o.aTypedArrayConstructor;
@@ -6239,10 +6293,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/array-buffer-view-core": 12,
                 "../internals/array-iteration": 19,
-                "../internals/species-constructor": 122
+                "../internals/species-constructor": 123
             }
         ],
-        214: [
+        217: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-iteration").findIndex, s = o.aTypedArray;
@@ -6255,7 +6309,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-iteration": 19
             }
         ],
-        215: [
+        218: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-iteration").find, s = o.aTypedArray;
@@ -6268,7 +6322,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-iteration": 19
             }
         ],
-        216: [
+        219: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Float32", function(o) {
                     return function(e1, t, r) {
@@ -6277,10 +6331,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        217: [
+        220: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Float64", function(o) {
                     return function(e1, t, r) {
@@ -6289,10 +6343,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        218: [
+        221: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-iteration").forEach, s = o.aTypedArray;
@@ -6305,7 +6359,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-iteration": 19
             }
         ],
-        219: [
+        222: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-includes").includes, s = o.aTypedArray;
@@ -6318,7 +6372,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-includes": 18
             }
         ],
-        220: [
+        223: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-includes").indexOf, s = o.aTypedArray;
@@ -6331,7 +6385,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-includes": 18
             }
         ],
-        221: [
+        224: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Int16", function(o) {
                     return function(e1, t, r) {
@@ -6340,10 +6394,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        222: [
+        225: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Int32", function(o) {
                     return function(e1, t, r) {
@@ -6352,10 +6406,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        223: [
+        226: [
             function(e1, t, r) {
                 "use strict";
                 function o() {
@@ -6371,11 +6425,11 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/array-buffer-view-core": 12,
                 "../internals/global": 60,
-                "../internals/well-known-symbol": 149,
-                "../modules/es.array.iterator": 164
+                "../internals/well-known-symbol": 150,
+                "../modules/es.array.iterator": 165
             }
         ],
-        224: [
+        227: [
             function(e1, t, r) {
                 "use strict";
                 var e1 = e1("../internals/array-buffer-view-core"), o = e1.aTypedArray, e1 = e1.exportTypedArrayMethod, n = [].join;
@@ -6387,7 +6441,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-buffer-view-core": 12
             }
         ],
-        225: [
+        228: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-last-index-of"), s = o.aTypedArray;
@@ -6400,7 +6454,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-last-index-of": 20
             }
         ],
-        226: [
+        229: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-iteration").map, s = e1("../internals/species-constructor"), i = o.aTypedArray, a = o.aTypedArrayConstructor;
@@ -6413,10 +6467,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/array-buffer-view-core": 12,
                 "../internals/array-iteration": 19,
-                "../internals/species-constructor": 122
+                "../internals/species-constructor": 123
             }
         ],
-        227: [
+        230: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-reduce").right, s = o.aTypedArray;
@@ -6429,7 +6483,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-reduce": 24
             }
         ],
-        228: [
+        231: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-reduce").left, s = o.aTypedArray;
@@ -6442,7 +6496,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-reduce": 24
             }
         ],
-        229: [
+        232: [
             function(e1, t, r) {
                 "use strict";
                 var e1 = e1("../internals/array-buffer-view-core"), n = e1.aTypedArray, e1 = e1.exportTypedArrayMethod, s = Math.floor;
@@ -6455,7 +6509,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-buffer-view-core": 12
             }
         ],
-        230: [
+        233: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), i = e1("../internals/to-length"), a = e1("../internals/to-offset"), l = e1("../internals/to-object"), e1 = e1("../internals/fails"), u = o.aTypedArray;
@@ -6471,12 +6525,12 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/array-buffer-view-core": 12,
                 "../internals/fails": 51,
-                "../internals/to-length": 137,
-                "../internals/to-object": 138,
-                "../internals/to-offset": 139
+                "../internals/to-length": 138,
+                "../internals/to-object": 139,
+                "../internals/to-offset": 140
             }
         ],
-        231: [
+        234: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), i = e1("../internals/species-constructor"), e1 = e1("../internals/fails"), a = o.aTypedArray, l = o.aTypedArrayConstructor, o = o.exportTypedArrayMethod, u = [].slice;
@@ -6490,10 +6544,10 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../internals/array-buffer-view-core": 12,
                 "../internals/fails": 51,
-                "../internals/species-constructor": 122
+                "../internals/species-constructor": 123
             }
         ],
-        232: [
+        235: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/array-iteration").some, s = o.aTypedArray;
@@ -6506,7 +6560,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-iteration": 19
             }
         ],
-        233: [
+        236: [
             function(e1, t, r) {
                 "use strict";
                 var e1 = e1("../internals/array-buffer-view-core"), o = e1.aTypedArray, e1 = e1.exportTypedArrayMethod, n = [].sort;
@@ -6518,7 +6572,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/array-buffer-view-core": 12
             }
         ],
-        234: [
+        237: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core"), n = e1("../internals/to-length"), s = e1("../internals/to-absolute-index"), i = e1("../internals/species-constructor"), a = o.aTypedArray;
@@ -6529,12 +6583,12 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../internals/array-buffer-view-core": 12,
-                "../internals/species-constructor": 122,
-                "../internals/to-absolute-index": 133,
-                "../internals/to-length": 137
+                "../internals/species-constructor": 123,
+                "../internals/to-absolute-index": 134,
+                "../internals/to-length": 138
             }
         ],
-        235: [
+        238: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/global"), n = e1("../internals/array-buffer-view-core"), e1 = e1("../internals/fails"), s = o.Int8Array, i = n.aTypedArray, o = n.exportTypedArrayMethod, a = [].toLocaleString, l = [].slice, u = !!s && e1(function() {
@@ -6563,7 +6617,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60
             }
         ],
-        236: [
+        239: [
             function(e1, t, r) {
                 "use strict";
                 var o = e1("../internals/array-buffer-view-core").exportTypedArrayMethod, n = e1("../internals/fails"), e1 = e1("../internals/global").Uint8Array, e1 = e1 && e1.prototype || {}, s = [].toString, i = [].join, n = (n(function() {
@@ -6579,7 +6633,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60
             }
         ],
-        237: [
+        240: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Uint16", function(o) {
                     return function(e1, t, r) {
@@ -6588,10 +6642,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        238: [
+        241: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Uint32", function(o) {
                     return function(e1, t, r) {
@@ -6600,10 +6654,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        239: [
+        242: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Uint8", function(o) {
                     return function(e1, t, r) {
@@ -6612,10 +6666,10 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        240: [
+        243: [
             function(e1, t, r) {
                 e1("../internals/typed-array-constructor")("Uint8", function(o) {
                     return function(e1, t, r) {
@@ -6624,10 +6678,10 @@ new (0, _p5Default.default)((sketch)=>{
                 }, !0);
             },
             {
-                "../internals/typed-array-constructor": 143
+                "../internals/typed-array-constructor": 144
             }
         ],
-        241: [
+        244: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -6663,10 +6717,10 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/internal-state": 71,
                 "../internals/is-object": 75,
                 "../internals/native-weak-map": 86,
-                "../internals/redefine-all": 108
+                "../internals/redefine-all": 109
             }
         ],
-        242: [
+        245: [
             function(e1, t, r) {
                 var o, n = e1("../internals/global"), s = e1("../internals/dom-iterables"), i = e1("../internals/array-for-each"), a = e1("../internals/create-non-enumerable-property");
                 for(o in s){
@@ -6685,7 +6739,7 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/global": 60
             }
         ],
-        243: [
+        246: [
             function(e1, t, r) {
                 var o, n = e1("../internals/global"), s = e1("../internals/dom-iterables"), i = e1("../modules/es.array.iterator"), a = e1("../internals/create-non-enumerable-property"), e1 = e1("../internals/well-known-symbol"), l = e1("iterator"), u = e1("toStringTag"), c = i.values;
                 for(o in s){
@@ -6710,11 +6764,11 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/create-non-enumerable-property": 38,
                 "../internals/dom-iterables": 45,
                 "../internals/global": 60,
-                "../internals/well-known-symbol": 149,
-                "../modules/es.array.iterator": 164
+                "../internals/well-known-symbol": 150,
+                "../modules/es.array.iterator": 165
             }
         ],
-        244: [
+        247: [
             function(e1, t, D) {
                 "use strict";
                 e1("../modules/es.array.iterator");
@@ -6740,15 +6794,15 @@ new (0, _p5Default.default)((sketch)=>{
                 function d() {
                     y(this, d, k);
                     var e1, t, r, o, n, s, i, a, l = 0 < arguments.length ? arguments[0] : void 0, u = [];
-                    if (O(this, {
+                    if (C(this, {
                         type: k,
                         entries: u,
                         updateURL: function() {},
                         updateSearchParams: c
                     }), void 0 !== l) {
-                        if (j(l)) {
+                        if (_(l)) {
                             if ("function" == typeof (e1 = T(l))) for(r = (t = e1.call(l)).next; !(o = r.call(t)).done;){
-                                if ((s = (n = (o = S(_(o.value))).next).call(o)).done || (i = n.call(o)).done || !n.call(o).done) throw TypeError("Expected sequence with length 2");
+                                if ((s = (n = (o = S(j(o.value))).next).call(o)).done || (i = n.call(o)).done || !n.call(o).done) throw TypeError("Expected sequence with length 2");
                                 u.push({
                                     key: s.value + "",
                                     value: i.value + ""
@@ -6761,7 +6815,7 @@ new (0, _p5Default.default)((sketch)=>{
                         } else R(u, "string" == typeof l ? "?" === l.charAt(0) ? l.slice(1) : l : l + "");
                     }
                 }
-                var o = e1("../internals/export"), i = e1("../internals/get-built-in"), a = e1("../internals/native-url"), l = e1("../internals/redefine"), h = e1("../internals/redefine-all"), f = e1("../internals/set-to-string-tag"), p = e1("../internals/create-iterator-constructor"), m = e1("../internals/internal-state"), y = e1("../internals/an-instance"), g = e1("../internals/has"), v = e1("../internals/function-bind-context"), b = e1("../internals/classof"), _ = e1("../internals/an-object"), j = e1("../internals/is-object"), x = e1("../internals/object-create"), w = e1("../internals/create-property-descriptor"), S = e1("../internals/get-iterator"), T = e1("../internals/get-iterator-method"), e1 = e1("../internals/well-known-symbol"), E = i("fetch"), M = i("Headers"), i = e1("iterator"), k = "URLSearchParams", C = k + "Iterator", O = m.set, A = m.getterFor(k), F = m.getterFor(C), U = /\+/g, P = Array(4), L = function(e1) {
+                var o = e1("../internals/export"), i = e1("../internals/get-built-in"), a = e1("../internals/native-url"), l = e1("../internals/redefine"), h = e1("../internals/redefine-all"), f = e1("../internals/set-to-string-tag"), p = e1("../internals/create-iterator-constructor"), m = e1("../internals/internal-state"), y = e1("../internals/an-instance"), g = e1("../internals/has"), v = e1("../internals/function-bind-context"), b = e1("../internals/classof"), j = e1("../internals/an-object"), _ = e1("../internals/is-object"), x = e1("../internals/object-create"), w = e1("../internals/create-property-descriptor"), S = e1("../internals/get-iterator"), T = e1("../internals/get-iterator-method"), e1 = e1("../internals/well-known-symbol"), E = i("fetch"), M = i("Headers"), i = e1("iterator"), k = "URLSearchParams", O = k + "Iterator", C = m.set, A = m.getterFor(k), F = m.getterFor(O), U = /\+/g, P = Array(4), L = function(e1) {
                     var t, r = e1.replace(U, " "), o = 4;
                     try {
                         return decodeURIComponent(r);
@@ -6782,8 +6836,8 @@ new (0, _p5Default.default)((sketch)=>{
                         value: L(r.join("="))
                     }));
                 }, I = p(function(e1, t) {
-                    O(this, {
-                        type: C,
+                    C(this, {
+                        type: O,
                         iterator: S(A(e1).entries),
                         kind: t
                     });
@@ -6874,7 +6928,7 @@ new (0, _p5Default.default)((sketch)=>{
                         var t, r, o, e1 = [
                             e1
                         ];
-                        return 1 < arguments.length && (j(t = arguments[1]) && (r = t.body, b(r) === k && ((o = t.headers ? new M(t.headers) : new M).has("content-type") || o.set("content-type", "application/x-www-form-urlencoded;charset=UTF-8"), t = x(t, {
+                        return 1 < arguments.length && (_(t = arguments[1]) && (r = t.body, b(r) === k && ((o = t.headers ? new M(t.headers) : new M).has("content-type") || o.set("content-type", "application/x-www-form-urlencoded;charset=UTF-8"), t = x(t, {
                             body: w(0, String(r)),
                             headers: w(0, o)
                         }))), e1.push(t)), E.apply(this, e1);
@@ -6900,14 +6954,14 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/is-object": 75,
                 "../internals/native-url": 85,
                 "../internals/object-create": 91,
-                "../internals/redefine": 109,
-                "../internals/redefine-all": 108,
-                "../internals/set-to-string-tag": 118,
-                "../internals/well-known-symbol": 149,
-                "../modules/es.array.iterator": 164
+                "../internals/redefine": 110,
+                "../internals/redefine-all": 109,
+                "../internals/set-to-string-tag": 119,
+                "../internals/well-known-symbol": 150,
+                "../modules/es.array.iterator": 165
             }
         ],
-        245: [
+        248: [
             function(e1, y, F) {
                 "use strict";
                 e1("../modules/es.string.iterator");
@@ -6930,7 +6984,7 @@ new (0, _p5Default.default)((sketch)=>{
                         switch(s = n[l], a){
                             case me:
                                 if (!s || !J.test(s)) {
-                                    if (r) return _;
+                                    if (r) return j;
                                     a = ge;
                                     continue;
                                 }
@@ -6940,26 +6994,26 @@ new (0, _p5Default.default)((sketch)=>{
                                 if (s && ($.test(s) || "+" == s || "-" == s || "." == s)) u += s.toLowerCase();
                                 else {
                                     if (":" != s) {
-                                        if (r) return _;
+                                        if (r) return j;
                                         u = "", a = ge, l = 0;
                                         continue;
                                     }
-                                    if (r && (k(e1) != v(M, u) || "file" == u && (C(e1) || null !== e1.port) || "file" == e1.scheme && !e1.host)) return;
+                                    if (r && (k(e1) != v(M, u) || "file" == u && (O(e1) || null !== e1.port) || "file" == e1.scheme && !e1.host)) return;
                                     if (e1.scheme = u, r) return void (k(e1) && M[e1.scheme] == e1.port && (e1.port = null));
-                                    u = "", "file" == e1.scheme ? a = Ee : k(e1) && o && o.scheme == e1.scheme ? a = ve : k(e1) ? a = xe : "/" == n[l + 1] ? (a = be, l++) : (e1.cannotBeABaseURL = !0, e1.path.push(""), a = Ce);
+                                    u = "", "file" == e1.scheme ? a = Ee : k(e1) && o && o.scheme == e1.scheme ? a = ve : k(e1) ? a = xe : "/" == n[l + 1] ? (a = be, l++) : (e1.cannotBeABaseURL = !0, e1.path.push(""), a = Oe);
                                 }
                                 break;
                             case ge:
-                                if (!o || o.cannotBeABaseURL && "#" != s) return _;
+                                if (!o || o.cannotBeABaseURL && "#" != s) return j;
                                 if (o.cannotBeABaseURL && "#" == s) {
                                     e1.scheme = o.scheme, e1.path = o.path.slice(), e1.query = o.query, e1.fragment = "", e1.cannotBeABaseURL = !0, a = D;
                                     break;
                                 }
-                                a = "file" == o.scheme ? Ee : _e;
+                                a = "file" == o.scheme ? Ee : je;
                                 continue;
                             case ve:
                                 if ("/" != s || "/" != n[l + 1]) {
-                                    a = _e;
+                                    a = je;
                                     continue;
                                 }
                                 a = A, l++;
@@ -6971,9 +7025,9 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                                 a = R;
                                 continue;
-                            case _e:
+                            case je:
                                 if (e1.scheme = o.scheme, s == g) e1.username = o.username, e1.password = o.password, e1.host = o.host, e1.port = o.port, e1.path = o.path.slice(), e1.query = o.query;
-                                else if ("/" == s || "\\" == s && k(e1)) a = je;
+                                else if ("/" == s || "\\" == s && k(e1)) a = _e;
                                 else if ("?" == s) e1.username = o.username, e1.password = o.password, e1.host = o.host, e1.port = o.port, e1.path = o.path.slice(), e1.query = "", a = I;
                                 else {
                                     if ("#" != s) {
@@ -6983,7 +7037,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     e1.username = o.username, e1.password = o.password, e1.host = o.host, e1.port = o.port, e1.path = o.path.slice(), e1.query = o.query, e1.fragment = "", a = D;
                                 }
                                 break;
-                            case je:
+                            case _e:
                                 if (!k(e1) || "/" != s && "\\" != s) {
                                     if ("/" != s) {
                                         e1.username = o.username, e1.password = o.password, e1.host = o.host, e1.port = o.port, a = R;
@@ -7021,15 +7075,15 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                                 if (":" != s || d) {
                                     if (s == g || "/" == s || "?" == s || "#" == s || "\\" == s && k(e1)) {
-                                        if (k(e1) && "" == u) return j;
-                                        if (r && "" == u && (C(e1) || null !== e1.port)) return;
+                                        if (k(e1) && "" == u) return _;
+                                        if (r && "" == u && (O(e1) || null !== e1.port)) return;
                                         if (i = w(e1, u)) return i;
                                         if (u = "", a = L, r) return;
                                         continue;
                                     }
                                     "[" == s ? d = !0 : "]" == s && (d = !1), u += s;
                                 } else {
-                                    if ("" == u) return j;
+                                    if ("" == u) return _;
                                     if (i = w(e1, u)) return i;
                                     if (u = "", a = Te, r == Se) return;
                                 }
@@ -7073,11 +7127,11 @@ new (0, _p5Default.default)((sketch)=>{
                                     a = ke;
                                     break;
                                 }
-                                o && "file" == o.scheme && !de(n.slice(l).join("")) && (O(o.path[0], !0) ? e1.path.push(o.path[0]) : e1.host = o.host), a = R;
+                                o && "file" == o.scheme && !de(n.slice(l).join("")) && (C(o.path[0], !0) ? e1.path.push(o.path[0]) : e1.host = o.host), a = R;
                                 continue;
                             case ke:
                                 if (s == g || "/" == s || "\\" == s || "?" == s || "#" == s) {
-                                    if (!r && O(u)) a = R;
+                                    if (!r && C(u)) a = R;
                                     else {
                                         if ("" == u) {
                                             if (e1.host = "", r) return;
@@ -7103,11 +7157,11 @@ new (0, _p5Default.default)((sketch)=>{
                                 break;
                             case R:
                                 if (s == g || "/" == s || "\\" == s && k(e1) || !r && ("?" == s || "#" == s)) {
-                                    if (pe(u) ? (he(e1), "/" == s || "\\" == s && k(e1) || e1.path.push("")) : fe(u) ? "/" == s || "\\" == s && k(e1) || e1.path.push("") : ("file" == e1.scheme && !e1.path.length && O(u) && (e1.host && (e1.host = ""), u = u.charAt(0) + ":"), e1.path.push(u)), u = "", "file" == e1.scheme && (s == g || "?" == s || "#" == s)) for(; 1 < e1.path.length && "" === e1.path[0];)e1.path.shift();
+                                    if (pe(u) ? (he(e1), "/" == s || "\\" == s && k(e1) || e1.path.push("")) : fe(u) ? "/" == s || "\\" == s && k(e1) || e1.path.push("") : ("file" == e1.scheme && !e1.path.length && C(u) && (e1.host && (e1.host = ""), u = u.charAt(0) + ":"), e1.path.push(u)), u = "", "file" == e1.scheme && (s == g || "?" == s || "#" == s)) for(; 1 < e1.path.length && "" === e1.path[0];)e1.path.shift();
                                     "?" == s ? (e1.query = "", a = I) : "#" == s && (e1.fragment = "", a = D);
                                 } else u += E(s, ce);
                                 break;
-                            case Ce:
+                            case Oe:
                                 "?" == s ? (e1.query = "", a = I) : "#" == s ? (e1.fragment = "", a = D) : s != g && (e1.path[0] += E(s, S));
                                 break;
                             case I:
@@ -7131,7 +7185,7 @@ new (0, _p5Default.default)((sketch)=>{
                     var i = s.searchParams = new q;
                     (n = f(i)).updateSearchParams(s.query), n.updateURL = function() {
                         s.query = String(i) || null;
-                    }, u || (o.href = m.call(o), o.origin = Oe.call(o), o.protocol = Ae.call(o), o.username = Pe.call(o), o.password = Le.call(o), o.host = Re.call(o), o.hostname = Ie.call(o), o.port = De.call(o), o.pathname = Fe.call(o), o.search = Ue.call(o), o.searchParams = Ne.call(o), o.hash = Be.call(o));
+                    }, u || (o.href = m.call(o), o.origin = Ce.call(o), o.protocol = Ae.call(o), o.username = Pe.call(o), o.password = Le.call(o), o.host = Re.call(o), o.hostname = Ie.call(o), o.port = De.call(o), o.pathname = Fe.call(o), o.search = Ue.call(o), o.searchParams = Ne.call(o), o.hash = Be.call(o));
                 }
                 function t(e1, t) {
                     return {
@@ -7141,7 +7195,7 @@ new (0, _p5Default.default)((sketch)=>{
                         enumerable: !0
                     };
                 }
-                var g, r, o, U = e1("../internals/export"), u = e1("../internals/descriptors"), N = e1("../internals/native-url"), s = e1("../internals/global"), B = e1("../internals/object-define-properties"), i = e1("../internals/redefine"), G = e1("../internals/an-instance"), v = e1("../internals/has"), d = e1("../internals/object-assign"), b = e1("../internals/array-from"), V = e1("../internals/string-multibyte").codeAt, z = e1("../internals/string-punycode-to-ascii"), H = e1("../internals/set-to-string-tag"), W = e1("../modules/web.url-search-params"), e1 = e1("../internals/internal-state"), h = s.URL, q = W.URLSearchParams, f = W.getState, X = e1.set, p = e1.getterFor("URL"), Y = Math.floor, Z = Math.pow, Q = "Invalid authority", _ = "Invalid scheme", j = "Invalid host", K = "Invalid port", J = /[A-Za-z]/, $ = /[\d+-.A-Za-z]/, x = /\d/, ee = /^(0x|0X)/, te = /^[0-7]+$/, re = /^\d+$/, oe = /^[\dA-Fa-f]+$/, ne = /[\u0000\u0009\u000A\u000D #%/:?@[\\]]/, se = /[\u0000\u0009\u000A\u000D #/:?@[\\]]/, ie = /^[\u0000-\u001F ]+|[\u0000-\u001F ]+$/g, ae = /[\u0009\u000A\u000D]/g, w = function(e1, t) {
+                var g, r, o, U = e1("../internals/export"), u = e1("../internals/descriptors"), N = e1("../internals/native-url"), s = e1("../internals/global"), B = e1("../internals/object-define-properties"), i = e1("../internals/redefine"), G = e1("../internals/an-instance"), v = e1("../internals/has"), d = e1("../internals/object-assign"), b = e1("../internals/array-from"), V = e1("../internals/string-multibyte").codeAt, z = e1("../internals/string-punycode-to-ascii"), H = e1("../internals/set-to-string-tag"), W = e1("../modules/web.url-search-params"), e1 = e1("../internals/internal-state"), h = s.URL, q = W.URLSearchParams, f = W.getState, X = e1.set, p = e1.getterFor("URL"), Y = Math.floor, Z = Math.pow, Q = "Invalid authority", j = "Invalid scheme", _ = "Invalid host", K = "Invalid port", J = /[A-Za-z]/, $ = /[\d+-.A-Za-z]/, x = /\d/, ee = /^(0x|0X)/, te = /^[0-7]+$/, re = /^\d+$/, oe = /^[\dA-Fa-f]+$/, ne = /[\u0000\u0009\u000A\u000D #%/:?@[\\]]/, se = /[\u0000\u0009\u000A\u000D #/:?@[\\]]/, ie = /^[\u0000-\u001F ]+|[\u0000-\u001F ]+$/g, ae = /[\u0009\u000A\u000D]/g, w = function(e1, t) {
                     var r, o, n;
                     if ("[" == t.charAt(0)) return "]" == t.charAt(t.length - 1) && (r = function(e1) {
                         var t = [
@@ -7219,7 +7273,7 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                         } else if (r != 8) return;
                         return t;
-                    }(t.slice(1, -1))) ? void (e1.host = r) : j;
+                    }(t.slice(1, -1))) ? void (e1.host = r) : _;
                     if (k(e1)) return t = z(t), ne.test(t) || null === (r = function(e1) {
                         var t = e1.split("."), r, o, n, s, i, a, l;
                         if (t.length && t[t.length - 1] == "") t.pop();
@@ -7247,8 +7301,8 @@ new (0, _p5Default.default)((sketch)=>{
                         }
                         for(l = o.pop(), n = 0; n < o.length; n++)l += o[n] * Z(256, 3 - n);
                         return l;
-                    }(t)) ? j : void (e1.host = r);
-                    if (se.test(t)) return j;
+                    }(t)) ? _ : void (e1.host = r);
+                    if (se.test(t)) return _;
                     for(r = "", o = b(t), n = 0; n < o.length; n++)r += E(o[n], S);
                     e1.host = r;
                 }, le = function(e1) {
@@ -7288,23 +7342,23 @@ new (0, _p5Default.default)((sketch)=>{
                     wss: 443
                 }, k = function(e1) {
                     return v(M, e1.scheme);
-                }, C = function(e1) {
+                }, O = function(e1) {
                     return "" != e1.username || "" != e1.password;
-                }, O = function(e1, t) {
+                }, C = function(e1, t) {
                     return 2 == e1.length && J.test(e1.charAt(0)) && (":" == (e1 = e1.charAt(1)) || !t && "|" == e1);
                 }, de = function(e1) {
-                    return 1 < e1.length && O(e1.slice(0, 2)) && (2 == e1.length || "/" === (e1 = e1.charAt(2)) || "\\" === e1 || "?" === e1 || "#" === e1);
+                    return 1 < e1.length && C(e1.slice(0, 2)) && (2 == e1.length || "/" === (e1 = e1.charAt(2)) || "\\" === e1 || "?" === e1 || "#" === e1);
                 }, he = function(e1) {
                     var t = e1.path, r = t.length;
-                    !r || "file" == e1.scheme && 1 == r && O(t[0], !0) || t.pop();
+                    !r || "file" == e1.scheme && 1 == r && C(t[0], !0) || t.pop();
                 }, fe = function(e1) {
                     return "." === e1 || "%2e" === e1.toLowerCase();
                 }, pe = function(e1) {
                     return ".." === (e1 = e1.toLowerCase()) || "%2e." === e1 || ".%2e" === e1 || "%2e%2e" === e1;
-                }, me = {}, ye = {}, ge = {}, ve = {}, be = {}, _e = {}, je = {}, xe = {}, A = {}, P = {}, we = {}, Se = {}, Te = {}, Ee = {}, Me = {}, ke = {}, L = {}, R = {}, Ce = {}, I = {}, D = {}, s = l.prototype, m = function() {
+                }, me = {}, ye = {}, ge = {}, ve = {}, be = {}, je = {}, _e = {}, xe = {}, A = {}, P = {}, we = {}, Se = {}, Te = {}, Ee = {}, Me = {}, ke = {}, L = {}, R = {}, Oe = {}, I = {}, D = {}, s = l.prototype, m = function() {
                     var e1 = p(this), t = e1.scheme, r = e1.username, o = e1.password, n = e1.host, s = e1.port, i = e1.path, a = e1.query, l = e1.fragment, u = t + ":";
-                    return null !== n ? (u += "//", C(e1) && (u += r + (o ? ":" + o : "") + "@"), u += c(n), null !== s && (u += ":" + s)) : "file" == t && (u += "//"), u += e1.cannotBeABaseURL ? i[0] : i.length ? "/" + i.join("/") : "", null !== a && (u += "?" + a), null !== l && (u += "#" + l), u;
-                }, Oe = function() {
+                    return null !== n ? (u += "//", O(e1) && (u += r + (o ? ":" + o : "") + "@"), u += c(n), null !== s && (u += ":" + s)) : "file" == t && (u += "//"), u += e1.cannotBeABaseURL ? i[0] : i.length ? "/" + i.join("/") : "", null !== a && (u += "?" + a), null !== l && (u += "#" + l), u;
+                }, Ce = function() {
                     var e1 = p(this), t = e1.scheme, r = e1.port;
                     if ("blob" == t) try {
                         return new URL(t.path[0]).origin;
@@ -7345,7 +7399,7 @@ new (0, _p5Default.default)((sketch)=>{
                         if (e1) throw TypeError(e1);
                         f(t.searchParams).updateSearchParams(t.query);
                     }),
-                    origin: t(Oe),
+                    origin: t(Ce),
                     protocol: t(Ae, function(e1) {
                         var t = p(this);
                         a(t, String(e1) + ":", me);
@@ -7420,24 +7474,24 @@ new (0, _p5Default.default)((sketch)=>{
                 "../internals/native-url": 85,
                 "../internals/object-assign": 90,
                 "../internals/object-define-properties": 92,
-                "../internals/redefine": 109,
-                "../internals/set-to-string-tag": 118,
-                "../internals/string-multibyte": 124,
-                "../internals/string-punycode-to-ascii": 127,
-                "../modules/es.string.iterator": 197,
-                "../modules/web.url-search-params": 244
+                "../internals/redefine": 110,
+                "../internals/set-to-string-tag": 119,
+                "../internals/string-multibyte": 125,
+                "../internals/string-punycode-to-ascii": 128,
+                "../modules/es.string.iterator": 200,
+                "../modules/web.url-search-params": 247
             }
         ],
-        246: [
+        249: [
             function(e1, t, r) {
                 "use strict";
                 t.exports = e1("./").polyfill();
             },
             {
-                "./": 247
+                "./": 250
             }
         ],
-        247: [
+        250: [
             function(V, r, o) {
                 (function(B, G) {
                     var e1, t;
@@ -7475,14 +7529,14 @@ new (0, _p5Default.default)((sketch)=>{
                         }
                         var p, m, y, D = void 0;
                         function g(e1, t) {
-                            var r, o = this, n = new this.constructor(_), s = (void 0 === n[b] && P(n), o._state);
+                            var r, o = this, n = new this.constructor(j), s = (void 0 === n[b] && P(n), o._state);
                             return s ? (r = arguments[s - 1], i(function() {
-                                return O(s, n, r, o._result);
+                                return C(s, n, r, o._result);
                             })) : k(o, n, e1, t), n;
                         }
                         function v(e1) {
                             var t;
-                            return e1 && "object" == typeof e1 && e1.constructor === this ? e1 : (T(t = new this(_), e1), t);
+                            return e1 && "object" == typeof e1 && e1.constructor === this ? e1 : (T(t = new this(j), e1), t);
                         }
                         var D = a ? function() {
                             return B.nextTick(h);
@@ -7493,8 +7547,8 @@ new (0, _p5Default.default)((sketch)=>{
                         }) : u ? ((p = new MessageChannel).port1.onmessage = h, function() {
                             return p.port2.postMessage(0);
                         }) : (void 0 === e1 && "function" == typeof V ? f : c)(), b = Math.random().toString(36).substring(2);
-                        function _() {}
-                        var j = void 0, x = 1, w = 2;
+                        function j() {}
+                        var _ = void 0, x = 1, w = 2;
                         function F(e1, o, n) {
                             i(function(t) {
                                 var r = !1, e1 = function(e1, t, r, o) {
@@ -7534,26 +7588,26 @@ new (0, _p5Default.default)((sketch)=>{
                             var r;
                         }
                         function U(e1) {
-                            e1._onerror && e1._onerror(e1._result), C(e1);
+                            e1._onerror && e1._onerror(e1._result), O(e1);
                         }
                         function E(e1, t) {
-                            e1._state === j && (e1._result = t, e1._state = x, 0 !== e1._subscribers.length && i(C, e1));
+                            e1._state === _ && (e1._result = t, e1._state = x, 0 !== e1._subscribers.length && i(O, e1));
                         }
                         function M(e1, t) {
-                            e1._state === j && (e1._state = w, e1._result = t, i(U, e1));
+                            e1._state === _ && (e1._state = w, e1._result = t, i(U, e1));
                         }
                         function k(e1, t, r, o) {
                             var n = e1._subscribers, s = n.length;
-                            e1._onerror = null, n[s] = t, n[s + x] = r, n[s + w] = o, 0 === s && e1._state && i(C, e1);
+                            e1._onerror = null, n[s] = t, n[s + x] = r, n[s + w] = o, 0 === s && e1._state && i(O, e1);
                         }
-                        function C(e1) {
+                        function O(e1) {
                             var t = e1._subscribers, r = e1._state;
                             if (0 !== t.length) {
-                                for(var o, n = void 0, s = e1._result, i = 0; i < t.length; i += 3)o = t[i], n = t[i + r], o ? O(r, o, n, s) : n(s);
+                                for(var o, n = void 0, s = e1._result, i = 0; i < t.length; i += 3)o = t[i], n = t[i + r], o ? C(r, o, n, s) : n(s);
                                 e1._subscribers.length = 0;
                             }
                         }
-                        function O(e1, t, r, o) {
+                        function C(e1, t, r, o) {
                             var n = l(r), s = void 0, i = void 0, a = !0;
                             if (n) {
                                 try {
@@ -7563,14 +7617,14 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                                 if (t === s) return void M(t, new TypeError("A promises callback cannot return that same promise."));
                             } else s = o;
-                            t._state === j && (n && a ? T(t, s) : !1 === a ? M(t, i) : e1 === x ? E(t, s) : e1 === w && M(t, s));
+                            t._state === _ && (n && a ? T(t, s) : !1 === a ? M(t, i) : e1 === x ? E(t, s) : e1 === w && M(t, s));
                         }
                         var A = 0;
                         function P(e1) {
                             e1[b] = A++, e1._state = void 0, e1._result = void 0, e1._subscribers = [];
                         }
                         L.prototype._enumerate = function(e1) {
-                            for(var t = 0; this._state === j && t < e1.length; t++)this._eachEntry(e1[t], t);
+                            for(var t = 0; this._state === _ && t < e1.length; t++)this._eachEntry(e1[t], t);
                         }, L.prototype._eachEntry = function(t, e1) {
                             var r = this._instanceConstructor, o = r.resolve;
                             if (o === v) {
@@ -7580,13 +7634,13 @@ new (0, _p5Default.default)((sketch)=>{
                                 } catch (e1) {
                                     a = !0, i = e1;
                                 }
-                                s === g && t._state !== j ? this._settledAt(t._state, e1, t._result) : "function" != typeof s ? (this._remaining--, this._result[e1] = t) : r === R ? (n = new r(_), a ? M(n, i) : S(n, t, s), this._willSettleAt(n, e1)) : this._willSettleAt(new r(function(e1) {
+                                s === g && t._state !== _ ? this._settledAt(t._state, e1, t._result) : "function" != typeof s ? (this._remaining--, this._result[e1] = t) : r === R ? (n = new r(j), a ? M(n, i) : S(n, t, s), this._willSettleAt(n, e1)) : this._willSettleAt(new r(function(e1) {
                                     return e1(t);
                                 }), e1);
                             } else this._willSettleAt(o(t), e1);
                         }, L.prototype._settledAt = function(e1, t, r) {
                             var o = this.promise;
-                            o._state === j && (this._remaining--, e1 === w ? M(o, r) : this._result[t] = r), 0 === this._remaining && E(o, this._result);
+                            o._state === _ && (this._remaining--, e1 === w ? M(o, r) : this._result[t] = r), 0 === this._remaining && E(o, this._result);
                         }, L.prototype._willSettleAt = function(e1, t) {
                             var r = this;
                             k(e1, void 0, function(e1) {
@@ -7597,7 +7651,7 @@ new (0, _p5Default.default)((sketch)=>{
                         };
                         var N = L;
                         function L(e1, t) {
-                            this._instanceConstructor = e1, this.promise = new e1(_), this.promise[b] || P(this.promise), r(t) ? (this.length = t.length, this._remaining = t.length, this._result = new Array(this.length), 0 !== this.length && (this.length = this.length || 0, this._enumerate(t), 0 !== this._remaining) || E(this.promise, this._result)) : M(this.promise, new Error("Array Methods must be provided an Array"));
+                            this._instanceConstructor = e1, this.promise = new e1(j), this.promise[b] || P(this.promise), r(t) ? (this.length = t.length, this._remaining = t.length, this._result = new Array(this.length), 0 !== this.length && (this.length = this.length || 0, this._enumerate(t), 0 !== this._remaining) || E(this.promise, this._result)) : M(this.promise, new Error("Array Methods must be provided an Array"));
                         }
                         I.prototype.catch = function(e1) {
                             return this.then(null, e1);
@@ -7615,7 +7669,7 @@ new (0, _p5Default.default)((sketch)=>{
                         };
                         var R = I;
                         function I(e1) {
-                            if (this[b] = A++, this._result = this._state = void 0, this._subscribers = [], _ !== e1) {
+                            if (this[b] = A++, this._result = this._state = void 0, this._subscribers = [], j !== e1) {
                                 if ("function" != typeof e1) throw new TypeError("You must pass a resolver function as the first argument to the promise constructor");
                                 if (!(this instanceof I)) throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
                                 var t = this;
@@ -7640,7 +7694,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 return t(new TypeError("You must pass an array to race."));
                             });
                         }, R.resolve = v, R.reject = function(e1) {
-                            var t = new this(_);
+                            var t = new this(j);
                             return M(t, e1), t;
                         }, R._setScheduler = function(e1) {
                             n = e1;
@@ -7669,10 +7723,10 @@ new (0, _p5Default.default)((sketch)=>{
                 }).call(this, V("_process"), "undefined" != typeof global ? global : "undefined" != typeof self ? self : "undefined" != typeof window ? window : {});
             },
             {
-                _process: 256
+                _process: 259
             }
         ],
-        248: [
+        251: [
             function(e1, t, r) {
                 var o, n;
                 o = this, n = function(e1, t) {
@@ -7718,7 +7772,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        249: [
+        252: [
             function(e1, t, r) {
                 var o = function(a) {
                     "use strict";
@@ -7771,7 +7825,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        250: [
+        253: [
             function(e1, t, r) {
                 var o, n = Object.defineProperty, s = (n(r, "__esModule", {
                     value: !0
@@ -7794,7 +7848,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 i[e1] = h;
                             }
                             else {
-                                const g = "rgb444" === r ? P : O;
+                                const g = "rgb444" === r ? P : C;
                                 for(let e1 = 0; e1 < n; e1++){
                                     var f = o[e1], p = f >> 16 & 255, m = f >> 8 & 255, f = 255 & f, y = g(f, m, p), y = y in a ? a[y] : a[y] = function(t, r, o, n) {
                                         let s = 0, i = 1e100;
@@ -7843,15 +7897,15 @@ new (0, _p5Default.default)((sketch)=>{
                                     e1.rc += c, e1.gc += h, e1.bc += d, e1.cnt++;
                                 }
                                 else for(let t = 0; t < n; ++t){
-                                    var p = r[t], m = p >> 16 & 255, y = p >> 8 & 255, p = 255 & p, g = O(p, y, m);
+                                    var p = r[t], m = p >> 16 & 255, y = p >> 8 & 255, p = 255 & p, g = C(p, y, m);
                                     let e1 = g in o ? o[g] : o[g] = D();
                                     e1.rc += p, e1.gc += y, e1.bc += m, e1.cnt++;
                                 }
                                 return o;
                             }(e1, o), d = c.length, h = d - 1, f = new Uint32Array(d + 1);
                             for(var p = 0, m = 0; m < d; ++m){
-                                const C = c[m];
-                                null != C && (E = 1 / C.cnt, u && (C.ac *= E), C.rc *= E, C.gc *= E, C.bc *= E, c[p++] = C);
+                                const O = c[m];
+                                null != O && (E = 1 / O.cnt, u && (O.ac *= E), O.rc *= E, O.gc *= E, O.bc *= E, c[p++] = O);
                             }
                             R(t) / p < .022 && (l = !1);
                             for(var y, g, v, m = 0; m < p - 1; ++m)c[m].fw = m + 1, c[m + 1].bk = m, l && (c[m].cnt = Math.sqrt(c[m].cnt));
@@ -7862,18 +7916,18 @@ new (0, _p5Default.default)((sketch)=>{
                                 for(g = ++f[0]; 1 < g && (v = g >> 1, !(c[y = f[v]].err <= b)); g = v)f[g] = y;
                                 f[g] = m;
                             }
-                            var _, j = p - t;
-                            for(m = 0; m < j;){
+                            var j, _ = p - t;
+                            for(m = 0; m < _;){
                                 for(;;){
                                     var x = f[1];
-                                    if ((_ = c[x]).tm >= _.mtm && c[_.nn].mtm <= _.tm) break;
-                                    _.mtm == h ? x = f[1] = f[f[0]--] : (I(c, x, !1), _.tm = m);
+                                    if ((j = c[x]).tm >= j.mtm && c[j.nn].mtm <= j.tm) break;
+                                    j.mtm == h ? x = f[1] = f[f[0]--] : (I(c, x, !1), j.tm = m);
                                     b = c[x].err;
                                     for(g = 1; (v = g + g) <= f[0] && (v < f[0] && c[f[v]].err > c[f[v + 1]].err && v++, !(b <= c[y = f[v]].err)); g = v)f[g] = y;
                                     f[g] = x;
                                 }
-                                var w = c[_.nn], S = _.cnt, T = w.cnt, E = 1 / (S + T);
-                                u && (_.ac = E * (S * _.ac + T * w.ac)), _.rc = E * (S * _.rc + T * w.rc), _.gc = E * (S * _.gc + T * w.gc), _.bc = E * (S * _.bc + T * w.bc), _.cnt += w.cnt, _.mtm = ++m, c[w.bk].fw = w.fw, c[w.fw].bk = w.bk, w.mtm = h;
+                                var w = c[j.nn], S = j.cnt, T = w.cnt, E = 1 / (S + T);
+                                u && (j.ac = E * (S * j.ac + T * w.ac)), j.rc = E * (S * j.rc + T * w.rc), j.gc = E * (S * j.gc + T * w.gc), j.bc = E * (S * j.bc + T * w.bc), j.cnt += w.cnt, j.mtm = ++m, c[w.bk].fw = w.fw, c[w.fw].bk = w.bk, w.mtm = h;
                             }
                             let M = [];
                             for(m = 0;;){
@@ -8007,23 +8061,23 @@ new (0, _p5Default.default)((sketch)=>{
                     let f = !1, p = h, m = (1 << p) - 1;
                     var y = 1 << d - 1;
                     const g = 1 + y;
-                    let v = 2 + y, b = 0, _ = r[0], j = 0;
-                    for(let e1 = l; e1 < 65536; e1 *= 2)++j;
-                    j = 8 - j, n.writeByte(o), E(y);
+                    let v = 2 + y, b = 0, j = r[0], _ = 0;
+                    for(let e1 = l; e1 < 65536; e1 *= 2)++_;
+                    _ = 8 - _, n.writeByte(o), E(y);
                     var x = r.length;
                     for(let t = 1; t < x; t++)e: {
-                        var w = r[t], S = (w << 12) + _;
-                        let e1 = w << j ^ _;
-                        if (i[e1] === S) _ = a[e1];
+                        var w = r[t], S = (w << 12) + j;
+                        let e1 = w << _ ^ j;
+                        if (i[e1] === S) j = a[e1];
                         else {
                             for(var T = 0 === e1 ? 1 : l - e1; 0 <= i[e1];)if ((e1 -= T) < 0 && (e1 += l), i[e1] === S) {
-                                _ = a[e1];
+                                j = a[e1];
                                 break e;
                             }
-                            E(_), _ = w, v < 4096 ? (a[e1] = v++, i[e1] = S) : (i.fill(-1), v = 2 + y, f = !0, E(y));
+                            E(j), j = w, v < 4096 ? (a[e1] = v++, i[e1] = S) : (i.fill(-1), v = 2 + y, f = !0, E(y));
                         }
                     }
-                    return E(_), E(g), n.writeByte(0), n.bytesView();
+                    return E(j), E(g), n.writeByte(0), n.bytesView();
                     function E(e1) {
                         for(u &= k[c], 0 < c ? u |= e1 << c : u = e1, c += p; 8 <= c;)s[b++] = 255 & u, 254 <= b && (n.writeByte(b), n.writeBytesView(s, 0, b), b = 0), u >>= 8, c -= 8;
                         if ((v > m || f) && (f ? (p = h, m = (1 << p) - 1, f = !1) : (++p, m = 12 === p ? 1 << p : (1 << p) - 1)), e1 == g) {
@@ -8032,7 +8086,7 @@ new (0, _p5Default.default)((sketch)=>{
                         }
                     }
                 };
-                function O(e1, t, r) {
+                function C(e1, t, r) {
                     return e1 << 8 & 63488 | t << 2 & 992 | r >> 3;
                 }
                 function A(e1, t, r, o) {
@@ -8105,7 +8159,7 @@ new (0, _p5Default.default)((sketch)=>{
                 }
                 function h(e1 = {}) {
                     const { initialCapacity: t = 4096, auto: g = !0 } = e1, v = M(t);
-                    const b = new Uint8Array(256), _ = new Int32Array(5003), j = new Int32Array(5003);
+                    const b = new Uint8Array(256), j = new Int32Array(5003), _ = new Int32Array(5003);
                     let x = !1;
                     return {
                         reset () {
@@ -8143,7 +8197,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     m,
                                     0,
                                     0
-                                ]), T(v, a), 0 <= l && (p = v, h = l, p.writeByte(33), p.writeByte(255), p.writeByte(11), C(p, "NETSCAPE2.0"), p.writeByte(3), p.writeByte(1), E(p, h), p.writeByte(0));
+                                ]), T(v, a), 0 <= l && (p = v, h = l, p.writeByte(33), p.writeByte(255), p.writeByte(11), O(p, "NETSCAPE2.0"), p.writeByte(3), p.writeByte(1), E(p, h), p.writeByte(0));
                             }
                             var y, f = Math.round(i / 10), o = v, m = c, l = f, h = n, p = s, i = (o.writeByte(33), o.writeByte(249), o.writeByte(4), p < 0 && (p = 0, h = !1), h = h ? (y = 1, 2) : y = 0, 0 <= m && (h = 7 & m), h <<= 2, o.writeByte(0 | h | y), E(o, l), o.writeByte(p || 0), o.writeByte(0), Boolean(a) && !d);
                             c = v, n = t, s = r, y = i ? a : null, c.writeByte(44), E(c, 0), E(c, 0), E(c, n), E(c, s), y ? (n = F(y.length) - 1, c.writeByte(128 | n)) : c.writeByte(0), i && T(v, a), [l, o, s, n, c = 8, i, a, e1] = [
@@ -8153,13 +8207,13 @@ new (0, _p5Default.default)((sketch)=>{
                                 r,
                                 u,
                                 b,
-                                _,
-                                j
+                                j,
+                                _
                             ], S(s, n, o, c, l, i, a, e1);
                         }
                     };
                     function w() {
-                        C(v, "GIF89a");
+                        O(v, "GIF89a");
                     }
                 }
                 function T(r, o) {
@@ -8176,7 +8230,7 @@ new (0, _p5Default.default)((sketch)=>{
                 function E(e1, t) {
                     e1.writeByte(255 & t), e1.writeByte(t >> 8 & 255);
                 }
-                function C(e1, t) {
+                function O(e1, t) {
                     for(var r = 0; r < t.length; r++)e1.writeByte(t.charCodeAt(r));
                 }
                 function F(e1) {
@@ -8186,7 +8240,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        251: [
+        254: [
             function(e1, t, r) {
                 r.read = function(e1, t, r, o, n) {
                     var s, i, a = 8 * n - o - 1, l = (1 << a) - 1, u = l >> 1, c = -7, d = r ? n - 1 : 0, h = r ? -1 : 1, n = e1[t + d];
@@ -8207,7 +8261,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        252: [
+        255: [
             function(o, e1, c) {
                 "use strict";
                 var t;
@@ -8225,7 +8279,7 @@ new (0, _p5Default.default)((sketch)=>{
                     var o = t.b - e1.b, n = r.b - t.b;
                     return 0 < o + n ? (t.a - r.a) * o + (t.a - e1.a) * n : 0;
                 }
-                function _(e1, t) {
+                function j(e1, t) {
                     return e1.a < t.a || e1.a === t.a && e1.b <= t.b;
                 }
                 function V(e1, t, r) {
@@ -8236,7 +8290,7 @@ new (0, _p5Default.default)((sketch)=>{
                     var o = t.a - e1.a, n = r.a - t.a;
                     return 0 < o + n ? (t.b - r.b) * o + (t.b - e1.b) * n : 0;
                 }
-                function j(e1, t, r, o) {
+                function _(e1, t, r, o) {
                     return (e1 = e1 < 0 ? 0 : e1) <= (r = r < 0 ? 0 : r) ? 0 === r ? (t + o) / 2 : t + e1 / (e1 + r) * (o - t) : o + r / (e1 + r) * (t - o);
                 }
                 function d(e1) {
@@ -8302,12 +8356,12 @@ new (0, _p5Default.default)((sketch)=>{
                     var t = e1.e;
                     t.a.c = t.c, t.c.a = t.a, e1.e = null;
                 }
-                function C(e1, t) {
+                function O(e1, t) {
                     m(e1.a), e1.c = !1, (e1.a = t).i = e1;
                 }
-                function O(e1) {
+                function C(e1) {
                     for(var t = e1.a.a; (e1 = G(e1)).a.a === t;);
-                    return e1.c && (C(e1, t = S(B(e1).a.b, e1.a.e)), e1 = G(e1)), e1;
+                    return e1.c && (O(e1, t = S(B(e1).a.b, e1.a.e)), e1 = G(e1)), e1;
                 }
                 function q(e1, t, r) {
                     var o = new N;
@@ -8341,7 +8395,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 f(e1);
                                 break;
                             }
-                            C(o, n = S(t.c.b, n.b));
+                            O(o, n = S(t.c.b, n.b));
                         }
                         t.c !== n && (x(n.b.e, n), x(t, n)), f(e1), t = o.a, e1 = o;
                     }
@@ -8405,9 +8459,9 @@ new (0, _p5Default.default)((sketch)=>{
                             if (0 < b(l, s, i)) return;
                         } else if (b(a, i, s) < 0) return;
                         var c, d, h = a, f = s, p = l, m = i;
-                        if (g(h, f) || (c = h, h = f, f = c), g(p, m) || (c = p, p = m, m = c), g(h, p) || (c = h, h = p, p = c, c = f, f = m, m = c), g(p, f) ? g(f, m) ? ((c = v(h, p, f)) + (d = v(p, f, m)) < 0 && (c = -c, d = -d), u.b = j(c, p.b, d, f.b)) : ((c = b(h, p, f)) + (d = -b(h, m, f)) < 0 && (c = -c, d = -d), u.b = j(c, p.b, d, m.b)) : u.b = (p.b + f.b) / 2, _(h, f) || (c = h, h = f, f = c), _(p, m) || (c = p, p = m, m = c), _(h, p) || (c = h, h = p, p = c, c = f, f = m, m = c), _(p, f) ? _(f, m) ? ((c = V(h, p, f)) + (d = V(p, f, m)) < 0 && (c = -c, d = -d), u.a = j(c, p.a, d, f.a)) : ((c = z(h, p, f)) + (d = -z(h, m, f)) < 0 && (c = -c, d = -d), u.a = j(c, p.a, d, m.a)) : u.a = (p.a + f.a) / 2, g(u, e1.a) && (u.b = e1.a.b, u.a = e1.a.a), h = g(s, i) ? s : i, g(h, u) && (u.b = h.b, u.a = h.a), y(u, s) || y(u, i)) return R(e1, t), 0;
+                        if (g(h, f) || (c = h, h = f, f = c), g(p, m) || (c = p, p = m, m = c), g(h, p) || (c = h, h = p, p = c, c = f, f = m, m = c), g(p, f) ? g(f, m) ? ((c = v(h, p, f)) + (d = v(p, f, m)) < 0 && (c = -c, d = -d), u.b = _(c, p.b, d, f.b)) : ((c = b(h, p, f)) + (d = -b(h, m, f)) < 0 && (c = -c, d = -d), u.b = _(c, p.b, d, m.b)) : u.b = (p.b + f.b) / 2, j(h, f) || (c = h, h = f, f = c), j(p, m) || (c = p, p = m, m = c), j(h, p) || (c = h, h = p, p = c, c = f, f = m, m = c), j(p, f) ? j(f, m) ? ((c = V(h, p, f)) + (d = V(p, f, m)) < 0 && (c = -c, d = -d), u.a = _(c, p.a, d, f.a)) : ((c = z(h, p, f)) + (d = -z(h, m, f)) < 0 && (c = -c, d = -d), u.a = _(c, p.a, d, m.a)) : u.a = (p.a + f.a) / 2, g(u, e1.a) && (u.b = e1.a.b, u.a = e1.a.a), h = g(s, i) ? s : i, g(h, u) && (u.b = h.b, u.a = h.a), y(u, s) || y(u, i)) return R(e1, t), 0;
                         if (!y(a, e1.a) && 0 <= b(a, e1.a, u) || !y(l, e1.a) && b(l, e1.a, u) <= 0) {
-                            if (l === e1.a) w(o.b), x(n.b, o), o = B(t = O(t)).a, A(e1, B(t), r), P(e1, t, o.b.e, o, o, !0);
+                            if (l === e1.a) w(o.b), x(n.b, o), o = B(t = C(t)).a, A(e1, B(t), r), P(e1, t, o.b.e, o, o, !0);
                             else {
                                 if (a !== e1.a) return 0 <= b(a, e1.a, u) && (G(t).b = t.b = !0, w(o.b), o.a.b = e1.a.b, o.a.a = e1.a.a), void (b(l, e1.a, u) <= 0 && (t.b = r.b = !0, w(n.b), n.a.b = e1.a.b, n.a.a = e1.a.a));
                                 for(w(n.b), x(o.e, n.b.e), i = (s = r = t).a.b.a; (s = G(s)).a.b.a === i;);
@@ -8738,9 +8792,9 @@ new (0, _p5Default.default)((sketch)=>{
                                 (c = new N).a = s.c.b;
                                 for(var i = (a = n.f).a; null !== (i = i.a).b && !a.c(a.b, c, i.b););
                                 var a, l, u = B(a = i.b), c = a.a, i = u.a;
-                                return void (0 === b(c.b.a, s, c.a) ? y((c = a.a).a, s) || y(c.b.a, s) || (w(c.b), a.c && (m(c.c), a.c = !1), x(s.c, c), e1(n, s)) : (l = g(i.b.a, c.b.a) ? a : u, u = void 0, a.d || l.c ? (u = l === a ? S(s.c.b, c.e) : S(i.b.c.b, s.c).b, l.c ? C(l, u) : ((a = q(c = n, a, u)).f = G(a).f + a.a.f, a.d = X(c, a.f)), e1(n, s)) : P(n, a, s.c, s.c, null, !0)));
+                                return void (0 === b(c.b.a, s, c.a) ? y((c = a.a).a, s) || y(c.b.a, s) || (w(c.b), a.c && (m(c.c), a.c = !1), x(s.c, c), e1(n, s)) : (l = g(i.b.a, c.b.a) ? a : u, u = void 0, a.d || l.c ? (u = l === a ? S(s.c.b, c.e) : S(i.b.c.b, s.c).b, l.c ? O(l, u) : ((a = q(c = n, a, u)).f = G(a).f + a.a.f, a.d = X(c, a.f)), e1(n, s)) : P(n, a, s.c, s.c, null, !0)));
                             }
-                            a = (c = B(n = O(n.i))).a, (c = A(t, c, null)).c === a ? (c = (a = c).c, i = B(n), u = n.a, l = i.a, o = !1, u.b.a !== l.b.a && Q(t, n), y(u.a, t.a) && (x(c.b.e, u), c = B(n = O(n)).a, A(t, B(n), i), o = !0), y(l.a, t.a) && (x(a, l.b.e), a = A(t, i, null), o = !0), o ? P(t, n, a.c, c, c, !0) : (s = g(l.a, u.a) ? l.b.e : u, P(t, n, s = S(a.c.b, s), s.c, s.c, !1), s.b.i.c = !0, K(t, n))) : P(t, n, c.c, a, a, !0);
+                            a = (c = B(n = C(n.i))).a, (c = A(t, c, null)).c === a ? (c = (a = c).c, i = B(n), u = n.a, l = i.a, o = !1, u.b.a !== l.b.a && Q(t, n), y(u.a, t.a) && (x(c.b.e, u), c = B(n = C(n)).a, A(t, B(n), i), o = !0), y(l.a, t.a) && (x(a, l.b.e), a = A(t, i, null), o = !0), o ? P(t, n, a.c, c, c, !0) : (s = g(l.a, u.a) ? l.b.e : u, P(t, n, s = S(a.c.b, s), s.c, s.c, !1), s.b.i.c = !0, K(t, n))) : P(t, n, c.c, a, a, !0);
                         }(this, i);
                     }
                     for(this.a = this.f.a.a.b.a.a, i = 0; null !== (s = this.f.a.a.b);)s.h || ++i, k(s);
@@ -8826,13 +8880,13 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        253: [
+        256: [
             function(e1, t, r) {
                 "use strict";
                 function o(g, e1, t, r) {
                     var v = 0, o = void 0 === (r = void 0 === r ? {} : r).loop ? null : r.loop, b = void 0 === r.palette ? null : r.palette;
                     if (e1 <= 0 || t <= 0 || 65535 < e1 || 65535 < t) throw new Error("Width/Height invalid.");
-                    function _(e1) {
+                    function j(e1) {
                         e1 = e1.length;
                         if (e1 < 2 || 256 < e1 || e1 & e1 - 1) throw new Error("Invalid code/color length, must be power of 2 and 2 .. 256.");
                         return e1;
@@ -8840,7 +8894,7 @@ new (0, _p5Default.default)((sketch)=>{
                     g[v++] = 71, g[v++] = 73, g[v++] = 70, g[v++] = 56, g[v++] = 57, g[v++] = 97;
                     var n = 0, s = 0;
                     if (null !== b) {
-                        for(var i = _(b); i >>= 1;)++n;
+                        for(var i = j(b); i >>= 1;)++n;
                         if (i = 1 << n, --n, void 0 !== r.background) {
                             if (i <= (s = r.background)) throw new Error("Background index out of range.");
                             if (0 === s) throw new Error("Background index explicitly passed as 0.");
@@ -8854,14 +8908,14 @@ new (0, _p5Default.default)((sketch)=>{
                         if (o < 0 || 65535 < o) throw new Error("Loop count invalid.");
                         g[v++] = 33, g[v++] = 255, g[v++] = 11, g[v++] = 78, g[v++] = 69, g[v++] = 84, g[v++] = 83, g[v++] = 67, g[v++] = 65, g[v++] = 80, g[v++] = 69, g[v++] = 50, g[v++] = 46, g[v++] = 48, g[v++] = 3, g[v++] = 1, g[v++] = 255 & o, g[v++] = o >> 8 & 255, g[v++] = 0;
                     }
-                    var j = !1;
+                    var _ = !1;
                     this.addFrame = function(e1, t, r, o, n, s) {
-                        if (!0 === j && (--v, j = !1), s = void 0 === s ? {} : s, e1 < 0 || t < 0 || 65535 < e1 || 65535 < t) throw new Error("x/y invalid.");
+                        if (!0 === _ && (--v, _ = !1), s = void 0 === s ? {} : s, e1 < 0 || t < 0 || 65535 < e1 || 65535 < t) throw new Error("x/y invalid.");
                         if (r <= 0 || o <= 0 || 65535 < r || 65535 < o) throw new Error("Width/Height invalid.");
                         if (n.length < r * o) throw new Error("Not enough pixels for the frame size.");
                         var i = !0, a = s.palette;
                         if (null == a && (i = !1, a = b), null == a) throw new Error("Must supply either a local or global palette.");
-                        for(var l = _(a), u = 0; l >>= 1;)++u;
+                        for(var l = j(a), u = 0; l >>= 1;)++u;
                         var l = 1 << u, c = void 0 === s.delay ? 0 : s.delay, d = void 0 === s.disposal ? 0 : s.disposal;
                         if (d < 0 || 3 < d) throw new Error("Disposal out of range.");
                         var h = !1, f = 0;
@@ -8882,17 +8936,17 @@ new (0, _p5Default.default)((sketch)=>{
                             var p = o[0] & i, m = {};
                             f(s);
                             for(var y = 1, g = o.length; y < g; ++y){
-                                var v = o[y] & i, b = p << 8 | v, _ = m[b];
-                                if (void 0 === _) {
+                                var v = o[y] & i, b = p << 8 | v, j = m[b];
+                                if (void 0 === j) {
                                     for(d |= p << c, c += u; 8 <= c;)t[r++] = 255 & d, d >>= 8, c -= 8, r === n + 256 && (t[n] = 255, n = r++);
                                     4096 === l ? (f(s), l = 1 + a, u = e1 + 1, m = {}) : (1 << u <= l && ++u, m[b] = l++), p = v;
-                                } else p = _;
+                                } else p = j;
                             }
                             f(p), f(a), h(1), n + 1 === r ? t[n] = 0 : (t[n] = r - n - 1, t[r++] = 0);
                             return r;
                         }(g, v, u < 2 ? 2 : u, n);
                     }, this.end = function() {
-                        return !1 === j && (g[v++] = 59, j = !0), v;
+                        return !1 === _ && (g[v++] = 59, _ = !0), v;
                     }, this.getOutputBuffer = function() {
                         return g;
                     }, this.setOutputBuffer = function(e1) {
@@ -8912,12 +8966,12 @@ new (0, _p5Default.default)((sketch)=>{
                         else {
                             if (y == i) break;
                             for(var g = y < a ? y : m, v = 0, b = g; s < b;)b = p[b] >> 8, ++v;
-                            var _ = b;
+                            var j = b;
                             if (o < h + v + (g !== y ? 1 : 0)) return void console.log("Warning, gif stream longer than expected.");
-                            r[h++] = _;
-                            var j = h += v;
-                            for(g !== y && (r[h++] = _), b = g; v--;)b = p[b], r[--j] = 255 & b, b >>= 8;
-                            null !== m && a < 4096 && (p[a++] = m << 8 | _, u + 1 <= a && l < 12 && (++l, u = u << 1 | 1)), m = y;
+                            r[h++] = j;
+                            var _ = h += v;
+                            for(g !== y && (r[h++] = j), b = g; v--;)b = p[b], r[--_] = 255 & b, b >>= 8;
+                            null !== m && a < 4096 && (p[a++] = m << 8 | j, u + 1 <= a && l < 12 && (++l, u = u << 1 | 1)), m = y;
                         }
                     }
                     h !== o && console.log("Warning, gif stream shorter than expected.");
@@ -8926,8 +8980,8 @@ new (0, _p5Default.default)((sketch)=>{
                     r.GifWriter = o, r.GifReader = function(b) {
                         var e1 = 0;
                         if (71 !== b[e1++] || 73 !== b[e1++] || 70 !== b[e1++] || 56 !== b[e1++] || 56 != (b[e1++] + 1 & 253) || 97 !== b[e1++]) throw new Error("Invalid GIF 87a/89a header.");
-                        var _ = b[e1++] | b[e1++] << 8, t = b[e1++] | b[e1++] << 8, r = b[e1++], o = 1 << 1 + (7 & r), n = (b[e1++], b[e1++], null), s = null, i = (r >> 7 && (n = e1, e1 += 3 * (s = o)), !0), a = [], l = 0, u = null, c = 0, d = null;
-                        for(this.width = _, this.height = t; i && e1 < b.length;)switch(b[e1++]){
+                        var j = b[e1++] | b[e1++] << 8, t = b[e1++] | b[e1++] << 8, r = b[e1++], o = 1 << 1 + (7 & r), n = (b[e1++], b[e1++], null), s = null, i = (r >> 7 && (n = e1, e1 += 3 * (s = o)), !0), a = [], l = 0, u = null, c = 0, d = null;
+                        for(this.width = j, this.height = t; i && e1 < b.length;)switch(b[e1++]){
                             case 33:
                                 switch(b[e1++]){
                                     case 255:
@@ -8955,7 +9009,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                                 break;
                             case 44:
-                                var f, p = b[e1++] | b[e1++] << 8, m = b[e1++] | b[e1++] << 8, y = b[e1++] | b[e1++] << 8, g = b[e1++] | b[e1++] << 8, v = b[e1++], j = v >> 6 & 1, x = 1 << 1 + (7 & v), w = n, S = s, T = !1, v = (v >> 7 && (T = !0, w = e1, e1 += 3 * (S = x)), e1);
+                                var f, p = b[e1++] | b[e1++] << 8, m = b[e1++] | b[e1++] << 8, y = b[e1++] | b[e1++] << 8, g = b[e1++] | b[e1++] << 8, v = b[e1++], _ = v >> 6 & 1, x = 1 << 1 + (7 & v), w = n, S = s, T = !1, v = (v >> 7 && (T = !0, w = e1, e1 += 3 * (S = x)), e1);
                                 for(e1++;;){
                                     if (!(0 <= (f = b[e1++]))) throw Error("Invalid block size");
                                     if (0 === f) break;
@@ -8972,7 +9026,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     data_offset: v,
                                     data_length: e1 - v,
                                     transparent_index: u,
-                                    interlaced: !!j,
+                                    interlaced: !!_,
                                     delay: l,
                                     disposal: c
                                 });
@@ -8991,14 +9045,14 @@ new (0, _p5Default.default)((sketch)=>{
                             if (e1 < 0 || e1 >= a.length) throw new Error("Frame index out of range.");
                             return a[e1];
                         }, this.decodeAndBlitFrameBGRA = function(e1, t) {
-                            for(var e1 = this.frameInfo(e1), r = e1.width * e1.height, o = new Uint8Array(r), n = (E(b, e1.data_offset, o, r), e1.palette_offset), s = e1.transparent_index, i = (null === s && (s = 256), e1.width), a = _ - i, l = i, u = 4 * (e1.y * _ + e1.x), c = 4 * ((e1.y + e1.height) * _ + e1.x), d = u, h = 4 * a, f = (!0 === e1.interlaced && (h += 4 * _ * 7), 8), p = 0, m = o.length; p < m; ++p){
+                            for(var e1 = this.frameInfo(e1), r = e1.width * e1.height, o = new Uint8Array(r), n = (E(b, e1.data_offset, o, r), e1.palette_offset), s = e1.transparent_index, i = (null === s && (s = 256), e1.width), a = j - i, l = i, u = 4 * (e1.y * j + e1.x), c = 4 * ((e1.y + e1.height) * j + e1.x), d = u, h = 4 * a, f = (!0 === e1.interlaced && (h += 4 * j * 7), 8), p = 0, m = o.length; p < m; ++p){
                                 var y, g, v = o[p];
-                                0 === l && (l = i, c <= (d += h) && (h = 4 * a + 4 * _ * (f - 1), d = u + (i + a) * (f << 1), f >>= 1)), v === s ? d += 4 : (y = b[n + 3 * v], g = b[n + 3 * v + 1], v = b[n + 3 * v + 2], t[d++] = v, t[d++] = g, t[d++] = y, t[d++] = 255), --l;
+                                0 === l && (l = i, c <= (d += h) && (h = 4 * a + 4 * j * (f - 1), d = u + (i + a) * (f << 1), f >>= 1)), v === s ? d += 4 : (y = b[n + 3 * v], g = b[n + 3 * v + 1], v = b[n + 3 * v + 2], t[d++] = v, t[d++] = g, t[d++] = y, t[d++] = 255), --l;
                             }
                         }, this.decodeAndBlitFrameRGBA = function(e1, t) {
-                            for(var e1 = this.frameInfo(e1), r = e1.width * e1.height, o = new Uint8Array(r), n = (E(b, e1.data_offset, o, r), e1.palette_offset), s = e1.transparent_index, i = (null === s && (s = 256), e1.width), a = _ - i, l = i, u = 4 * (e1.y * _ + e1.x), c = 4 * ((e1.y + e1.height) * _ + e1.x), d = u, h = 4 * a, f = (!0 === e1.interlaced && (h += 4 * _ * 7), 8), p = 0, m = o.length; p < m; ++p){
+                            for(var e1 = this.frameInfo(e1), r = e1.width * e1.height, o = new Uint8Array(r), n = (E(b, e1.data_offset, o, r), e1.palette_offset), s = e1.transparent_index, i = (null === s && (s = 256), e1.width), a = j - i, l = i, u = 4 * (e1.y * j + e1.x), c = 4 * ((e1.y + e1.height) * j + e1.x), d = u, h = 4 * a, f = (!0 === e1.interlaced && (h += 4 * j * 7), 8), p = 0, m = o.length; p < m; ++p){
                                 var y, g, v = o[p];
-                                0 === l && (l = i, c <= (d += h) && (h = 4 * a + 4 * _ * (f - 1), d = u + (i + a) * (f << 1), f >>= 1)), v === s ? d += 4 : (y = b[n + 3 * v], g = b[n + 3 * v + 1], v = b[n + 3 * v + 2], t[d++] = y, t[d++] = g, t[d++] = v, t[d++] = 255), --l;
+                                0 === l && (l = i, c <= (d += h) && (h = 4 * a + 4 * j * (f - 1), d = u + (i + a) * (f << 1), f >>= 1)), v === s ? d += 4 : (y = b[n + 3 * v], g = b[n + 3 * v + 1], v = b[n + 3 * v + 2], t[d++] = y, t[d++] = g, t[d++] = v, t[d++] = 255), --l;
                             }
                         };
                     };
@@ -9006,11 +9060,11 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        254: [
+        257: [
             function(Pr, r, o) {
                 (function(Ar) {
                     var e1, t;
-                    e1 = this, t = function(_) {
+                    e1 = this, t = function(j) {
                         "use strict";
                         function D(e1) {
                             if (null == this) throw TypeError();
@@ -9752,10 +9806,10 @@ new (0, _p5Default.default)((sketch)=>{
                         function be(e1, t) {
                             return e1.getUint32(t, !1);
                         }
-                        function _e(e1, t) {
+                        function je(e1, t) {
                             return e1.getInt16(t, !1) + e1.getUint16(t + 2, !1) / 65535;
                         }
-                        var je = {
+                        var _e = {
                             byte: 1,
                             uShort: 2,
                             short: 2,
@@ -9786,7 +9840,7 @@ new (0, _p5Default.default)((sketch)=>{
                             var e1 = be(this.data, this.offset + this.relativeOffset);
                             return this.relativeOffset += 4, e1;
                         }, u.prototype.parseFixed = function() {
-                            var e1 = _e(this.data, this.offset + this.relativeOffset);
+                            var e1 = je(this.data, this.offset + this.relativeOffset);
                             return this.relativeOffset += 4, e1;
                         }, u.prototype.parseString = function(e1) {
                             var t = this.data, r = this.offset + this.relativeOffset, o = "";
@@ -9802,7 +9856,7 @@ new (0, _p5Default.default)((sketch)=>{
                             var t = ve(this.data, this.offset + this.relativeOffset), r = ve(this.data, this.offset + this.relativeOffset + 2);
                             return this.relativeOffset += 4, t + r / (e1 = void 0 === e1 ? 4096 : e1) / 10;
                         }, u.prototype.skip = function(e1, t) {
-                            this.relativeOffset += je[e1] * (t = void 0 === t ? 1 : t);
+                            this.relativeOffset += _e[e1] * (t = void 0 === t ? 1 : t);
                         }, u.prototype.parseULongList = function(e1) {
                             void 0 === e1 && (e1 = this.parseULong());
                             for(var t = new Array(e1), r = this.data, o = this.offset + this.relativeOffset, n = 0; n < e1; n++)t[n] = r.getUint32(o), o += 4;
@@ -9981,7 +10035,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 return e1.getInt16(t, !1);
                             },
                             getULong: be,
-                            getFixed: _e,
+                            getFixed: je,
                             getTag: function(e1, t) {
                                 for(var r = "", o = t; o < t + 4; o += 1)r += String.fromCharCode(e1.getInt8(o));
                                 return r;
@@ -10018,8 +10072,8 @@ new (0, _p5Default.default)((sketch)=>{
                                 } else {
                                     if (4 !== r.format) throw new Error("Only format 4 and 12 cmap tables are supported (found format " + r.format + ").");
                                     var y = r, g = e1, v = t, b = o;
-                                    y.length = a.parseUShort(), y.language = a.parseUShort(), y.segCount = _ = a.parseUShort() >> 1, a.skip("uShort", 3), y.glyphIndexMap = {};
-                                    for(var _, j = new R.Parser(g, v + b + 14), x = new R.Parser(g, v + b + 16 + 2 * _), w = new R.Parser(g, v + b + 16 + 4 * _), S = new R.Parser(g, v + b + 16 + 6 * _), T = v + b + 16 + 8 * _, E = 0; E < _ - 1; E += 1)for(var M = void 0, k = j.parseUShort(), C = x.parseUShort(), O = w.parseShort(), A = S.parseUShort(), P = C; P <= k; P += 1)0 !== A ? (T = (T = S.offset + S.relativeOffset - 2) + A + 2 * (P - C), 0 !== (M = R.getUShort(g, T)) && (M = M + O & 65535)) : M = P + O & 65535, y.glyphIndexMap[P] = M;
+                                    y.length = a.parseUShort(), y.language = a.parseUShort(), y.segCount = j = a.parseUShort() >> 1, a.skip("uShort", 3), y.glyphIndexMap = {};
+                                    for(var j, _ = new R.Parser(g, v + b + 14), x = new R.Parser(g, v + b + 16 + 2 * j), w = new R.Parser(g, v + b + 16 + 4 * j), S = new R.Parser(g, v + b + 16 + 6 * j), T = v + b + 16 + 8 * j, E = 0; E < j - 1; E += 1)for(var M = void 0, k = _.parseUShort(), O = x.parseUShort(), C = w.parseShort(), A = S.parseUShort(), P = O; P <= k; P += 1)0 !== A ? (T = (T = S.offset + S.relativeOffset - 2) + A + 2 * (P - O), 0 !== (M = R.getUShort(g, T)) && (M = M + C & 65535)) : M = P + C & 65535, y.glyphIndexMap[P] = M;
                                 }
                                 return r;
                             },
@@ -11361,10 +11415,10 @@ new (0, _p5Default.default)((sketch)=>{
                         function ke(e1) {
                             this.cmap = e1;
                         }
-                        function Ce(e1, t) {
+                        function Oe(e1, t) {
                             this.encoding = e1, this.charset = t;
                         }
-                        function Oe(e1) {
+                        function Ce(e1) {
                             switch(e1.version){
                                 case 1:
                                     this.names = c.slice();
@@ -11389,12 +11443,12 @@ new (0, _p5Default.default)((sketch)=>{
                             return null;
                         }, ke.prototype.charToGlyphIndex = function(e1) {
                             return this.cmap.glyphIndexMap[e1.codePointAt(0)] || 0;
-                        }, Ce.prototype.charToGlyphIndex = function(e1) {
+                        }, Oe.prototype.charToGlyphIndex = function(e1) {
                             e1 = e1.codePointAt(0), e1 = this.encoding[e1];
                             return this.charset.indexOf(e1);
-                        }, Oe.prototype.nameToGlyphIndex = function(e1) {
+                        }, Ce.prototype.nameToGlyphIndex = function(e1) {
                             return this.names.indexOf(e1);
-                        }, Oe.prototype.glyphIndexToName = function(e1) {
+                        }, Ce.prototype.glyphIndexToName = function(e1) {
                             return this.names[e1];
                         };
                         var d = {
@@ -11850,9 +11904,9 @@ new (0, _p5Default.default)((sketch)=>{
                             return n;
                         }
                         function Ve(y, g, e1) {
-                            var v, b, _, j, t, x, w, r, S, T = new h, E = [], M = 0, k = !1, C = !1, O = 0, A = 0, P = (S = (y.isCIDFont ? (t = y.tables.cff.topDict._fdSelect[g.index], t = y.tables.cff.topDict._fdArray[t], x = t._subrs, w = t._subrsBias, r = t._defaultWidthX, t) : (x = y.tables.cff.topDict._subrs, w = y.tables.cff.topDict._subrsBias, r = y.tables.cff.topDict._defaultWidthX, y.tables.cff.topDict))._nominalWidthX, r);
+                            var v, b, j, _, t, x, w, r, S, T = new h, E = [], M = 0, k = !1, O = !1, C = 0, A = 0, P = (S = (y.isCIDFont ? (t = y.tables.cff.topDict._fdSelect[g.index], t = y.tables.cff.topDict._fdArray[t], x = t._subrs, w = t._subrsBias, r = t._defaultWidthX, t) : (x = y.tables.cff.topDict._subrs, w = y.tables.cff.topDict._subrsBias, r = y.tables.cff.topDict._defaultWidthX, y.tables.cff.topDict))._nominalWidthX, r);
                             function L(e1, t) {
-                                C && T.closePath(), T.moveTo(e1, t), C = !0;
+                                O && T.closePath(), T.moveTo(e1, t), O = !0;
                             }
                             function R() {
                                 E.length % 2 == 0 || k || (P = E.shift() + S), M += E.length >> 1, E.length = 0, k = !0;
@@ -11866,19 +11920,19 @@ new (0, _p5Default.default)((sketch)=>{
                                             R();
                                             break;
                                         case 4:
-                                            1 < E.length && !k && (P = E.shift() + S, k = !0), A += E.pop(), L(O, A);
+                                            1 < E.length && !k && (P = E.shift() + S, k = !0), A += E.pop(), L(C, A);
                                             break;
                                         case 5:
-                                            for(; 0 < E.length;)O += E.shift(), A += E.shift(), T.lineTo(O, A);
+                                            for(; 0 < E.length;)C += E.shift(), A += E.shift(), T.lineTo(C, A);
                                             break;
                                         case 6:
-                                            for(; 0 < E.length && (O += E.shift(), T.lineTo(O, A), 0 !== E.length);)A += E.shift(), T.lineTo(O, A);
+                                            for(; 0 < E.length && (C += E.shift(), T.lineTo(C, A), 0 !== E.length);)A += E.shift(), T.lineTo(C, A);
                                             break;
                                         case 7:
-                                            for(; 0 < E.length && (A += E.shift(), T.lineTo(O, A), 0 !== E.length);)O += E.shift(), T.lineTo(O, A);
+                                            for(; 0 < E.length && (A += E.shift(), T.lineTo(C, A), 0 !== E.length);)C += E.shift(), T.lineTo(C, A);
                                             break;
                                         case 8:
-                                            for(; 0 < E.length;)v = O + E.shift(), b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), O = _ + E.shift(), A = j + E.shift(), T.curveTo(v, b, _, j, O, A);
+                                            for(; 0 < E.length;)v = C + E.shift(), b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), C = j + E.shift(), A = _ + E.shift(), T.curveTo(v, b, j, _, C, A);
                                             break;
                                         case 10:
                                             i = E.pop() + w, (a = x[i]) && e1(a);
@@ -11888,23 +11942,23 @@ new (0, _p5Default.default)((sketch)=>{
                                         case 12:
                                             switch(m = t[p], p += 1, m){
                                                 case 35:
-                                                    v = O + E.shift(), b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), l = _ + E.shift(), u = j + E.shift(), c = l + E.shift(), d = u + E.shift(), h = c + E.shift(), f = d + E.shift(), O = h + E.shift(), A = f + E.shift(), E.shift(), T.curveTo(v, b, _, j, l, u), T.curveTo(c, d, h, f, O, A);
+                                                    v = C + E.shift(), b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), l = j + E.shift(), u = _ + E.shift(), c = l + E.shift(), d = u + E.shift(), h = c + E.shift(), f = d + E.shift(), C = h + E.shift(), A = f + E.shift(), E.shift(), T.curveTo(v, b, j, _, l, u), T.curveTo(c, d, h, f, C, A);
                                                     break;
                                                 case 34:
-                                                    v = O + E.shift(), b = A, _ = v + E.shift(), j = b + E.shift(), l = _ + E.shift(), u = j, c = l + E.shift(), d = j, h = c + E.shift(), f = A, O = h + E.shift(), T.curveTo(v, b, _, j, l, u), T.curveTo(c, d, h, f, O, A);
+                                                    v = C + E.shift(), b = A, j = v + E.shift(), _ = b + E.shift(), l = j + E.shift(), u = _, c = l + E.shift(), d = _, h = c + E.shift(), f = A, C = h + E.shift(), T.curveTo(v, b, j, _, l, u), T.curveTo(c, d, h, f, C, A);
                                                     break;
                                                 case 36:
-                                                    v = O + E.shift(), b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), l = _ + E.shift(), u = j, c = l + E.shift(), d = j, h = c + E.shift(), f = d + E.shift(), O = h + E.shift(), T.curveTo(v, b, _, j, l, u), T.curveTo(c, d, h, f, O, A);
+                                                    v = C + E.shift(), b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), l = j + E.shift(), u = _, c = l + E.shift(), d = _, h = c + E.shift(), f = d + E.shift(), C = h + E.shift(), T.curveTo(v, b, j, _, l, u), T.curveTo(c, d, h, f, C, A);
                                                     break;
                                                 case 37:
-                                                    v = O + E.shift(), b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), l = _ + E.shift(), u = j + E.shift(), c = l + E.shift(), d = u + E.shift(), h = c + E.shift(), f = d + E.shift(), Math.abs(h - O) > Math.abs(f - A) ? O = h + E.shift() : A = f + E.shift(), T.curveTo(v, b, _, j, l, u), T.curveTo(c, d, h, f, O, A);
+                                                    v = C + E.shift(), b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), l = j + E.shift(), u = _ + E.shift(), c = l + E.shift(), d = u + E.shift(), h = c + E.shift(), f = d + E.shift(), Math.abs(h - C) > Math.abs(f - A) ? C = h + E.shift() : A = f + E.shift(), T.curveTo(v, b, j, _, l, u), T.curveTo(c, d, h, f, C, A);
                                                     break;
                                                 default:
                                                     console.log("Glyph " + g.index + ": unknown operator 1200" + m), E.length = 0;
                                             }
                                             break;
                                         case 14:
-                                            0 < E.length && !k && (P = E.shift() + S, k = !0), C && (T.closePath(), C = !1);
+                                            0 < E.length && !k && (P = E.shift() + S, k = !0), O && (T.closePath(), O = !1);
                                             break;
                                         case 18:
                                             R();
@@ -11914,27 +11968,27 @@ new (0, _p5Default.default)((sketch)=>{
                                             R(), p += M + 7 >> 3;
                                             break;
                                         case 21:
-                                            2 < E.length && !k && (P = E.shift() + S, k = !0), A += E.pop(), L(O += E.pop(), A);
+                                            2 < E.length && !k && (P = E.shift() + S, k = !0), A += E.pop(), L(C += E.pop(), A);
                                             break;
                                         case 22:
-                                            1 < E.length && !k && (P = E.shift() + S, k = !0), L(O += E.pop(), A);
+                                            1 < E.length && !k && (P = E.shift() + S, k = !0), L(C += E.pop(), A);
                                             break;
                                         case 23:
                                             R();
                                             break;
                                         case 24:
-                                            for(; 2 < E.length;)v = O + E.shift(), b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), O = _ + E.shift(), A = j + E.shift(), T.curveTo(v, b, _, j, O, A);
-                                            O += E.shift(), A += E.shift(), T.lineTo(O, A);
+                                            for(; 2 < E.length;)v = C + E.shift(), b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), C = j + E.shift(), A = _ + E.shift(), T.curveTo(v, b, j, _, C, A);
+                                            C += E.shift(), A += E.shift(), T.lineTo(C, A);
                                             break;
                                         case 25:
-                                            for(; 6 < E.length;)O += E.shift(), A += E.shift(), T.lineTo(O, A);
-                                            v = O + E.shift(), b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), O = _ + E.shift(), A = j + E.shift(), T.curveTo(v, b, _, j, O, A);
+                                            for(; 6 < E.length;)C += E.shift(), A += E.shift(), T.lineTo(C, A);
+                                            v = C + E.shift(), b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), C = j + E.shift(), A = _ + E.shift(), T.curveTo(v, b, j, _, C, A);
                                             break;
                                         case 26:
-                                            for(E.length % 2 && (O += E.shift()); 0 < E.length;)v = O, b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), O = _, A = j + E.shift(), T.curveTo(v, b, _, j, O, A);
+                                            for(E.length % 2 && (C += E.shift()); 0 < E.length;)v = C, b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), C = j, A = _ + E.shift(), T.curveTo(v, b, j, _, C, A);
                                             break;
                                         case 27:
-                                            for(E.length % 2 && (A += E.shift()); 0 < E.length;)v = O + E.shift(), b = A, _ = v + E.shift(), j = b + E.shift(), O = _ + E.shift(), A = j, T.curveTo(v, b, _, j, O, A);
+                                            for(E.length % 2 && (A += E.shift()); 0 < E.length;)v = C + E.shift(), b = A, j = v + E.shift(), _ = b + E.shift(), C = j + E.shift(), A = _, T.curveTo(v, b, j, _, C, A);
                                             break;
                                         case 28:
                                             r = t[p], o = t[p + 1], E.push((r << 24 | o << 16) >> 16), p += 2;
@@ -11943,10 +11997,10 @@ new (0, _p5Default.default)((sketch)=>{
                                             i = E.pop() + y.gsubrsBias, (a = y.gsubrs[i]) && e1(a);
                                             break;
                                         case 30:
-                                            for(; 0 < E.length && (v = O, b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), O = _ + E.shift(), A = j + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, _, j, O, A), 0 !== E.length);)v = O + E.shift(), b = A, _ = v + E.shift(), j = b + E.shift(), A = j + E.shift(), O = _ + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, _, j, O, A);
+                                            for(; 0 < E.length && (v = C, b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), C = j + E.shift(), A = _ + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, j, _, C, A), 0 !== E.length);)v = C + E.shift(), b = A, j = v + E.shift(), _ = b + E.shift(), A = _ + E.shift(), C = j + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, j, _, C, A);
                                             break;
                                         case 31:
-                                            for(; 0 < E.length && (v = O + E.shift(), b = A, _ = v + E.shift(), j = b + E.shift(), A = j + E.shift(), O = _ + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, _, j, O, A), 0 !== E.length);)v = O, b = A + E.shift(), _ = v + E.shift(), j = b + E.shift(), O = _ + E.shift(), A = j + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, _, j, O, A);
+                                            for(; 0 < E.length && (v = C + E.shift(), b = A, j = v + E.shift(), _ = b + E.shift(), A = _ + E.shift(), C = j + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, j, _, C, A), 0 !== E.length);)v = C, b = A + E.shift(), j = v + E.shift(), _ = b + E.shift(), C = j + E.shift(), A = _ + (1 === E.length ? E.shift() : 0), T.curveTo(v, b, j, _, C, A);
                                             break;
                                         default:
                                             m < 32 ? console.log("Glyph " + g.index + ": unknown operator " + m) : m < 247 ? E.push(m - 139) : m < 251 ? (r = t[p], p += 1, E.push(256 * (m - 247) + r + 108)) : m < 255 ? (r = t[p], p += 1, E.push(256 * -(m - 251) - r - 108)) : (r = t[p], o = t[p + 1], n = t[p + 2], s = t[p + 3], p += 4, E.push((r << 24 | o << 16 | n << 8 | s) / 65536));
@@ -12137,14 +12191,14 @@ new (0, _p5Default.default)((sketch)=>{
                                     }
                                     return s;
                                 }(e1, t + n.charset, r.nGlyphs, s.objects));
-                                0 === n.encoding ? r.cffEncoding = new Ce(Te, o) : 1 === n.encoding ? r.cffEncoding = new Ce(Ee, o) : r.cffEncoding = function(e1, t, r) {
+                                0 === n.encoding ? r.cffEncoding = new Oe(Te, o) : 1 === n.encoding ? r.cffEncoding = new Oe(Ee, o) : r.cffEncoding = function(e1, t, r) {
                                     var o = {}, n = new R.Parser(e1, t);
                                     if (0 === (e1 = n.parseCard8())) for(var s = n.parseCard8(), i = 0; i < s; i += 1)o[l = n.parseCard8()] = i;
                                     else {
                                         if (1 !== e1) throw new Error("Unknown encoding format " + e1);
                                         for(var a = n.parseCard8(), l = 1, u = 0; u < a; u += 1)for(var c = n.parseCard8(), d = n.parseCard8(), h = c; h <= c + d; h += 1)o[h] = l, l += 1;
                                     }
-                                    return new Ce(o, r);
+                                    return new Oe(o, r);
                                 }(e1, t + n.encoding, o), r.encoding = r.encoding || r.cffEncoding, r.glyphs = new p.GlyphSet(r);
                                 for(var l = 0; l < r.nGlyphs; l += 1){
                                     var u = a.objects[l];
@@ -13182,14 +13236,14 @@ new (0, _p5Default.default)((sketch)=>{
                                 for(var a = lt(tt), l = lt(ot), u = [], c = [], d = 0; d < o.length; d++){
                                     var h, f, p = n[h = o[d]];
                                     for(f in p){
-                                        var m = p[f], y = 1, g = a[f], v = rt[g], b = at(y, v, g), b = w.MACSTRING(m, b), _ = (void 0 === b && (y = 0, (g = t.indexOf(f)) < 0 && (g = t.length, t.push(f)), v = 4, b = w.UTF16(m)), ct(b, c)), y = (u.push(ut(y, v, g, h, b.length, _)), l[f]);
+                                        var m = p[f], y = 1, g = a[f], v = rt[g], b = at(y, v, g), b = w.MACSTRING(m, b), j = (void 0 === b && (y = 0, (g = t.indexOf(f)) < 0 && (g = t.length, t.push(f)), v = 4, b = w.UTF16(m)), ct(b, c)), y = (u.push(ut(y, v, g, h, b.length, j)), l[f]);
                                         void 0 !== y && (g = ct(v = w.UTF16(m), c), u.push(ut(3, 1, y, h, v.length, g)));
                                     }
                                 }
                                 u.sort(function(e1, t) {
                                     return e1.platformID - t.platformID || e1.encodingID - t.encodingID || e1.languageID - t.languageID || e1.nameID - t.nameID;
                                 });
-                                for(var j = new S.Table("name", [
+                                for(var _ = new S.Table("name", [
                                     {
                                         name: "format",
                                         type: "USHORT",
@@ -13205,16 +13259,16 @@ new (0, _p5Default.default)((sketch)=>{
                                         type: "USHORT",
                                         value: 6 + 12 * u.length
                                     }
-                                ]), x = 0; x < u.length; x++)j.fields.push({
+                                ]), x = 0; x < u.length; x++)_.fields.push({
                                     name: "record_" + x,
                                     type: "RECORD",
                                     value: u[x]
                                 });
-                                return j.fields.push({
+                                return _.fields.push({
                                     name: "strings",
                                     type: "LITERAL",
                                     value: c
-                                }), j;
+                                }), _;
                             }
                         }, ht = [
                             {
@@ -14319,7 +14373,7 @@ new (0, _p5Default.default)((sketch)=>{
                             for(var t = 0, r = 0; r < e1.length; r += 4)t += (e1[r] << 24) + (e1[r + 1] << 16) + (e1[r + 2] << 8) + e1[r + 3];
                             return t %= Math.pow(2, 32);
                         }
-                        function _t(e1, t, r, o) {
+                        function jt(e1, t, r, o) {
                             return new S.Record("Table Record", [
                                 {
                                     name: "tag",
@@ -14343,7 +14397,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                             ]);
                         }
-                        function jt(e1) {
+                        function _t(e1) {
                             for(var t = new S.Table("sfnt", [
                                 {
                                     name: "version",
@@ -14370,13 +14424,13 @@ new (0, _p5Default.default)((sketch)=>{
                                     type: "USHORT",
                                     value: 0
                                 }
-                            ]), r = (t.tables = e1, t.numTables = e1.length, Math.pow(2, vt(t.numTables))), o = (t.searchRange = 16 * r, t.entrySelector = vt(r), t.rangeShift = 16 * t.numTables - t.searchRange, []), n = [], s = t.sizeOf() + _t().sizeOf() * t.numTables; s % 4 != 0;)s += 1, n.push({
+                            ]), r = (t.tables = e1, t.numTables = e1.length, Math.pow(2, vt(t.numTables))), o = (t.searchRange = 16 * r, t.entrySelector = vt(r), t.rangeShift = 16 * t.numTables - t.searchRange, []), n = [], s = t.sizeOf() + jt().sizeOf() * t.numTables; s % 4 != 0;)s += 1, n.push({
                                 name: "padding",
                                 type: "BYTE",
                                 value: 0
                             });
                             for(var i = 0; i < e1.length; i += 1){
-                                var a = e1[i], l = (L.argument(4 === a.tableName.length, "Table name" + a.tableName + " is invalid."), a.sizeOf()), u = _t(a.tableName, bt(a.encode()), s, l);
+                                var a = e1[i], l = (L.argument(4 === a.tableName.length, "Table name" + a.tableName + " is invalid."), a.sizeOf()), u = jt(a.tableName, bt(a.encode()), s, l);
                                 for(o.push({
                                     name: u.tag + " Table Record",
                                     type: "RECORD",
@@ -14403,7 +14457,7 @@ new (0, _p5Default.default)((sketch)=>{
                             return r;
                         }
                         var wt = {
-                            make: jt,
+                            make: _t,
                             fontToTable: function(e1) {
                                 for(var t, r = [], o = [], n = [], s = [], i = [], a = [], l = [], u = 0, c = 0, d = 0, h = 0, f = 0, p = 0; p < e1.glyphs.length; p += 1){
                                     var m = e1.glyphs.get(p), y = 0 | m.unicode;
@@ -14441,7 +14495,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     yMax: v.yMax,
                                     lowestRecPPEM: 3,
                                     createdTimestamp: e1.createdTimestamp
-                                })), _ = Qe.make({
+                                })), j = Qe.make({
                                     ascender: v.ascender,
                                     descender: v.descender,
                                     advanceWidthMax: v.advanceWidthMax,
@@ -14449,7 +14503,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     minRightSideBearing: v.minRightSideBearing,
                                     xMaxExtent: v.maxLeftSideBearing + (v.xMax - v.xMin),
                                     numberOfHMetrics: e1.glyphs.length
-                                }), j = $e.make(e1.glyphs.length), x = ft.make({
+                                }), _ = $e.make(e1.glyphs.length), x = ft.make({
                                     xAvgCharWidth: Math.round(v.advanceWidthAvg),
                                     usWeightClass: e1.tables.os2.usWeightClass,
                                     usWidthClass: e1.tables.os2.usWidthClass,
@@ -14472,14 +14526,14 @@ new (0, _p5Default.default)((sketch)=>{
                                     sCapHeight: xt(e1, "HIKLEFJMNTZBDPRAGOQSUVWXY", v).yMax,
                                     usDefaultChar: e1.hasChar(" ") ? 32 : 0,
                                     usBreakChar: e1.hasChar(" ") ? 32 : 0
-                                }), w = Ke.make(e1.glyphs), S = we.make(e1.glyphs), T = e1.getEnglishName("fontFamily"), E = e1.getEnglishName("fontSubfamily"), M = T + " " + E, k = (k = e1.getEnglishName("postScriptName")) || T.replace(/\s/g, "") + "-" + E, C = {};
-                                for(g in e1.names)C[g] = e1.names[g];
-                                C.uniqueID || (C.uniqueID = {
+                                }), w = Ke.make(e1.glyphs), S = we.make(e1.glyphs), T = e1.getEnglishName("fontFamily"), E = e1.getEnglishName("fontSubfamily"), M = T + " " + E, k = (k = e1.getEnglishName("postScriptName")) || T.replace(/\s/g, "") + "-" + E, O = {};
+                                for(g in e1.names)O[g] = e1.names[g];
+                                O.uniqueID || (O.uniqueID = {
                                     en: e1.getEnglishName("manufacturer") + ":" + M
-                                }), C.postScriptName || (C.postScriptName = {
+                                }), O.postScriptName || (O.postScriptName = {
                                     en: k
-                                }), C.preferredFamily || (C.preferredFamily = e1.names.fontFamily), C.preferredSubfamily || (C.preferredSubfamily = e1.names.fontSubfamily);
-                                var O = [], A = dt.make(C, O), O = 0 < O.length ? Je.make(O) : void 0, P = pt.make(), M = Ye.make(e1.glyphs, {
+                                }), O.preferredFamily || (O.preferredFamily = e1.names.fontFamily), O.preferredSubfamily || (O.preferredSubfamily = e1.names.fontSubfamily);
+                                var C = [], A = dt.make(O, C), C = 0 < C.length ? Je.make(C) : void 0, P = pt.make(), M = Ye.make(e1.glyphs, {
                                     version: e1.getEnglishName("version"),
                                     fullName: M,
                                     familyName: T,
@@ -14494,8 +14548,8 @@ new (0, _p5Default.default)((sketch)=>{
                                     ]
                                 }), T = e1.metas && 0 < Object.keys(e1.metas).length ? gt.make(e1.metas) : void 0, E = [
                                     b,
-                                    _,
                                     j,
+                                    _,
                                     x,
                                     A,
                                     S,
@@ -14503,8 +14557,8 @@ new (0, _p5Default.default)((sketch)=>{
                                     M,
                                     w
                                 ];
-                                O && E.push(O), e1.tables.gsub && E.push(yt.make(e1.tables.gsub)), T && E.push(T);
-                                for(var D = bt((k = jt(E)).encode()), L = k.fields, R = !1, I = 0; I < L.length; I += 1)if ("head table" === L[I].name) {
+                                C && E.push(C), e1.tables.gsub && E.push(yt.make(e1.tables.gsub)), T && E.push(T);
+                                for(var D = bt((k = _t(E)).encode()), L = k.fields, R = !1, I = 0; I < L.length; I += 1)if ("head table" === L[I].name) {
                                     L[I].value.checkSumAdjustment = 2981146554 - D, R = !0;
                                     break;
                                 }
@@ -14546,18 +14600,18 @@ new (0, _p5Default.default)((sketch)=>{
                         function i(e1) {
                             Mt.call(this, e1, "gsub");
                         }
-                        function Ct(e1, t, r) {
+                        function Ot(e1, t, r) {
                             for(var o = e1.subtables, n = 0; n < o.length; n++){
                                 var s = o[n];
                                 if (s.substFormat === t) return s;
                             }
                             if (r) return o.push(r), r;
                         }
-                        function Ot(e1) {
+                        function Ct(e1) {
                             for(var t = new ArrayBuffer(e1.length), r = new Uint8Array(t), o = 0; o < e1.length; ++o)r[o] = e1[o];
                             return t;
                         }
-                        function j(e1, t) {
+                        function _(e1, t) {
                             if (!e1) throw t;
                         }
                         function At(e1, t, r, o, n) {
@@ -14583,9 +14637,9 @@ new (0, _p5Default.default)((sketch)=>{
                             } else if (0 === e1.numberOfContours) e1.points = [];
                             else {
                                 e1.isComposite = !0, e1.points = [], e1.components = [];
-                                for(var _ = !0; _;){
+                                for(var j = !0; j;){
                                     u = n.parseUShort();
-                                    var j = {
+                                    var _ = {
                                         glyphIndex: n.parseUShort(),
                                         xScale: 1,
                                         scale01: 0,
@@ -14594,13 +14648,13 @@ new (0, _p5Default.default)((sketch)=>{
                                         dx: 0,
                                         dy: 0
                                     };
-                                    0 < (1 & u) ? 0 < (2 & u) ? (j.dx = n.parseShort(), j.dy = n.parseShort()) : j.matchedPoints = [
+                                    0 < (1 & u) ? 0 < (2 & u) ? (_.dx = n.parseShort(), _.dy = n.parseShort()) : _.matchedPoints = [
                                         n.parseUShort(),
                                         n.parseUShort()
-                                    ] : 0 < (2 & u) ? (j.dx = n.parseChar(), j.dy = n.parseChar()) : j.matchedPoints = [
+                                    ] : 0 < (2 & u) ? (_.dx = n.parseChar(), _.dy = n.parseChar()) : _.matchedPoints = [
                                         n.parseByte(),
                                         n.parseByte()
-                                    ], 0 < (8 & u) ? j.xScale = j.yScale = n.parseF2Dot14() : 0 < (64 & u) ? (j.xScale = n.parseF2Dot14(), j.yScale = n.parseF2Dot14()) : 0 < (128 & u) && (j.xScale = n.parseF2Dot14(), j.scale01 = n.parseF2Dot14(), j.scale10 = n.parseF2Dot14(), j.yScale = n.parseF2Dot14()), e1.components.push(j), _ = !!(32 & u);
+                                    ], 0 < (8 & u) ? _.xScale = _.yScale = n.parseF2Dot14() : 0 < (64 & u) ? (_.xScale = n.parseF2Dot14(), _.yScale = n.parseF2Dot14()) : 0 < (128 & u) && (_.xScale = n.parseF2Dot14(), _.scale01 = n.parseF2Dot14(), _.scale10 = n.parseF2Dot14(), _.yScale = n.parseF2Dot14()), e1.components.push(_), j = !!(32 & u);
                                 }
                                 if (256 & u) {
                                     e1.instructionLength = n.parseUShort(), e1.instructions = [];
@@ -14848,7 +14902,7 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                             return o;
                         }, i.prototype.addSingle = function(e1, t, r, o) {
-                            r = Ct(this.getLookupTables(r, o, e1, 1, !0)[0], 2, {
+                            r = Ot(this.getLookupTables(r, o, e1, 1, !0)[0], 2, {
                                 substFormat: 2,
                                 coverage: {
                                     format: 1,
@@ -14858,7 +14912,7 @@ new (0, _p5Default.default)((sketch)=>{
                             }), L.assert(1 === r.coverage.format, "Ligature: unable to modify coverage table format " + r.coverage.format), o = t.sub, e1 = this.binSearch(r.coverage.glyphs, o);
                             e1 < 0 && (r.coverage.glyphs.splice(e1 = -1 - e1, 0, o), r.substitute.splice(e1, 0, 0)), r.substitute[e1] = t.by;
                         }, i.prototype.addAlternate = function(e1, t, r, o) {
-                            r = Ct(this.getLookupTables(r, o, e1, 3, !0)[0], 1, {
+                            r = Ot(this.getLookupTables(r, o, e1, 3, !0)[0], 1, {
                                 substFormat: 1,
                                 coverage: {
                                     format: 1,
@@ -15066,47 +15120,47 @@ new (0, _p5Default.default)((sketch)=>{
                             e1.ip = n;
                         }
                         function Kt(e1, t) {
-                            _.DEBUG && console.log(t.step, "SVTCA[" + e1.axis + "]"), t.fv = t.pv = t.dpv = e1;
+                            j.DEBUG && console.log(t.step, "SVTCA[" + e1.axis + "]"), t.fv = t.pv = t.dpv = e1;
                         }
                         function Jt(e1, t) {
-                            _.DEBUG && console.log(t.step, "SPVTCA[" + e1.axis + "]"), t.pv = t.dpv = e1;
+                            j.DEBUG && console.log(t.step, "SPVTCA[" + e1.axis + "]"), t.pv = t.dpv = e1;
                         }
                         function $t(e1, t) {
-                            _.DEBUG && console.log(t.step, "SFVTCA[" + e1.axis + "]"), t.fv = e1;
+                            j.DEBUG && console.log(t.step, "SFVTCA[" + e1.axis + "]"), t.fv = e1;
                         }
                         function er(e1, t) {
                             var r, o = t.stack, n = o.pop(), o = o.pop(), s = t.z2[n], i = t.z1[o];
-                            _.DEBUG && console.log("SPVTL[" + e1 + "]", n, o), n = e1 ? (r = s.y - i.y, i.x - s.x) : (r = i.x - s.x, i.y - s.y), t.pv = t.dpv = qt(r, n);
+                            j.DEBUG && console.log("SPVTL[" + e1 + "]", n, o), n = e1 ? (r = s.y - i.y, i.x - s.x) : (r = i.x - s.x, i.y - s.y), t.pv = t.dpv = qt(r, n);
                         }
                         function tr(e1, t) {
                             var r, o = t.stack, n = o.pop(), o = o.pop(), s = t.z2[n], i = t.z1[o];
-                            _.DEBUG && console.log("SFVTL[" + e1 + "]", n, o), n = e1 ? (r = s.y - i.y, i.x - s.x) : (r = i.x - s.x, i.y - s.y), t.fv = qt(r, n);
+                            j.DEBUG && console.log("SFVTL[" + e1 + "]", n, o), n = e1 ? (r = s.y - i.y, i.x - s.x) : (r = i.x - s.x, i.y - s.y), t.fv = qt(r, n);
                         }
                         function rr(e1) {
-                            _.DEBUG && console.log(e1.step, "POP[]"), e1.stack.pop();
+                            j.DEBUG && console.log(e1.step, "POP[]"), e1.stack.pop();
                         }
                         function or(e1, t) {
-                            var r = t.stack.pop(), o = t.z0[r], n = t.fv, s = t.pv, i = (_.DEBUG && console.log(t.step, "MDAP[" + e1 + "]", r), s.distance(o, Xt));
+                            var r = t.stack.pop(), o = t.z0[r], n = t.fv, s = t.pv, i = (j.DEBUG && console.log(t.step, "MDAP[" + e1 + "]", r), s.distance(o, Xt));
                             e1 && (i = t.round(i)), n.setRelative(o, Xt, i, s), n.touch(o), t.rp0 = t.rp1 = r;
                         }
                         function nr(e1, t) {
                             var r, o, n, s = t.z2, i = s.length - 2;
-                            _.DEBUG && console.log(t.step, "IUP[" + e1.axis + "]");
+                            j.DEBUG && console.log(t.step, "IUP[" + e1.axis + "]");
                             for(var a = 0; a < i; a++)r = s[a], e1.touched(r) || (o = r.prevTouched(e1)) !== r && (o === (n = r.nextTouched(e1)) && e1.setRelative(r, r, e1.distance(o, o, !1, !0), e1, !0), e1.interpolate(r, o, n, e1));
                         }
                         function sr(e1, t) {
                             for(var r = t.stack, o = e1 ? t.rp1 : t.rp2, n = (e1 ? t.z0 : t.z1)[o], s = t.fv, i = t.pv, a = t.loop, l = t.z2; a--;){
                                 var u = r.pop(), c = l[u], d = i.distance(n, n, !1, !0);
-                                s.setRelative(c, c, d, i), s.touch(c), _.DEBUG && console.log(t.step, (1 < t.loop ? "loop " + (t.loop - a) + ": " : "") + "SHP[" + (e1 ? "rp1" : "rp2") + "]", u);
+                                s.setRelative(c, c, d, i), s.touch(c), j.DEBUG && console.log(t.step, (1 < t.loop ? "loop " + (t.loop - a) + ": " : "") + "SHP[" + (e1 ? "rp1" : "rp2") + "]", u);
                             }
                             t.loop = 1;
                         }
                         function ir(e1, t) {
-                            for(var r = t.stack, o = e1 ? t.rp1 : t.rp2, n = (e1 ? t.z0 : t.z1)[o], s = t.fv, i = t.pv, o = r.pop(), a = t.z2[t.contours[o]], l = a, u = (_.DEBUG && console.log(t.step, "SHC[" + e1 + "]", o), i.distance(n, n, !1, !0)); l !== n && s.setRelative(l, l, u, i), (l = l.nextPointOnContour) !== a;);
+                            for(var r = t.stack, o = e1 ? t.rp1 : t.rp2, n = (e1 ? t.z0 : t.z1)[o], s = t.fv, i = t.pv, o = r.pop(), a = t.z2[t.contours[o]], l = a, u = (j.DEBUG && console.log(t.step, "SHC[" + e1 + "]", o), i.distance(n, n, !1, !0)); l !== n && s.setRelative(l, l, u, i), (l = l.nextPointOnContour) !== a;);
                         }
                         function ar(e1, t) {
                             var r, o, n = t.stack, s = e1 ? t.rp1 : t.rp2, s = (e1 ? t.z0 : t.z1)[s], i = t.fv, a = t.pv, n = n.pop();
-                            switch(_.DEBUG && console.log(t.step, "SHZ[" + e1 + "]", n), n){
+                            switch(j.DEBUG && console.log(t.step, "SHZ[" + e1 + "]", n), n){
                                 case 0:
                                     r = t.tZone;
                                     break;
@@ -15120,62 +15174,62 @@ new (0, _p5Default.default)((sketch)=>{
                         }
                         function lr(e1, t) {
                             var r = t.stack, o = r.pop() / 64, r = r.pop(), n = t.z1[r], s = t.z0[t.rp0], i = t.fv, a = t.pv;
-                            i.setRelative(n, s, o, a), i.touch(n), _.DEBUG && console.log(t.step, "MSIRP[" + e1 + "]", o, r), t.rp1 = t.rp0, t.rp2 = r, e1 && (t.rp0 = r);
+                            i.setRelative(n, s, o, a), i.touch(n), j.DEBUG && console.log(t.step, "MSIRP[" + e1 + "]", o, r), t.rp1 = t.rp0, t.rp2 = r, e1 && (t.rp0 = r);
                         }
                         function ur(e1, t) {
-                            var r = t.stack, o = r.pop(), r = r.pop(), n = t.z0[r], s = t.fv, i = t.pv, a = t.cvt[o], o = (_.DEBUG && console.log(t.step, "MIAP[" + e1 + "]", o, "(", a, ")", r), i.distance(n, Xt));
+                            var r = t.stack, o = r.pop(), r = r.pop(), n = t.z0[r], s = t.fv, i = t.pv, a = t.cvt[o], o = (j.DEBUG && console.log(t.step, "MIAP[" + e1 + "]", o, "(", a, ")", r), i.distance(n, Xt));
                             e1 && (Math.abs(o - a) < t.cvCutIn && (o = a), o = t.round(o)), s.setRelative(n, Xt, o, i), 0 === t.zp0 && (n.xo = n.x, n.yo = n.y), s.touch(n), t.rp0 = t.rp1 = r;
                         }
                         function cr(e1, t) {
                             var r = t.stack, o = r.pop(), n = t.z2[o];
-                            _.DEBUG && console.log(t.step, "GC[" + e1 + "]", o), r.push(64 * t.dpv.distance(n, Xt, e1, !1));
+                            j.DEBUG && console.log(t.step, "GC[" + e1 + "]", o), r.push(64 * t.dpv.distance(n, Xt, e1, !1));
                         }
                         function dr(e1, t) {
                             var r = t.stack, o = r.pop(), r = r.pop(), n = t.z1[o], s = t.z0[r], s = t.dpv.distance(s, n, e1, e1);
-                            _.DEBUG && console.log(t.step, "MD[" + e1 + "]", o, r, "->", s), t.stack.push(Math.round(64 * s));
+                            j.DEBUG && console.log(t.step, "MD[" + e1 + "]", o, r, "->", s), t.stack.push(Math.round(64 * s));
                         }
                         function hr(e1, t) {
                             var r = t.stack, o = r.pop(), n = t.fv, s = t.pv, i = t.ppem, a = t.deltaBase + 16 * (e1 - 1), l = t.deltaShift, u = t.z0;
-                            _.DEBUG && console.log(t.step, "DELTAP[" + e1 + "]", o, r);
+                            j.DEBUG && console.log(t.step, "DELTAP[" + e1 + "]", o, r);
                             for(var c = 0; c < o; c++){
                                 var d = r.pop(), h = r.pop();
-                                a + ((240 & h) >> 4) === i && (0 <= (h = (15 & h) - 8) && h++, _.DEBUG && console.log(t.step, "DELTAPFIX", d, "by", h * l), d = u[d], n.setRelative(d, d, h * l, s));
+                                a + ((240 & h) >> 4) === i && (0 <= (h = (15 & h) - 8) && h++, j.DEBUG && console.log(t.step, "DELTAPFIX", d, "by", h * l), d = u[d], n.setRelative(d, d, h * l, s));
                             }
                         }
                         function fr(e1, t) {
                             var r = t.stack, o = r.pop();
-                            _.DEBUG && console.log(t.step, "ROUND[]"), r.push(64 * t.round(o / 64));
+                            j.DEBUG && console.log(t.step, "ROUND[]"), r.push(64 * t.round(o / 64));
                         }
                         function pr(e1, t) {
                             var r = t.stack, o = r.pop(), n = t.ppem, s = t.deltaBase + 16 * (e1 - 1), i = t.deltaShift;
-                            _.DEBUG && console.log(t.step, "DELTAC[" + e1 + "]", o, r);
+                            j.DEBUG && console.log(t.step, "DELTAC[" + e1 + "]", o, r);
                             for(var a = 0; a < o; a++){
                                 var l = r.pop(), u = r.pop();
-                                s + ((240 & u) >> 4) === n && (0 <= (u = (15 & u) - 8) && u++, u = u * i, _.DEBUG && console.log(t.step, "DELTACFIX", l, "by", u), t.cvt[l] += u);
+                                s + ((240 & u) >> 4) === n && (0 <= (u = (15 & u) - 8) && u++, u = u * i, j.DEBUG && console.log(t.step, "DELTACFIX", l, "by", u), t.cvt[l] += u);
                             }
                         }
                         function mr(e1, t) {
                             var r, o = t.stack, n = o.pop(), o = o.pop(), s = t.z2[n], i = t.z1[o];
-                            _.DEBUG && console.log(t.step, "SDPVTL[" + e1 + "]", n, o), n = e1 ? (r = s.y - i.y, i.x - s.x) : (r = i.x - s.x, i.y - s.y), t.dpv = qt(r, n);
+                            j.DEBUG && console.log(t.step, "SDPVTL[" + e1 + "]", n, o), n = e1 ? (r = s.y - i.y, i.x - s.x) : (r = i.x - s.x, i.y - s.y), t.dpv = qt(r, n);
                         }
                         function k(e1, t) {
                             var r = t.stack, o = t.prog, n = t.ip;
-                            _.DEBUG && console.log(t.step, "PUSHB[" + e1 + "]");
+                            j.DEBUG && console.log(t.step, "PUSHB[" + e1 + "]");
                             for(var s = 0; s < e1; s++)r.push(o[++n]);
                             t.ip = n;
                         }
-                        function C(e1, t) {
+                        function O(e1, t) {
                             var r = t.ip, o = t.prog, n = t.stack;
-                            _.DEBUG && console.log(t.ip, "PUSHW[" + e1 + "]");
+                            j.DEBUG && console.log(t.ip, "PUSHW[" + e1 + "]");
                             for(var s = 0; s < e1; s++){
                                 var i = o[++r] << 8 | o[++r];
                                 32768 & i && (i = -(1 + (65535 ^ i))), n.push(i);
                             }
                             t.ip = r;
                         }
-                        function O(e1, t, r, o, n, s) {
+                        function C(e1, t, r, o, n, s) {
                             var i, a, l = s.stack, u = e1 && l.pop(), l = l.pop(), c = s.rp0, c = s.z0[c], d = s.z1[l], h = s.minDis, f = s.fv, p = s.dpv, m = i = p.distance(d, c, !0, !0), y = 0 <= m ? 1 : -1;
-                            m = Math.abs(m), e1 && (a = s.cvt[u], o && Math.abs(m - a) < s.cvCutIn && (m = a)), r && m < h && (m = h), o && (m = s.round(m)), f.setRelative(d, c, y * m, p), f.touch(d), _.DEBUG && console.log(s.step, (e1 ? "MIRP[" : "MDRP[") + (t ? "M" : "m") + (r ? ">" : "_") + (o ? "R" : "_") + (0 === n ? "Gr" : 1 === n ? "Bl" : 2 === n ? "Wh" : "") + "]", e1 ? u + "(" + s.cvt[u] + "," + a + ")" : "", l, "(d =", i, "->", y * m, ")"), s.rp1 = s.rp0, s.rp2 = l, t && (s.rp0 = l);
+                            m = Math.abs(m), e1 && (a = s.cvt[u], o && Math.abs(m - a) < s.cvCutIn && (m = a)), r && m < h && (m = h), o && (m = s.round(m)), f.setRelative(d, c, y * m, p), f.touch(d), j.DEBUG && console.log(s.step, (e1 ? "MIRP[" : "MDRP[") + (t ? "M" : "m") + (r ? ">" : "_") + (o ? "R" : "_") + (0 === n ? "Gr" : 1 === n ? "Bl" : 2 === n ? "Wh" : "") + "]", e1 ? u + "(" + s.cvt[u] + "," + a + ")" : "", l, "(d =", i, "->", y * m, ")"), s.rp1 = s.rp0, s.rp2 = l, t && (s.rp0 = l);
                         }
                         Ft.prototype.exec = function(e1, t) {
                             if ("number" != typeof t) throw new Error("Point size is not a number!");
@@ -15184,7 +15238,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 if (!o || o.ppem !== t) {
                                     var n = this._fpgmState;
                                     if (!n) {
-                                        M.prototype = Yt, (n = this._fpgmState = new M("fpgm", r.tables.fpgm)).funcs = [], n.font = r, _.DEBUG && (console.log("---EXEC FPGM---"), n.step = -1);
+                                        M.prototype = Yt, (n = this._fpgmState = new M("fpgm", r.tables.fpgm)).funcs = [], n.font = r, j.DEBUG && (console.log("---EXEC FPGM---"), n.step = -1);
                                         try {
                                             vr(n);
                                         } catch (e1) {
@@ -15195,7 +15249,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     var s = r.tables.cvt;
                                     if (s) for(var i = o.cvt = new Array(s.length), a = t / r.unitsPerEm, l = 0; l < s.length; l++)i[l] = s[l] * a;
                                     else o.cvt = [];
-                                    _.DEBUG && (console.log("---EXEC PREP---"), o.step = -1);
+                                    j.DEBUG && (console.log("---EXEC PREP---"), o.step = -1);
                                     try {
                                         vr(o);
                                     } catch (e1) {
@@ -15214,7 +15268,7 @@ new (0, _p5Default.default)((sketch)=>{
                             if (M.prototype = t, n) {
                                 for(var s = t.font, i = [], a = [], l = 0; l < n.length; l++){
                                     var u = n[l], c = s.glyphs.get(u.glyphIndex), d = new M("glyf", c.instructions);
-                                    _.DEBUG && (console.log("---EXEC COMP " + l + "---"), d.step = -1), gr(c, d, r, o);
+                                    j.DEBUG && (console.log("---EXEC COMP " + l + "---"), d.step = -1), gr(c, d, r, o);
                                     for(var h = Math.round(u.dx * r), f = Math.round(u.dy * o), p = d.gZone, m = d.contours, y = 0; y < p.length; y++){
                                         var g = p[y];
                                         g.xTouched = g.yTouched = !1, g.xo = g.x = g.x + h, g.yo = g.y = g.y + f;
@@ -15223,18 +15277,18 @@ new (0, _p5Default.default)((sketch)=>{
                                     i.push.apply(i, p);
                                     for(var b = 0; b < m.length; b++)a.push(m[b] + v);
                                 }
-                                e1.instructions && !d.inhibitGridFit && ((d = new M("glyf", e1.instructions)).gZone = d.z0 = d.z1 = d.z2 = i, d.contours = a, i.push(new E(0, 0), new E(Math.round(e1.advanceWidth * r), 0)), _.DEBUG && (console.log("---EXEC COMPOSITE---"), d.step = -1), vr(d), i.length -= 2);
-                            } else d = new M("glyf", e1.instructions), _.DEBUG && (console.log("---EXEC GLYPH---"), d.step = -1), gr(e1, d, r, o), i = d.gZone;
+                                e1.instructions && !d.inhibitGridFit && ((d = new M("glyf", e1.instructions)).gZone = d.z0 = d.z1 = d.z2 = i, d.contours = a, i.push(new E(0, 0), new E(Math.round(e1.advanceWidth * r), 0)), j.DEBUG && (console.log("---EXEC COMPOSITE---"), d.step = -1), vr(d), i.length -= 2);
+                            } else d = new M("glyf", e1.instructions), j.DEBUG && (console.log("---EXEC GLYPH---"), d.step = -1), gr(e1, d, r, o), i = d.gZone;
                             return i;
                         }, gr = function(e1, t, r, o) {
                             for(var n, s, i, a = e1.points || [], l = a.length, u = t.gZone = t.z0 = t.z1 = t.z2 = [], c = t.contours = [], d = 0; d < l; d++)n = a[d], u[d] = new E(n.x * r, n.y * o, n.lastPointOfContour, n.onCurve);
                             for(var h = 0; h < l; h++)n = u[h], s || (s = n, c.push(h)), n.lastPointOfContour ? ((n.nextPointOnContour = s).prevPointOnContour = n, s = void 0) : (i = u[h + 1], (n.nextPointOnContour = i).prevPointOnContour = n);
                             if (!t.inhibitGridFit) {
-                                if (_.DEBUG) {
+                                if (j.DEBUG) {
                                     console.log("PROCESSING GLYPH", t.stack);
                                     for(var f = 0; f < l; f++)console.log(f, u[f].x, u[f].y);
                                 }
-                                if (u.push(new E(0, 0), new E(Math.round(e1.advanceWidth * r), 0)), vr(t), u.length -= 2, _.DEBUG) {
+                                if (u.push(new E(0, 0), new E(Math.round(e1.advanceWidth * r), 0)), vr(t), u.length -= 2, j.DEBUG) {
                                     console.log("FINISHED GLYPH", t.stack);
                                     for(var p = 0; p < l; p++)console.log(p, u[p].x, u[p].y);
                                 }
@@ -15244,7 +15298,7 @@ new (0, _p5Default.default)((sketch)=>{
                             if (t) {
                                 var r, o = t.length;
                                 for(e1.ip = 0; e1.ip < o; e1.ip++){
-                                    if (_.DEBUG && e1.step++, !(r = br[t[e1.ip]])) throw new Error("unknown instruction: 0x" + Number(t[e1.ip]).toString(16));
+                                    if (j.DEBUG && e1.step++, !(r = br[t[e1.ip]])) throw new Error("unknown instruction: 0x" + Number(t[e1.ip]).toString(16));
                                     r(e1);
                                 }
                             }
@@ -15261,39 +15315,39 @@ new (0, _p5Default.default)((sketch)=>{
                             tr.bind(void 0, 1),
                             function(e1) {
                                 var t = (r = e1.stack).pop(), r = r.pop();
-                                _.DEBUG && console.log(e1.step, "SPVFS[]", t, r), e1.pv = e1.dpv = qt(r, t);
+                                j.DEBUG && console.log(e1.step, "SPVFS[]", t, r), e1.pv = e1.dpv = qt(r, t);
                             },
                             function(e1) {
                                 var t = (r = e1.stack).pop(), r = r.pop();
-                                _.DEBUG && console.log(e1.step, "SPVFS[]", t, r), e1.fv = qt(r, t);
+                                j.DEBUG && console.log(e1.step, "SPVFS[]", t, r), e1.fv = qt(r, t);
                             },
                             function(e1) {
                                 var t = e1.stack, r = e1.pv;
-                                _.DEBUG && console.log(e1.step, "GPV[]"), t.push(16384 * r.x), t.push(16384 * r.y);
+                                j.DEBUG && console.log(e1.step, "GPV[]"), t.push(16384 * r.x), t.push(16384 * r.y);
                             },
                             function(e1) {
                                 var t = e1.stack, r = e1.fv;
-                                _.DEBUG && console.log(e1.step, "GFV[]"), t.push(16384 * r.x), t.push(16384 * r.y);
+                                j.DEBUG && console.log(e1.step, "GFV[]"), t.push(16384 * r.x), t.push(16384 * r.y);
                             },
                             function(e1) {
-                                e1.fv = e1.pv, _.DEBUG && console.log(e1.step, "SFVTPV[]");
+                                e1.fv = e1.pv, j.DEBUG && console.log(e1.step, "SFVTPV[]");
                             },
                             function(e1) {
-                                var t = (s = e1.stack).pop(), r = s.pop(), o = s.pop(), n = s.pop(), s = s.pop(), i = e1.z0, a = e1.z1, l = i[t], i = i[r], u = a[o], a = a[n], e1 = e1.z2[s], t = (_.DEBUG && console.log("ISECT[], ", t, r, o, n, s), l.x), r = l.y, o = i.x, n = i.y, s = u.x, l = u.y, i = a.x, u = a.y, a = (t - o) * (l - u) - (r - n) * (s - i), c = t * n - r * o, d = s * u - l * i;
+                                var t = (s = e1.stack).pop(), r = s.pop(), o = s.pop(), n = s.pop(), s = s.pop(), i = e1.z0, a = e1.z1, l = i[t], i = i[r], u = a[o], a = a[n], e1 = e1.z2[s], t = (j.DEBUG && console.log("ISECT[], ", t, r, o, n, s), l.x), r = l.y, o = i.x, n = i.y, s = u.x, l = u.y, i = a.x, u = a.y, a = (t - o) * (l - u) - (r - n) * (s - i), c = t * n - r * o, d = s * u - l * i;
                                 e1.x = (c * (s - i) - d * (t - o)) / a, e1.y = (c * (l - u) - d * (r - n)) / a;
                             },
                             function(e1) {
-                                e1.rp0 = e1.stack.pop(), _.DEBUG && console.log(e1.step, "SRP0[]", e1.rp0);
+                                e1.rp0 = e1.stack.pop(), j.DEBUG && console.log(e1.step, "SRP0[]", e1.rp0);
                             },
                             function(e1) {
-                                e1.rp1 = e1.stack.pop(), _.DEBUG && console.log(e1.step, "SRP1[]", e1.rp1);
+                                e1.rp1 = e1.stack.pop(), j.DEBUG && console.log(e1.step, "SRP1[]", e1.rp1);
                             },
                             function(e1) {
-                                e1.rp2 = e1.stack.pop(), _.DEBUG && console.log(e1.step, "SRP2[]", e1.rp2);
+                                e1.rp2 = e1.stack.pop(), j.DEBUG && console.log(e1.step, "SRP2[]", e1.rp2);
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "SZP0[]", t), e1.zp0 = t){
+                                switch(j.DEBUG && console.log(e1.step, "SZP0[]", t), e1.zp0 = t){
                                     case 0:
                                         e1.tZone || Zt(e1), e1.z0 = e1.tZone;
                                         break;
@@ -15306,7 +15360,7 @@ new (0, _p5Default.default)((sketch)=>{
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "SZP1[]", t), e1.zp1 = t){
+                                switch(j.DEBUG && console.log(e1.step, "SZP1[]", t), e1.zp1 = t){
                                     case 0:
                                         e1.tZone || Zt(e1), e1.z1 = e1.tZone;
                                         break;
@@ -15319,7 +15373,7 @@ new (0, _p5Default.default)((sketch)=>{
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "SZP2[]", t), e1.zp2 = t){
+                                switch(j.DEBUG && console.log(e1.step, "SZP2[]", t), e1.zp2 = t){
                                     case 0:
                                         e1.tZone || Zt(e1), e1.z2 = e1.tZone;
                                         break;
@@ -15332,7 +15386,7 @@ new (0, _p5Default.default)((sketch)=>{
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "SZPS[]", t), e1.zp0 = e1.zp1 = e1.zp2 = t){
+                                switch(j.DEBUG && console.log(e1.step, "SZPS[]", t), e1.zp0 = e1.zp1 = e1.zp2 = t){
                                     case 0:
                                         e1.tZone || Zt(e1), e1.z0 = e1.z1 = e1.z2 = e1.tZone;
                                         break;
@@ -15344,72 +15398,72 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                             },
                             function(e1) {
-                                e1.loop = e1.stack.pop(), _.DEBUG && console.log(e1.step, "SLOOP[]", e1.loop);
+                                e1.loop = e1.stack.pop(), j.DEBUG && console.log(e1.step, "SLOOP[]", e1.loop);
                             },
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "RTG[]"), e1.round = Nt;
+                                j.DEBUG && console.log(e1.step, "RTG[]"), e1.round = Nt;
                             },
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "RTHG[]"), e1.round = Gt;
-                            },
-                            function(e1) {
-                                var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "SMD[]", t), e1.minDis = t / 64;
-                            },
-                            function(e1) {
-                                _.DEBUG && console.log(e1.step, "ELSE[]"), Qt(e1, !1);
+                                j.DEBUG && console.log(e1.step, "RTHG[]"), e1.round = Gt;
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "JMPR[]", t), e1.ip += t - 1;
+                                j.DEBUG && console.log(e1.step, "SMD[]", t), e1.minDis = t / 64;
+                            },
+                            function(e1) {
+                                j.DEBUG && console.log(e1.step, "ELSE[]"), Qt(e1, !1);
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "SCVTCI[]", t), e1.cvCutIn = t / 64;
+                                j.DEBUG && console.log(e1.step, "JMPR[]", t), e1.ip += t - 1;
+                            },
+                            function(e1) {
+                                var t = e1.stack.pop();
+                                j.DEBUG && console.log(e1.step, "SCVTCI[]", t), e1.cvCutIn = t / 64;
                             },
                             void 0,
                             void 0,
                             function(e1) {
                                 var t = e1.stack;
-                                _.DEBUG && console.log(e1.step, "DUP[]"), t.push(t[t.length - 1]);
+                                j.DEBUG && console.log(e1.step, "DUP[]"), t.push(t[t.length - 1]);
                             },
                             rr,
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "CLEAR[]"), e1.stack.length = 0;
+                                j.DEBUG && console.log(e1.step, "CLEAR[]"), e1.stack.length = 0;
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "SWAP[]"), t.push(r), t.push(o);
+                                j.DEBUG && console.log(e1.step, "SWAP[]"), t.push(r), t.push(o);
                             },
                             function(e1) {
                                 var t = e1.stack;
-                                _.DEBUG && console.log(e1.step, "DEPTH[]"), t.push(t.length);
+                                j.DEBUG && console.log(e1.step, "DEPTH[]"), t.push(t.length);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "CINDEX[]", r), t.push(t[t.length - r]);
+                                j.DEBUG && console.log(e1.step, "CINDEX[]", r), t.push(t[t.length - r]);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "MINDEX[]", r), t.push(t.splice(t.length - r, 1)[0]);
+                                j.DEBUG && console.log(e1.step, "MINDEX[]", r), t.push(t.splice(t.length - r, 1)[0]);
                             },
                             void 0,
                             void 0,
                             void 0,
                             function(e1) {
-                                var t = (o = e1.stack).pop(), r = o.pop(), o = (_.DEBUG && console.log(e1.step, "LOOPCALL[]", t, r), e1.ip), n = e1.prog;
+                                var t = (o = e1.stack).pop(), r = o.pop(), o = (j.DEBUG && console.log(e1.step, "LOOPCALL[]", t, r), e1.ip), n = e1.prog;
                                 e1.prog = e1.funcs[t];
-                                for(var s = 0; s < r; s++)vr(e1), _.DEBUG && console.log(++e1.step, s + 1 < r ? "next loopcall" : "done loopcall", s);
+                                for(var s = 0; s < r; s++)vr(e1), j.DEBUG && console.log(++e1.step, s + 1 < r ? "next loopcall" : "done loopcall", s);
                                 e1.ip = o, e1.prog = n;
                             },
                             function(e1) {
-                                var t = e1.stack.pop(), r = (_.DEBUG && console.log(e1.step, "CALL[]", t), e1.ip), o = e1.prog;
-                                e1.prog = e1.funcs[t], vr(e1), e1.ip = r, e1.prog = o, _.DEBUG && console.log(++e1.step, "returning from", t);
+                                var t = e1.stack.pop(), r = (j.DEBUG && console.log(e1.step, "CALL[]", t), e1.ip), o = e1.prog;
+                                e1.prog = e1.funcs[t], vr(e1), e1.ip = r, e1.prog = o, j.DEBUG && console.log(++e1.step, "returning from", t);
                             },
                             function(e1) {
                                 if ("fpgm" !== e1.env) throw new Error("FDEF not allowed here");
                                 var t = e1.stack, r = e1.prog, o = e1.ip, t = t.pop(), n = o;
-                                for(_.DEBUG && console.log(e1.step, "FDEF[]", t); 45 !== r[++o];);
+                                for(j.DEBUG && console.log(e1.step, "FDEF[]", t); 45 !== r[++o];);
                                 e1.ip = o, e1.funcs[t] = r.slice(n + 1, o);
                             },
                             void 0,
@@ -15426,14 +15480,14 @@ new (0, _p5Default.default)((sketch)=>{
                             function(e1) {
                                 for(var t = e1.stack, r = e1.loop, o = e1.fv, n = t.pop() / 64, s = e1.z2; r--;){
                                     var i = t.pop(), a = s[i];
-                                    _.DEBUG && console.log(e1.step, (1 < e1.loop ? "loop " + (e1.loop - r) + ": " : "") + "SHPIX[]", i, n), o.setRelative(a, a, n), o.touch(a);
+                                    j.DEBUG && console.log(e1.step, (1 < e1.loop ? "loop " + (e1.loop - r) + ": " : "") + "SHPIX[]", i, n), o.setRelative(a, a, n), o.touch(a);
                                 }
                                 e1.loop = 1;
                             },
                             function(e1) {
                                 for(var t = e1.stack, r = e1.rp1, o = e1.rp2, n = e1.loop, s = e1.z0[r], i = e1.z1[o], a = e1.fv, l = e1.dpv, u = e1.z2; n--;){
                                     var c = t.pop(), d = u[c];
-                                    _.DEBUG && console.log(e1.step, (1 < e1.loop ? "loop " + (e1.loop - n) + ": " : "") + "IP[]", c, r, "<->", o), a.interpolate(d, s, i, l), a.touch(d);
+                                    j.DEBUG && console.log(e1.step, (1 < e1.loop ? "loop " + (e1.loop - n) + ": " : "") + "IP[]", c, r, "<->", o), a.interpolate(d, s, i, l), a.touch(d);
                                 }
                                 e1.loop = 1;
                             },
@@ -15442,24 +15496,24 @@ new (0, _p5Default.default)((sketch)=>{
                             function(e1) {
                                 for(var t = e1.stack, r = e1.rp0, o = e1.z0[r], n = e1.loop, s = e1.fv, i = e1.pv, a = e1.z1; n--;){
                                     var l = t.pop(), u = a[l];
-                                    _.DEBUG && console.log(e1.step, (1 < e1.loop ? "loop " + (e1.loop - n) + ": " : "") + "ALIGNRP[]", l), s.setRelative(u, o, 0, i), s.touch(u);
+                                    j.DEBUG && console.log(e1.step, (1 < e1.loop ? "loop " + (e1.loop - n) + ": " : "") + "ALIGNRP[]", l), s.setRelative(u, o, 0, i), s.touch(u);
                                 }
                                 e1.loop = 1;
                             },
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "RTDG[]"), e1.round = Bt;
+                                j.DEBUG && console.log(e1.step, "RTDG[]"), e1.round = Bt;
                             },
                             ur.bind(void 0, 0),
                             ur.bind(void 0, 1),
                             function(e1) {
                                 var t = e1.prog, r = e1.ip, o = e1.stack, n = t[++r];
-                                _.DEBUG && console.log(e1.step, "NPUSHB[]", n);
+                                j.DEBUG && console.log(e1.step, "NPUSHB[]", n);
                                 for(var s = 0; s < n; s++)o.push(t[++r]);
                                 e1.ip = r;
                             },
                             function(e1) {
                                 var t = e1.ip, r = e1.prog, o = e1.stack, n = r[++t];
-                                _.DEBUG && console.log(e1.step, "NPUSHW[]", n);
+                                j.DEBUG && console.log(e1.step, "NPUSHW[]", n);
                                 for(var s = 0; s < n; s++){
                                     var i = r[++t] << 8 | r[++t];
                                     32768 & i && (i = -(1 + (65535 ^ i))), o.push(i);
@@ -15468,19 +15522,19 @@ new (0, _p5Default.default)((sketch)=>{
                             },
                             function(e1) {
                                 var t = e1.stack, r = (r = e1.store) || (e1.store = []), o = t.pop(), t = t.pop();
-                                _.DEBUG && console.log(e1.step, "WS", o, t), r[t] = o;
+                                j.DEBUG && console.log(e1.step, "WS", o, t), r[t] = o;
                             },
                             function(e1) {
-                                var t = e1.stack, r = e1.store, o = t.pop(), e1 = (_.DEBUG && console.log(e1.step, "RS", o), r && r[o] || 0);
+                                var t = e1.stack, r = e1.store, o = t.pop(), e1 = (j.DEBUG && console.log(e1.step, "RS", o), r && r[o] || 0);
                                 t.push(e1);
                             },
                             function(e1) {
                                 var t = (r = e1.stack).pop(), r = r.pop();
-                                _.DEBUG && console.log(e1.step, "WCVTP", t, r), e1.cvt[r] = t / 64;
+                                j.DEBUG && console.log(e1.step, "WCVTP", t, r), e1.cvt[r] = t / 64;
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "RCVT", r), t.push(64 * e1.cvt[r]);
+                                j.DEBUG && console.log(e1.step, "RCVT", r), t.push(64 * e1.cvt[r]);
                             },
                             cr.bind(void 0, 0),
                             cr.bind(void 0, 1),
@@ -15488,105 +15542,105 @@ new (0, _p5Default.default)((sketch)=>{
                             dr.bind(void 0, 0),
                             dr.bind(void 0, 1),
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "MPPEM[]"), e1.stack.push(e1.ppem);
+                                j.DEBUG && console.log(e1.step, "MPPEM[]"), e1.stack.push(e1.ppem);
                             },
                             void 0,
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "FLIPON[]"), e1.autoFlip = !0;
+                                j.DEBUG && console.log(e1.step, "FLIPON[]"), e1.autoFlip = !0;
                             },
                             void 0,
                             void 0,
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "LT[]", r, o), t.push(o < r ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "LT[]", r, o), t.push(o < r ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "LTEQ[]", r, o), t.push(o <= r ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "LTEQ[]", r, o), t.push(o <= r ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "GT[]", r, o), t.push(r < o ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "GT[]", r, o), t.push(r < o ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "GTEQ[]", r, o), t.push(r <= o ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "GTEQ[]", r, o), t.push(r <= o ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "EQ[]", r, o), t.push(r === o ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "EQ[]", r, o), t.push(r === o ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "NEQ[]", r, o), t.push(r !== o ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "NEQ[]", r, o), t.push(r !== o ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "ODD[]", r), t.push(Math.trunc(r) % 2 ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "ODD[]", r), t.push(Math.trunc(r) % 2 ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "EVEN[]", r), t.push(Math.trunc(r) % 2 ? 0 : 1);
+                                j.DEBUG && console.log(e1.step, "EVEN[]", r), t.push(Math.trunc(r) % 2 ? 0 : 1);
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "IF[]", t), t || (Qt(e1, !0), _.DEBUG && console.log(e1.step, "EIF[]"));
+                                j.DEBUG && console.log(e1.step, "IF[]", t), t || (Qt(e1, !0), j.DEBUG && console.log(e1.step, "EIF[]"));
                             },
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "EIF[]");
-                            },
-                            function(e1) {
-                                var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "AND[]", r, o), t.push(r && o ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "EIF[]");
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "OR[]", r, o), t.push(r || o ? 1 : 0);
+                                j.DEBUG && console.log(e1.step, "AND[]", r, o), t.push(r && o ? 1 : 0);
+                            },
+                            function(e1) {
+                                var t = e1.stack, r = t.pop(), o = t.pop();
+                                j.DEBUG && console.log(e1.step, "OR[]", r, o), t.push(r || o ? 1 : 0);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "NOT[]", r), t.push(r ? 0 : 1);
+                                j.DEBUG && console.log(e1.step, "NOT[]", r), t.push(r ? 0 : 1);
                             },
                             hr.bind(void 0, 1),
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "SDB[]", t), e1.deltaBase = t;
+                                j.DEBUG && console.log(e1.step, "SDB[]", t), e1.deltaBase = t;
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "SDS[]", t), e1.deltaShift = Math.pow(.5, t);
+                                j.DEBUG && console.log(e1.step, "SDS[]", t), e1.deltaShift = Math.pow(.5, t);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "ADD[]", r, o), t.push(o + r);
+                                j.DEBUG && console.log(e1.step, "ADD[]", r, o), t.push(o + r);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "SUB[]", r, o), t.push(o - r);
+                                j.DEBUG && console.log(e1.step, "SUB[]", r, o), t.push(o - r);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "DIV[]", r, o), t.push(64 * o / r);
+                                j.DEBUG && console.log(e1.step, "DIV[]", r, o), t.push(64 * o / r);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "MUL[]", r, o), t.push(o * r / 64);
+                                j.DEBUG && console.log(e1.step, "MUL[]", r, o), t.push(o * r / 64);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "ABS[]", r), t.push(Math.abs(r));
+                                j.DEBUG && console.log(e1.step, "ABS[]", r), t.push(Math.abs(r));
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "NEG[]", r), t.push(-r);
+                                j.DEBUG && console.log(e1.step, "NEG[]", r), t.push(-r);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "FLOOR[]", r), t.push(64 * Math.floor(r / 64));
+                                j.DEBUG && console.log(e1.step, "FLOOR[]", r), t.push(64 * Math.floor(r / 64));
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop();
-                                _.DEBUG && console.log(e1.step, "CEILING[]", r), t.push(64 * Math.ceil(r / 64));
+                                j.DEBUG && console.log(e1.step, "CEILING[]", r), t.push(64 * Math.ceil(r / 64));
                             },
                             fr.bind(void 0, 0),
                             fr.bind(void 0, 1),
@@ -15598,7 +15652,7 @@ new (0, _p5Default.default)((sketch)=>{
                             void 0,
                             function(e1) {
                                 var t = (r = e1.stack).pop(), r = r.pop();
-                                _.DEBUG && console.log(e1.step, "WCVTF[]", t, r), e1.cvt[r] = t * e1.ppem / e1.font.unitsPerEm;
+                                j.DEBUG && console.log(e1.step, "WCVTF[]", t, r), e1.cvt[r] = t * e1.ppem / e1.font.unitsPerEm;
                             },
                             hr.bind(void 0, 2),
                             hr.bind(void 0, 3),
@@ -15607,7 +15661,7 @@ new (0, _p5Default.default)((sketch)=>{
                             pr.bind(void 0, 3),
                             function(e1) {
                                 var t, r = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "SROUND[]", r), e1.round = Ht, 192 & r){
+                                switch(j.DEBUG && console.log(e1.step, "SROUND[]", r), e1.round = Ht, 192 & r){
                                     case 0:
                                         t = .5;
                                         break;
@@ -15640,7 +15694,7 @@ new (0, _p5Default.default)((sketch)=>{
                             },
                             function(e1) {
                                 var t, r = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "S45ROUND[]", r), e1.round = Ht, 192 & r){
+                                switch(j.DEBUG && console.log(e1.step, "S45ROUND[]", r), e1.round = Ht, 192 & r){
                                     case 0:
                                         t = Math.sqrt(2) / 2;
                                         break;
@@ -15674,14 +15728,14 @@ new (0, _p5Default.default)((sketch)=>{
                             void 0,
                             void 0,
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "ROFF[]"), e1.round = Ut;
+                                j.DEBUG && console.log(e1.step, "ROFF[]"), e1.round = Ut;
                             },
                             void 0,
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "RUTG[]"), e1.round = Vt;
+                                j.DEBUG && console.log(e1.step, "RUTG[]"), e1.round = Vt;
                             },
                             function(e1) {
-                                _.DEBUG && console.log(e1.step, "RDTG[]"), e1.round = zt;
+                                j.DEBUG && console.log(e1.step, "RDTG[]"), e1.round = zt;
                             },
                             rr,
                             rr,
@@ -15692,34 +15746,34 @@ new (0, _p5Default.default)((sketch)=>{
                             void 0,
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "SCANCTRL[]", t);
+                                j.DEBUG && console.log(e1.step, "SCANCTRL[]", t);
                             },
                             mr.bind(void 0, 0),
                             mr.bind(void 0, 1),
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = 0;
-                                _.DEBUG && console.log(e1.step, "GETINFO[]", r), 1 & r && (o = 35), 32 & r && (o |= 4096), t.push(o);
+                                j.DEBUG && console.log(e1.step, "GETINFO[]", r), 1 & r && (o = 35), 32 & r && (o |= 4096), t.push(o);
                             },
                             void 0,
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop(), n = t.pop();
-                                _.DEBUG && console.log(e1.step, "ROLL[]"), t.push(o), t.push(r), t.push(n);
+                                j.DEBUG && console.log(e1.step, "ROLL[]"), t.push(o), t.push(r), t.push(n);
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "MAX[]", r, o), t.push(Math.max(o, r));
+                                j.DEBUG && console.log(e1.step, "MAX[]", r, o), t.push(Math.max(o, r));
                             },
                             function(e1) {
                                 var t = e1.stack, r = t.pop(), o = t.pop();
-                                _.DEBUG && console.log(e1.step, "MIN[]", r, o), t.push(Math.min(o, r));
+                                j.DEBUG && console.log(e1.step, "MIN[]", r, o), t.push(Math.min(o, r));
                             },
                             function(e1) {
                                 var t = e1.stack.pop();
-                                _.DEBUG && console.log(e1.step, "SCANTYPE[]", t);
+                                j.DEBUG && console.log(e1.step, "SCANTYPE[]", t);
                             },
                             function(e1) {
                                 var t = e1.stack.pop(), r = e1.stack.pop();
-                                switch(_.DEBUG && console.log(e1.step, "INSTCTRL[]", t, r), t){
+                                switch(j.DEBUG && console.log(e1.step, "INSTCTRL[]", t, r), t){
                                     case 1:
                                         return void (e1.inhibitGridFit = !!r);
                                     case 2:
@@ -15769,83 +15823,83 @@ new (0, _p5Default.default)((sketch)=>{
                             k.bind(void 0, 6),
                             k.bind(void 0, 7),
                             k.bind(void 0, 8),
-                            C.bind(void 0, 1),
-                            C.bind(void 0, 2),
-                            C.bind(void 0, 3),
-                            C.bind(void 0, 4),
-                            C.bind(void 0, 5),
-                            C.bind(void 0, 6),
-                            C.bind(void 0, 7),
-                            C.bind(void 0, 8),
-                            O.bind(void 0, 0, 0, 0, 0, 0),
-                            O.bind(void 0, 0, 0, 0, 0, 1),
-                            O.bind(void 0, 0, 0, 0, 0, 2),
-                            O.bind(void 0, 0, 0, 0, 0, 3),
-                            O.bind(void 0, 0, 0, 0, 1, 0),
-                            O.bind(void 0, 0, 0, 0, 1, 1),
-                            O.bind(void 0, 0, 0, 0, 1, 2),
-                            O.bind(void 0, 0, 0, 0, 1, 3),
-                            O.bind(void 0, 0, 0, 1, 0, 0),
-                            O.bind(void 0, 0, 0, 1, 0, 1),
-                            O.bind(void 0, 0, 0, 1, 0, 2),
-                            O.bind(void 0, 0, 0, 1, 0, 3),
-                            O.bind(void 0, 0, 0, 1, 1, 0),
-                            O.bind(void 0, 0, 0, 1, 1, 1),
-                            O.bind(void 0, 0, 0, 1, 1, 2),
-                            O.bind(void 0, 0, 0, 1, 1, 3),
-                            O.bind(void 0, 0, 1, 0, 0, 0),
-                            O.bind(void 0, 0, 1, 0, 0, 1),
-                            O.bind(void 0, 0, 1, 0, 0, 2),
-                            O.bind(void 0, 0, 1, 0, 0, 3),
-                            O.bind(void 0, 0, 1, 0, 1, 0),
-                            O.bind(void 0, 0, 1, 0, 1, 1),
-                            O.bind(void 0, 0, 1, 0, 1, 2),
-                            O.bind(void 0, 0, 1, 0, 1, 3),
-                            O.bind(void 0, 0, 1, 1, 0, 0),
-                            O.bind(void 0, 0, 1, 1, 0, 1),
-                            O.bind(void 0, 0, 1, 1, 0, 2),
-                            O.bind(void 0, 0, 1, 1, 0, 3),
-                            O.bind(void 0, 0, 1, 1, 1, 0),
-                            O.bind(void 0, 0, 1, 1, 1, 1),
-                            O.bind(void 0, 0, 1, 1, 1, 2),
-                            O.bind(void 0, 0, 1, 1, 1, 3),
-                            O.bind(void 0, 1, 0, 0, 0, 0),
-                            O.bind(void 0, 1, 0, 0, 0, 1),
-                            O.bind(void 0, 1, 0, 0, 0, 2),
-                            O.bind(void 0, 1, 0, 0, 0, 3),
-                            O.bind(void 0, 1, 0, 0, 1, 0),
-                            O.bind(void 0, 1, 0, 0, 1, 1),
-                            O.bind(void 0, 1, 0, 0, 1, 2),
-                            O.bind(void 0, 1, 0, 0, 1, 3),
-                            O.bind(void 0, 1, 0, 1, 0, 0),
-                            O.bind(void 0, 1, 0, 1, 0, 1),
-                            O.bind(void 0, 1, 0, 1, 0, 2),
-                            O.bind(void 0, 1, 0, 1, 0, 3),
-                            O.bind(void 0, 1, 0, 1, 1, 0),
-                            O.bind(void 0, 1, 0, 1, 1, 1),
-                            O.bind(void 0, 1, 0, 1, 1, 2),
-                            O.bind(void 0, 1, 0, 1, 1, 3),
-                            O.bind(void 0, 1, 1, 0, 0, 0),
-                            O.bind(void 0, 1, 1, 0, 0, 1),
-                            O.bind(void 0, 1, 1, 0, 0, 2),
-                            O.bind(void 0, 1, 1, 0, 0, 3),
-                            O.bind(void 0, 1, 1, 0, 1, 0),
-                            O.bind(void 0, 1, 1, 0, 1, 1),
-                            O.bind(void 0, 1, 1, 0, 1, 2),
-                            O.bind(void 0, 1, 1, 0, 1, 3),
-                            O.bind(void 0, 1, 1, 1, 0, 0),
-                            O.bind(void 0, 1, 1, 1, 0, 1),
-                            O.bind(void 0, 1, 1, 1, 0, 2),
-                            O.bind(void 0, 1, 1, 1, 0, 3),
-                            O.bind(void 0, 1, 1, 1, 1, 0),
-                            O.bind(void 0, 1, 1, 1, 1, 1),
-                            O.bind(void 0, 1, 1, 1, 1, 2),
-                            O.bind(void 0, 1, 1, 1, 1, 3)
-                        ], _r = Array.from || function(e1) {
+                            O.bind(void 0, 1),
+                            O.bind(void 0, 2),
+                            O.bind(void 0, 3),
+                            O.bind(void 0, 4),
+                            O.bind(void 0, 5),
+                            O.bind(void 0, 6),
+                            O.bind(void 0, 7),
+                            O.bind(void 0, 8),
+                            C.bind(void 0, 0, 0, 0, 0, 0),
+                            C.bind(void 0, 0, 0, 0, 0, 1),
+                            C.bind(void 0, 0, 0, 0, 0, 2),
+                            C.bind(void 0, 0, 0, 0, 0, 3),
+                            C.bind(void 0, 0, 0, 0, 1, 0),
+                            C.bind(void 0, 0, 0, 0, 1, 1),
+                            C.bind(void 0, 0, 0, 0, 1, 2),
+                            C.bind(void 0, 0, 0, 0, 1, 3),
+                            C.bind(void 0, 0, 0, 1, 0, 0),
+                            C.bind(void 0, 0, 0, 1, 0, 1),
+                            C.bind(void 0, 0, 0, 1, 0, 2),
+                            C.bind(void 0, 0, 0, 1, 0, 3),
+                            C.bind(void 0, 0, 0, 1, 1, 0),
+                            C.bind(void 0, 0, 0, 1, 1, 1),
+                            C.bind(void 0, 0, 0, 1, 1, 2),
+                            C.bind(void 0, 0, 0, 1, 1, 3),
+                            C.bind(void 0, 0, 1, 0, 0, 0),
+                            C.bind(void 0, 0, 1, 0, 0, 1),
+                            C.bind(void 0, 0, 1, 0, 0, 2),
+                            C.bind(void 0, 0, 1, 0, 0, 3),
+                            C.bind(void 0, 0, 1, 0, 1, 0),
+                            C.bind(void 0, 0, 1, 0, 1, 1),
+                            C.bind(void 0, 0, 1, 0, 1, 2),
+                            C.bind(void 0, 0, 1, 0, 1, 3),
+                            C.bind(void 0, 0, 1, 1, 0, 0),
+                            C.bind(void 0, 0, 1, 1, 0, 1),
+                            C.bind(void 0, 0, 1, 1, 0, 2),
+                            C.bind(void 0, 0, 1, 1, 0, 3),
+                            C.bind(void 0, 0, 1, 1, 1, 0),
+                            C.bind(void 0, 0, 1, 1, 1, 1),
+                            C.bind(void 0, 0, 1, 1, 1, 2),
+                            C.bind(void 0, 0, 1, 1, 1, 3),
+                            C.bind(void 0, 1, 0, 0, 0, 0),
+                            C.bind(void 0, 1, 0, 0, 0, 1),
+                            C.bind(void 0, 1, 0, 0, 0, 2),
+                            C.bind(void 0, 1, 0, 0, 0, 3),
+                            C.bind(void 0, 1, 0, 0, 1, 0),
+                            C.bind(void 0, 1, 0, 0, 1, 1),
+                            C.bind(void 0, 1, 0, 0, 1, 2),
+                            C.bind(void 0, 1, 0, 0, 1, 3),
+                            C.bind(void 0, 1, 0, 1, 0, 0),
+                            C.bind(void 0, 1, 0, 1, 0, 1),
+                            C.bind(void 0, 1, 0, 1, 0, 2),
+                            C.bind(void 0, 1, 0, 1, 0, 3),
+                            C.bind(void 0, 1, 0, 1, 1, 0),
+                            C.bind(void 0, 1, 0, 1, 1, 1),
+                            C.bind(void 0, 1, 0, 1, 1, 2),
+                            C.bind(void 0, 1, 0, 1, 1, 3),
+                            C.bind(void 0, 1, 1, 0, 0, 0),
+                            C.bind(void 0, 1, 1, 0, 0, 1),
+                            C.bind(void 0, 1, 1, 0, 0, 2),
+                            C.bind(void 0, 1, 1, 0, 0, 3),
+                            C.bind(void 0, 1, 1, 0, 1, 0),
+                            C.bind(void 0, 1, 1, 0, 1, 1),
+                            C.bind(void 0, 1, 1, 0, 1, 2),
+                            C.bind(void 0, 1, 1, 0, 1, 3),
+                            C.bind(void 0, 1, 1, 1, 0, 0),
+                            C.bind(void 0, 1, 1, 1, 0, 1),
+                            C.bind(void 0, 1, 1, 1, 0, 2),
+                            C.bind(void 0, 1, 1, 1, 0, 3),
+                            C.bind(void 0, 1, 1, 1, 1, 0),
+                            C.bind(void 0, 1, 1, 1, 1, 1),
+                            C.bind(void 0, 1, 1, 1, 1, 2),
+                            C.bind(void 0, 1, 1, 1, 1, 3)
+                        ], jr = Array.from || function(e1) {
                             return e1.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]?|[^\uD800-\uDFFF]|./g) || [];
                         };
                         function A(e1) {
-                            (e1 = e1 || {}).empty || (j(e1.familyName, "When creating a new Font object, familyName is required."), j(e1.styleName, "When creating a new Font object, styleName is required."), j(e1.unitsPerEm, "When creating a new Font object, unitsPerEm is required."), j(e1.ascender, "When creating a new Font object, ascender is required."), j(e1.descender, "When creating a new Font object, descender is required."), j(e1.descender < 0, "Descender should be negative (e.g. -512)."), this.names = {
+                            (e1 = e1 || {}).empty || (_(e1.familyName, "When creating a new Font object, familyName is required."), _(e1.styleName, "When creating a new Font object, styleName is required."), _(e1.unitsPerEm, "When creating a new Font object, unitsPerEm is required."), _(e1.ascender, "When creating a new Font object, ascender is required."), _(e1.descender, "When creating a new Font object, descender is required."), _(e1.descender < 0, "Descender should be negative (e.g. -512)."), this.names = {
                                 fontFamily: {
                                     en: e1.familyName || " "
                                 },
@@ -15900,7 +15954,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                             });
                         }
-                        function jr(e1, t) {
+                        function _r(e1, t) {
                             var r, o = JSON.stringify(e1), n = 256;
                             for(r in t){
                                 var s = parseInt(r);
@@ -15920,7 +15974,7 @@ new (0, _p5Default.default)((sketch)=>{
                             return this.glyphs.get(e1) || this.glyphs.get(0);
                         }, A.prototype.stringToGlyphs = function(e1, t) {
                             t = t || this.defaultRenderOptions;
-                            for(var r = _r(e1), o = [], n = 0; n < r.length; n += 1){
+                            for(var r = jr(e1), o = [], n = 0; n < r.length; n += 1){
                                 var s = r[n];
                                 o.push(this.charToGlyphIndex(s));
                             }
@@ -16097,7 +16151,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     }
                                 ]);
                                 r.offsetToData = r.sizeOf();
-                                for(var o, n, s, i = 0; i < e1.axes.length; i++)r.fields = r.fields.concat((o = i, n = e1.axes[i], s = t, s = jr(n.name, t), [
+                                for(var o, n, s, i = 0; i < e1.axes.length; i++)r.fields = r.fields.concat((o = i, n = e1.axes[i], s = t, s = _r(n.name, t), [
                                     {
                                         name: "tag_" + o,
                                         type: "TAG",
@@ -16134,7 +16188,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         {
                                             name: "nameID_" + e1,
                                             type: "USHORT",
-                                            value: jr(t.name, o)
+                                            value: _r(t.name, o)
                                         },
                                         {
                                             name: "flags_" + e1,
@@ -16314,7 +16368,7 @@ new (0, _p5Default.default)((sketch)=>{
                         function Mr(e1, r) {
                             Pr("fs").readFile(e1, function(e1, t) {
                                 if (e1) return r(e1.message);
-                                r(null, Ot(t));
+                                r(null, Ct(t));
                             });
                         }
                         function kr(e1, t) {
@@ -16325,7 +16379,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 t("Font could not be loaded");
                             }, r.send();
                         }
-                        function Cr(e1, t) {
+                        function Or(e1, t) {
                             for(var r = [], o = 12, n = 0; n < t; n += 1){
                                 var s = R.getTag(e1, o), i = R.getULong(e1, o + 4), a = R.getULong(e1, o + 8), l = R.getULong(e1, o + 12);
                                 r.push({
@@ -16350,12 +16404,12 @@ new (0, _p5Default.default)((sketch)=>{
                                 offset: 0
                             };
                         }
-                        function Or(e1) {
+                        function Cr(e1) {
                             var t, r, o, n, s, i, a, l, u, c, d, h, f, p, m = new A({
                                 empty: !0
                             }), y = new DataView(e1, 0), g = [], e1 = R.getTag(y, 0);
-                            if (e1 === String.fromCharCode(0, 1, 0, 0) || "true" === e1 || "typ1" === e1) m.outlinesFormat = "truetype", g = Cr(y, o = R.getUShort(y, 4));
-                            else if ("OTTO" === e1) m.outlinesFormat = "cff", g = Cr(y, o = R.getUShort(y, 4));
+                            if (e1 === String.fromCharCode(0, 1, 0, 0) || "true" === e1 || "typ1" === e1) m.outlinesFormat = "truetype", g = Or(y, o = R.getUShort(y, 4));
+                            else if ("OTTO" === e1) m.outlinesFormat = "cff", g = Or(y, o = R.getUShort(y, 4));
                             else {
                                 if ("wOFF" !== e1) throw new Error("Unsupported OpenType signature " + e1);
                                 var v = R.getTag(y, 4);
@@ -16379,67 +16433,67 @@ new (0, _p5Default.default)((sketch)=>{
                                 }(y, o = R.getUShort(y, 12));
                             }
                             for(var b = 0; b < o; b += 1){
-                                var _ = g[b], j = void 0;
-                                switch(_.tag){
+                                var j = g[b], _ = void 0;
+                                switch(j.tag){
                                     case "cmap":
-                                        j = I(y, _), m.tables.cmap = we.parse(j.data, j.offset), m.encoding = new ke(m.tables.cmap);
+                                        _ = I(y, j), m.tables.cmap = we.parse(_.data, _.offset), m.encoding = new ke(m.tables.cmap);
                                         break;
                                     case "cvt ":
-                                        j = I(y, _), p = new R.Parser(j.data, j.offset), m.tables.cvt = p.parseShortList(_.length / 2);
+                                        _ = I(y, j), p = new R.Parser(_.data, _.offset), m.tables.cvt = p.parseShortList(j.length / 2);
                                         break;
                                     case "fvar":
-                                        s = _;
+                                        s = j;
                                         break;
                                     case "fpgm":
-                                        j = I(y, _), p = new R.Parser(j.data, j.offset), m.tables.fpgm = p.parseByteList(_.length);
+                                        _ = I(y, j), p = new R.Parser(_.data, _.offset), m.tables.fpgm = p.parseByteList(j.length);
                                         break;
                                     case "head":
-                                        j = I(y, _), m.tables.head = Ze.parse(j.data, j.offset), m.unitsPerEm = m.tables.head.unitsPerEm, t = m.tables.head.indexToLocFormat;
+                                        _ = I(y, j), m.tables.head = Ze.parse(_.data, _.offset), m.unitsPerEm = m.tables.head.unitsPerEm, t = m.tables.head.indexToLocFormat;
                                         break;
                                     case "hhea":
-                                        j = I(y, _), m.tables.hhea = Qe.parse(j.data, j.offset), m.ascender = m.tables.hhea.ascender, m.descender = m.tables.hhea.descender, m.numberOfHMetrics = m.tables.hhea.numberOfHMetrics;
+                                        _ = I(y, j), m.tables.hhea = Qe.parse(_.data, _.offset), m.ascender = m.tables.hhea.ascender, m.descender = m.tables.hhea.descender, m.numberOfHMetrics = m.tables.hhea.numberOfHMetrics;
                                         break;
                                     case "hmtx":
-                                        u = _;
+                                        u = j;
                                         break;
                                     case "ltag":
-                                        j = I(y, _), r = Je.parse(j.data, j.offset);
+                                        _ = I(y, j), r = Je.parse(_.data, _.offset);
                                         break;
                                     case "maxp":
-                                        j = I(y, _), m.tables.maxp = $e.parse(j.data, j.offset), m.numGlyphs = m.tables.maxp.numGlyphs;
+                                        _ = I(y, j), m.tables.maxp = $e.parse(_.data, _.offset), m.numGlyphs = m.tables.maxp.numGlyphs;
                                         break;
                                     case "name":
-                                        h = _;
+                                        h = j;
                                         break;
                                     case "OS/2":
-                                        j = I(y, _), m.tables.os2 = ft.parse(j.data, j.offset);
+                                        _ = I(y, j), m.tables.os2 = ft.parse(_.data, _.offset);
                                         break;
                                     case "post":
-                                        j = I(y, _), m.tables.post = pt.parse(j.data, j.offset), m.glyphNames = new Oe(m.tables.post);
+                                        _ = I(y, j), m.tables.post = pt.parse(_.data, _.offset), m.glyphNames = new Ce(m.tables.post);
                                         break;
                                     case "prep":
-                                        j = I(y, _), p = new R.Parser(j.data, j.offset), m.tables.prep = p.parseByteList(_.length);
+                                        _ = I(y, j), p = new R.Parser(_.data, _.offset), m.tables.prep = p.parseByteList(j.length);
                                         break;
                                     case "glyf":
-                                        i = _;
+                                        i = j;
                                         break;
                                     case "loca":
-                                        d = _;
+                                        d = j;
                                         break;
                                     case "CFF ":
-                                        n = _;
+                                        n = j;
                                         break;
                                     case "kern":
-                                        c = _;
+                                        c = j;
                                         break;
                                     case "GPOS":
-                                        a = _;
+                                        a = j;
                                         break;
                                     case "GSUB":
-                                        l = _;
+                                        l = j;
                                         break;
                                     case "meta":
-                                        f = _;
+                                        f = j;
                                 }
                             }
                             v = I(y, h);
@@ -16455,23 +16509,23 @@ new (0, _p5Default.default)((sketch)=>{
                                 var E, M = S[T], k = w[M];
                                 (E = x.glyphs.get(k)).addUnicode(parseInt(M));
                             }
-                            for(var C = 0; C < x.glyphs.length; C += 1)E = x.glyphs.get(C), x.cffEncoding ? x.isCIDFont ? E.name = "gid" + C : E.name = x.cffEncoding.charset[C] : x.glyphNames.names && (E.name = x.glyphNames.glyphIndexToName(C));
+                            for(var O = 0; O < x.glyphs.length; O += 1)E = x.glyphs.get(O), x.cffEncoding ? x.isCIDFont ? E.name = "gid" + O : E.name = x.cffEncoding.charset[O] : x.glyphNames.names && (E.name = x.glyphNames.glyphIndexToName(O));
                             return c ? (e1 = I(y, c), m.kerningPairs = Tr.parse(e1.data, e1.offset)) : m.kerningPairs = {}, a && (v = I(y, a), m.tables.gpos = Sr.parse(v.data, v.offset), m.position.init()), l && (e1 = I(y, l), m.tables.gsub = yt.parse(e1.data, e1.offset)), s && (v = I(y, s), m.tables.fvar = xr.parse(v.data, v.offset, m.names)), f && (e1 = I(y, f), m.tables.meta = gt.parse(e1.data, e1.offset), m.metas = m.tables.meta), m;
                         }
-                        _.Font = A, _.Glyph = f, _.Path = h, _.BoundingBox = a, _._parse = R, _.parse = Or, _.load = function(e1, o) {
+                        j.Font = A, j.Glyph = f, j.Path = h, j.BoundingBox = a, j._parse = R, j.parse = Cr, j.load = function(e1, o) {
                             ("undefined" == typeof window ? Mr : kr)(e1, function(e1, t) {
                                 if (e1) return o(e1);
                                 var r;
                                 try {
-                                    r = Or(t);
+                                    r = Cr(t);
                                 } catch (e1) {
                                     return o(e1, null);
                                 }
                                 return o(null, r);
                             });
-                        }, _.loadSync = function(e1) {
-                            return Or(Ot(Pr("fs").readFileSync(e1)));
-                        }, Object.defineProperty(_, "__esModule", {
+                        }, j.loadSync = function(e1) {
+                            return Cr(Ct(Pr("fs").readFileSync(e1)));
+                        }, Object.defineProperty(j, "__esModule", {
                             value: !0
                         });
                     }, "object" == typeof o && void 0 !== r ? t(o) : "function" == typeof s && s.amd ? s([
@@ -16484,7 +16538,7 @@ new (0, _p5Default.default)((sketch)=>{
                 fs: 2
             }
         ],
-        255: [
+        258: [
             function(e1, t, u) {
                 (function(n) {
                     function s(e1, t) {
@@ -16577,10 +16631,10 @@ new (0, _p5Default.default)((sketch)=>{
                 }).call(this, e1("_process"));
             },
             {
-                _process: 256
+                _process: 259
             }
         ],
-        256: [
+        259: [
             function(e1, t, r) {
                 var o, n, t = t.exports = {};
                 function s() {
@@ -16661,7 +16715,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        257: [
+        260: [
             function(e1, t, r) {
                 t = function(s) {
                     "use strict";
@@ -16737,7 +16791,7 @@ new (0, _p5Default.default)((sketch)=>{
                     var t = {}, v = (t[o] = function() {
                         return this;
                     }, Object.getPrototypeOf), v = v && v(v(T([]))), b = (v && v !== e1 && u.call(v, o) && (t = v), g.prototype = y.prototype = Object.create(t));
-                    function _(e1) {
+                    function j(e1) {
                         [
                             "next",
                             "throw",
@@ -16748,7 +16802,7 @@ new (0, _p5Default.default)((sketch)=>{
                             };
                         });
                     }
-                    function j(i) {
+                    function _(i) {
                         var t;
                         this._invoke = function(r, o) {
                             function e1() {
@@ -16817,14 +16871,14 @@ new (0, _p5Default.default)((sketch)=>{
                         return {
                             __await: e1
                         };
-                    }, _(j.prototype), j.prototype[r] = function() {
+                    }, j(_.prototype), _.prototype[r] = function() {
                         return this;
-                    }, s.AsyncIterator = j, s.async = function(e1, t, r, o) {
-                        var n = new j(i(e1, t, r, o));
+                    }, s.AsyncIterator = _, s.async = function(e1, t, r, o) {
+                        var n = new _(i(e1, t, r, o));
                         return s.isGeneratorFunction(t) ? n : n.next().then(function(e1) {
                             return e1.done ? e1.value : n.next();
                         });
-                    }, _(b), b[n] = "Generator", b[o] = function() {
+                    }, j(b), b[n] = "Generator", b[o] = function() {
                         return this;
                     }, b.toString = function() {
                         return "[object Generator]";
@@ -16917,7 +16971,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        258: [
+        261: [
             function(e1, t, r) {
                 !function(e1) {
                     "use strict";
@@ -17013,21 +17067,21 @@ new (0, _p5Default.default)((sketch)=>{
                             if (this._bodyFormData) throw new Error("could not read FormData body as text");
                             return Promise.resolve(this._bodyText);
                         }, o && (this.formData = function() {
-                            return this.text().then(j);
+                            return this.text().then(_);
                         }), this.json = function() {
                             return this.text().then(JSON.parse);
                         }, this;
                     }
-                    function _(e1, t) {
+                    function j(e1, t) {
                         var r, o = (t = t || {}).body;
-                        if (e1 instanceof _) {
+                        if (e1 instanceof j) {
                             if (e1.bodyUsed) throw new TypeError("Already read");
                             this.url = e1.url, this.credentials = e1.credentials, t.headers || (this.headers = new p(e1.headers)), this.method = e1.method, this.mode = e1.mode, o || null == e1._bodyInit || (o = e1._bodyInit, e1.bodyUsed = !0);
                         } else this.url = String(e1);
                         if (this.credentials = t.credentials || this.credentials || "omit", !t.headers && this.headers || (this.headers = new p(t.headers)), this.method = (e1 = t.method || this.method || "GET", r = e1.toUpperCase(), -1 < u.indexOf(r) ? r : e1), this.mode = t.mode || this.mode || null, this.referrer = null, ("GET" === this.method || "HEAD" === this.method) && o) throw new TypeError("Body not allowed for GET or HEAD requests");
                         this._initBody(o);
                     }
-                    function j(e1) {
+                    function _(e1) {
                         var r = new FormData;
                         return e1.trim().split("&").forEach(function(e1) {
                             var t;
@@ -17096,11 +17150,11 @@ new (0, _p5Default.default)((sketch)=>{
                         "OPTIONS",
                         "POST",
                         "PUT"
-                    ], _.prototype.clone = function() {
-                        return new _(this, {
+                    ], j.prototype.clone = function() {
+                        return new j(this, {
                             body: this._bodyInit
                         });
-                    }, b.call(_.prototype), b.call(x.prototype), x.prototype.clone = function() {
+                    }, b.call(j.prototype), b.call(x.prototype), x.prototype.clone = function() {
                         return new x(this._bodyInit, {
                             status: this.status,
                             statusText: this.statusText,
@@ -17127,9 +17181,9 @@ new (0, _p5Default.default)((sketch)=>{
                                 location: e1
                             }
                         });
-                    }, e1.Headers = p, e1.Request = _, e1.Response = x, e1.fetch = function(r, s) {
+                    }, e1.Headers = p, e1.Request = j, e1.Response = x, e1.fetch = function(r, s) {
                         return new Promise(function(o, e1) {
-                            var t = new _(r, s), n = new XMLHttpRequest;
+                            var t = new j(r, s), n = new XMLHttpRequest;
                             n.onload = function() {
                                 var r, e1 = {
                                     status: n.status,
@@ -17153,7 +17207,7 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {}
         ],
-        259: [
+        262: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.function.name"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.function.name"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.split"), Object.defineProperty(r, "__esModule", {
@@ -17795,16 +17849,16 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../color/color_conversion": 265,
-                "../core/main": 280,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.split": 203
+                "../color/color_conversion": 268,
+                "../core/main": 283,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.split": 206
             }
         ],
-        260: [
+        263: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.ends-with"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.ends-with"), e1("core-js/modules/es.string.replace"), Object.defineProperty(r, "__esModule", {
@@ -17841,14 +17895,14 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.ends-with": 195,
-                "core-js/modules/es.string.replace": 201
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.ends-with": 198,
+                "core-js/modules/es.string.replace": 204
             }
         ],
-        261: [
+        264: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.string.iterator"), Object.defineProperty(r, "__esModule", {
@@ -17886,7 +17940,7 @@ new (0, _p5Default.default)((sketch)=>{
                         });
                         for(r in t)for(var a in t[r]){
                             var l = void 0;
-                            l = "line" !== r ? '<a href="#'.concat(e1, "shape").concat(n, '">').concat(t[r][a].color, " ").concat(r, "</a>") : '<a href="#'.concat(e1, "shape").concat(n, '">').concat(t[r][a].color, " ").concat(r, " midpoint</a>"), i[t[r][a].loc.locY][t[r][a].loc.locX] ? i[t[r][a].loc.locY][t[r][a].loc.locX] = i[t[r][a].loc.locY][t[r][a].loc.locX] + "  " + l : i[t[r][a].loc.locY][t[r][a].loc.locX] = l, n++;
+                            l = "line" !== r ? '<a href="#'.concat(e1, "shape").concat(n, '">').concat(t[r][a].color, " ").concat(r, "</a>") : '<a href="#'.concat(e1, "shape").concat(n, '">').concat(t[r][a].color, " ").concat(r, " midpoint</a>"), t[r][a].loc.locY < i.length && t[r][a].loc.locX < i[t[r][a].loc.locY].length && (i[t[r][a].loc.locY][t[r][a].loc.locX] ? i[t[r][a].loc.locY][t[r][a].loc.locX] = i[t[r][a].loc.locY][t[r][a].loc.locX] + "  " + l : i[t[r][a].loc.locY][t[r][a].loc.locX] = l, n++);
                         }
                         for(o in i){
                             var u, c = "<tr>";
@@ -17900,14 +17954,14 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.string.iterator": 197
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.string.iterator": 200
             }
         ],
-        262: [
+        265: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.fill"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.number.to-fixed"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.fill"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.number.to-fixed"), Object.defineProperty(r, "__esModule", {
@@ -18007,23 +18061,23 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.number.to-fixed": 180,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.number.to-fixed": 182,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        263: [
+        266: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.concat"), Object.defineProperty(r, "__esModule", {
@@ -18061,101 +18115,102 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153
             }
         ],
-        264: [
+        267: [
             function(e1, t, r) {
                 "use strict";
                 var o = (o = e1("./core/main")) && o.__esModule ? o : {
                     default: o
                 };
-                e1("./core/constants"), e1("./core/environment"), e1("./core/friendly_errors/stacktrace"), e1("./core/friendly_errors/validate_params"), e1("./core/friendly_errors/file_errors"), e1("./core/friendly_errors/fes_core"), e1("./core/friendly_errors/sketch_reader"), e1("./core/helpers"), e1("./core/legacy"), e1("./core/preload"), e1("./core/p5.Element"), e1("./core/p5.Graphics"), e1("./core/p5.Renderer"), e1("./core/p5.Renderer2D"), e1("./core/rendering"), e1("./core/shim"), e1("./core/structure"), e1("./core/transform"), e1("./core/shape/2d_primitives"), e1("./core/shape/attributes"), e1("./core/shape/curves"), e1("./core/shape/vertex"), e1("./accessibility/outputs"), e1("./accessibility/textOutput"), e1("./accessibility/gridOutput"), e1("./accessibility/color_namer"), e1("./color/color_conversion"), e1("./color/creating_reading"), e1("./color/p5.Color"), e1("./color/setting"), e1("./data/p5.TypedDict"), e1("./data/local_storage.js"), e1("./dom/dom"), e1("./accessibility/describe"), e1("./events/acceleration"), e1("./events/keyboard"), e1("./events/mouse"), e1("./events/touch"), e1("./image/filters"), e1("./image/image"), e1("./image/loading_displaying"), e1("./image/p5.Image"), e1("./image/pixels"), e1("./io/files"), e1("./io/p5.Table"), e1("./io/p5.TableRow"), e1("./io/p5.XML"), e1("./math/calculation"), e1("./math/math"), e1("./math/noise"), e1("./math/p5.Vector"), e1("./math/random"), e1("./math/trigonometry"), e1("./typography/attributes"), e1("./typography/loading_displaying"), e1("./typography/p5.Font"), e1("./utilities/array_functions"), e1("./utilities/conversion"), e1("./utilities/string_functions"), e1("./utilities/time_date"), e1("./webgl/3d_primitives"), e1("./webgl/interaction"), e1("./webgl/light"), e1("./webgl/loading"), e1("./webgl/material"), e1("./webgl/p5.Camera"), e1("./webgl/p5.DataArray"), e1("./webgl/p5.Geometry"), e1("./webgl/p5.Matrix"), e1("./webgl/p5.RendererGL.Immediate"), e1("./webgl/p5.RendererGL"), e1("./webgl/p5.RendererGL.Retained"), e1("./webgl/p5.Framebuffer"), e1("./webgl/p5.Shader"), e1("./webgl/p5.RenderBuffer"), e1("./webgl/p5.Texture"), e1("./webgl/text"), e1("./core/init"), t.exports = o.default;
+                e1("./core/constants"), e1("./core/environment"), e1("./core/friendly_errors/stacktrace"), e1("./core/friendly_errors/validate_params"), e1("./core/friendly_errors/file_errors"), e1("./core/friendly_errors/fes_core"), e1("./core/friendly_errors/sketch_reader"), e1("./core/helpers"), e1("./core/legacy"), e1("./core/preload"), e1("./core/p5.Element"), e1("./core/p5.Graphics"), e1("./core/p5.Renderer"), e1("./core/p5.Renderer2D"), e1("./core/rendering"), e1("./core/shim"), e1("./core/structure"), e1("./core/transform"), e1("./core/shape/2d_primitives"), e1("./core/shape/attributes"), e1("./core/shape/curves"), e1("./core/shape/vertex"), e1("./accessibility/outputs"), e1("./accessibility/textOutput"), e1("./accessibility/gridOutput"), e1("./accessibility/color_namer"), e1("./color/color_conversion"), e1("./color/creating_reading"), e1("./color/p5.Color"), e1("./color/setting"), e1("./data/p5.TypedDict"), e1("./data/local_storage.js"), e1("./dom/dom"), e1("./accessibility/describe"), e1("./events/acceleration"), e1("./events/keyboard"), e1("./events/mouse"), e1("./events/touch"), e1("./image/filters"), e1("./image/image"), e1("./image/loading_displaying"), e1("./image/p5.Image"), e1("./image/pixels"), e1("./io/files"), e1("./io/p5.Table"), e1("./io/p5.TableRow"), e1("./io/p5.XML"), e1("./math/calculation"), e1("./math/math"), e1("./math/noise"), e1("./math/p5.Vector"), e1("./math/random"), e1("./math/trigonometry"), e1("./typography/attributes"), e1("./typography/loading_displaying"), e1("./typography/p5.Font"), e1("./utilities/array_functions"), e1("./utilities/conversion"), e1("./utilities/string_functions"), e1("./utilities/time_date"), e1("./webgl/3d_primitives"), e1("./webgl/interaction"), e1("./webgl/light"), e1("./webgl/loading"), e1("./webgl/material"), e1("./webgl/p5.Camera"), e1("./webgl/p5.DataArray"), e1("./webgl/p5.Geometry"), e1("./webgl/p5.Matrix"), e1("./webgl/p5.Quat"), e1("./webgl/p5.RendererGL.Immediate"), e1("./webgl/p5.RendererGL"), e1("./webgl/p5.RendererGL.Retained"), e1("./webgl/p5.Framebuffer"), e1("./webgl/p5.Shader"), e1("./webgl/p5.RenderBuffer"), e1("./webgl/p5.Texture"), e1("./webgl/text"), e1("./core/init"), t.exports = o.default;
             },
             {
-                "./accessibility/color_namer": 259,
-                "./accessibility/describe": 260,
-                "./accessibility/gridOutput": 261,
-                "./accessibility/outputs": 262,
-                "./accessibility/textOutput": 263,
-                "./color/color_conversion": 265,
-                "./color/creating_reading": 266,
-                "./color/p5.Color": 267,
-                "./color/setting": 268,
-                "./core/constants": 269,
-                "./core/environment": 270,
-                "./core/friendly_errors/fes_core": 271,
-                "./core/friendly_errors/file_errors": 272,
-                "./core/friendly_errors/sketch_reader": 273,
-                "./core/friendly_errors/stacktrace": 274,
-                "./core/friendly_errors/validate_params": 275,
-                "./core/helpers": 276,
-                "./core/init": 277,
-                "./core/legacy": 279,
-                "./core/main": 280,
-                "./core/p5.Element": 281,
-                "./core/p5.Graphics": 282,
-                "./core/p5.Renderer": 283,
-                "./core/p5.Renderer2D": 284,
-                "./core/preload": 285,
-                "./core/rendering": 286,
-                "./core/shape/2d_primitives": 287,
-                "./core/shape/attributes": 288,
-                "./core/shape/curves": 289,
-                "./core/shape/vertex": 290,
-                "./core/shim": 291,
-                "./core/structure": 292,
-                "./core/transform": 293,
-                "./data/local_storage.js": 294,
-                "./data/p5.TypedDict": 295,
-                "./dom/dom": 296,
-                "./events/acceleration": 297,
-                "./events/keyboard": 298,
-                "./events/mouse": 299,
-                "./events/touch": 300,
-                "./image/filters": 301,
-                "./image/image": 302,
-                "./image/loading_displaying": 303,
-                "./image/p5.Image": 304,
-                "./image/pixels": 305,
-                "./io/files": 306,
-                "./io/p5.Table": 307,
-                "./io/p5.TableRow": 308,
-                "./io/p5.XML": 309,
-                "./math/calculation": 310,
-                "./math/math": 311,
-                "./math/noise": 312,
-                "./math/p5.Vector": 313,
-                "./math/random": 314,
-                "./math/trigonometry": 315,
-                "./typography/attributes": 316,
-                "./typography/loading_displaying": 317,
-                "./typography/p5.Font": 318,
-                "./utilities/array_functions": 319,
-                "./utilities/conversion": 320,
-                "./utilities/string_functions": 321,
-                "./utilities/time_date": 322,
-                "./webgl/3d_primitives": 323,
-                "./webgl/interaction": 325,
-                "./webgl/light": 326,
-                "./webgl/loading": 327,
-                "./webgl/material": 328,
-                "./webgl/p5.Camera": 329,
-                "./webgl/p5.DataArray": 330,
-                "./webgl/p5.Framebuffer": 331,
-                "./webgl/p5.Geometry": 332,
-                "./webgl/p5.Matrix": 333,
-                "./webgl/p5.RenderBuffer": 334,
-                "./webgl/p5.RendererGL": 337,
-                "./webgl/p5.RendererGL.Immediate": 335,
-                "./webgl/p5.RendererGL.Retained": 336,
-                "./webgl/p5.Shader": 338,
-                "./webgl/p5.Texture": 339,
-                "./webgl/text": 340
+                "./accessibility/color_namer": 262,
+                "./accessibility/describe": 263,
+                "./accessibility/gridOutput": 264,
+                "./accessibility/outputs": 265,
+                "./accessibility/textOutput": 266,
+                "./color/color_conversion": 268,
+                "./color/creating_reading": 269,
+                "./color/p5.Color": 270,
+                "./color/setting": 271,
+                "./core/constants": 272,
+                "./core/environment": 273,
+                "./core/friendly_errors/fes_core": 274,
+                "./core/friendly_errors/file_errors": 275,
+                "./core/friendly_errors/sketch_reader": 276,
+                "./core/friendly_errors/stacktrace": 277,
+                "./core/friendly_errors/validate_params": 278,
+                "./core/helpers": 279,
+                "./core/init": 280,
+                "./core/legacy": 282,
+                "./core/main": 283,
+                "./core/p5.Element": 284,
+                "./core/p5.Graphics": 285,
+                "./core/p5.Renderer": 286,
+                "./core/p5.Renderer2D": 287,
+                "./core/preload": 288,
+                "./core/rendering": 289,
+                "./core/shape/2d_primitives": 290,
+                "./core/shape/attributes": 291,
+                "./core/shape/curves": 292,
+                "./core/shape/vertex": 293,
+                "./core/shim": 294,
+                "./core/structure": 295,
+                "./core/transform": 296,
+                "./data/local_storage.js": 297,
+                "./data/p5.TypedDict": 298,
+                "./dom/dom": 299,
+                "./events/acceleration": 300,
+                "./events/keyboard": 301,
+                "./events/mouse": 302,
+                "./events/touch": 303,
+                "./image/filters": 304,
+                "./image/image": 305,
+                "./image/loading_displaying": 306,
+                "./image/p5.Image": 307,
+                "./image/pixels": 308,
+                "./io/files": 309,
+                "./io/p5.Table": 310,
+                "./io/p5.TableRow": 311,
+                "./io/p5.XML": 312,
+                "./math/calculation": 313,
+                "./math/math": 314,
+                "./math/noise": 315,
+                "./math/p5.Vector": 316,
+                "./math/random": 317,
+                "./math/trigonometry": 318,
+                "./typography/attributes": 319,
+                "./typography/loading_displaying": 320,
+                "./typography/p5.Font": 321,
+                "./utilities/array_functions": 322,
+                "./utilities/conversion": 323,
+                "./utilities/string_functions": 324,
+                "./utilities/time_date": 325,
+                "./webgl/3d_primitives": 326,
+                "./webgl/interaction": 328,
+                "./webgl/light": 329,
+                "./webgl/loading": 330,
+                "./webgl/material": 331,
+                "./webgl/p5.Camera": 332,
+                "./webgl/p5.DataArray": 333,
+                "./webgl/p5.Framebuffer": 334,
+                "./webgl/p5.Geometry": 335,
+                "./webgl/p5.Matrix": 336,
+                "./webgl/p5.Quat": 337,
+                "./webgl/p5.RenderBuffer": 338,
+                "./webgl/p5.RendererGL": 341,
+                "./webgl/p5.RendererGL.Immediate": 339,
+                "./webgl/p5.RendererGL.Retained": 340,
+                "./webgl/p5.Shader": 342,
+                "./webgl/p5.Texture": 343,
+                "./webgl/text": 344
             }
         ],
-        265: [
+        268: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -18236,10 +18291,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        266: [
+        269: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -18322,25 +18377,25 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = n;
             },
             {
-                "../core/constants": 269,
-                "../core/friendly_errors/fes_core": 271,
-                "../core/friendly_errors/file_errors": 272,
-                "../core/friendly_errors/validate_params": 275,
-                "../core/main": 280,
-                "./p5.Color": 267,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/friendly_errors/fes_core": 274,
+                "../core/friendly_errors/file_errors": 275,
+                "../core/friendly_errors/validate_params": 278,
+                "../core/main": 283,
+                "./p5.Color": 270,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        267: [
+        270: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -18853,30 +18908,30 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = u;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./color_conversion": 265,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.constructor": 191,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.trim": 206,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./color_conversion": 268,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.constructor": 194,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.trim": 209,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        268: [
+        271: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -18951,34 +19006,34 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = n;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.Color": 267,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.Color": 270,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        269: [
+        272: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.QUADRATIC = r.LINEAR = r._CTX_MIDDLE = r._DEFAULT_LEADMULT = r._DEFAULT_TEXT_FILL = r.WORD = r.CHAR = r.BOLDITALIC = r.BOLD = r.ITALIC = r.NORMAL = r.BLUR = r.ERODE = r.DILATE = r.POSTERIZE = r.INVERT = r.OPAQUE = r.GRAY = r.THRESHOLD = r.BURN = r.DODGE = r.SOFT_LIGHT = r.HARD_LIGHT = r.OVERLAY = r.REPLACE = r.SCREEN = r.MULTIPLY = r.EXCLUSION = r.SUBTRACT = r.DIFFERENCE = r.LIGHTEST = r.DARKEST = r.ADD = r.REMOVE = r.BLEND = r.UP_ARROW = r.TAB = r.SHIFT = r.RIGHT_ARROW = r.RETURN = r.OPTION = r.LEFT_ARROW = r.ESCAPE = r.ENTER = r.DOWN_ARROW = r.DELETE = r.CONTROL = r.BACKSPACE = r.ALT = r.AUTO = r.HSL = r.HSB = r.RGB = r.MITER = r.BEVEL = r.ROUND = r.SQUARE = r.PROJECT = r.PIE = r.CHORD = r.OPEN = r.CLOSE = r.TESS = r.QUAD_STRIP = r.QUADS = r.TRIANGLE_STRIP = r.TRIANGLE_FAN = r.TRIANGLES = r.LINE_LOOP = r.LINE_STRIP = r.LINES = r.POINTS = r.BASELINE = r.BOTTOM = r.TOP = r.CENTER = r.LEFT = r.RIGHT = r.RADIUS = r.CORNERS = r.CORNER = r.RAD_TO_DEG = r.DEG_TO_RAD = r.RADIANS = r.DEGREES = r.TWO_PI = r.TAU = r.QUARTER_PI = r.PI = r.HALF_PI = r.WAIT = r.TEXT = r.MOVE = r.HAND = r.CROSS = r.ARROW = r.WEBGL2 = r.WEBGL = r.P2D = r.VERSION = void 0, r.RGBA = r.HALF_FLOAT = r.FLOAT = r.UNSIGNED_INT = r.UNSIGNED_BYTE = r.COVER = r.CONTAIN = r.FALLBACK = r.LABEL = r.AXES = r.GRID = r._DEFAULT_FILL = r._DEFAULT_STROKE = r.PORTRAIT = r.LANDSCAPE = r.SMOOTH = r.FLAT = r.MIRROR = r.CLAMP = r.REPEAT = r.NEAREST = r.IMAGE = r.IMMEDIATE = r.TEXTURE = r.FILL = r.STROKE = r.CURVE = r.BEZIER = void 0;
-                var o = Math.PI, n = (r.VERSION = "1.9.2", r.P2D = "p2d", r.WEBGL = "webgl", r.WEBGL2 = "webgl2", r.ARROW = "default", r.CROSS = "crosshair", r.HAND = "pointer", r.MOVE = "move", r.TEXT = "text", r.WAIT = "wait", o / 2), n = (r.HALF_PI = n, o), n = (r.PI = n, o / 4), n = (r.QUARTER_PI = n, 2 * o), n = (r.TAU = n, 2 * o), n = (r.TWO_PI = n, r.DEGREES = "degrees", r.RADIANS = "radians", o / 180), n = (r.DEG_TO_RAD = n, 180 / o);
+                var o = Math.PI, n = (r.VERSION = "1.10.0", r.P2D = "p2d", r.WEBGL = "webgl", r.WEBGL2 = "webgl2", r.ARROW = "default", r.CROSS = "crosshair", r.HAND = "pointer", r.MOVE = "move", r.TEXT = "text", r.WAIT = "wait", o / 2), n = (r.HALF_PI = n, o), n = (r.PI = n, o / 4), n = (r.QUARTER_PI = n, 2 * o), n = (r.TAU = n, 2 * o), n = (r.TWO_PI = n, r.DEGREES = "degrees", r.RADIANS = "radians", o / 180), n = (r.DEG_TO_RAD = n, 180 / o);
                 r.RAD_TO_DEG = n, r.CORNER = "corner", r.CORNERS = "corners", r.RADIUS = "radius", r.RIGHT = "right", r.LEFT = "left", r.CENTER = "center", r.TOP = "top", r.BOTTOM = "bottom", r.BASELINE = "alphabetic", r.POINTS = 0, r.LINES = 1, r.LINE_STRIP = 3, r.LINE_LOOP = 2, r.TRIANGLES = 4, r.TRIANGLE_FAN = 6, r.TRIANGLE_STRIP = 5, r.QUADS = "quads", r.QUAD_STRIP = "quad_strip", r.TESS = "tess", r.CLOSE = "close", r.OPEN = "open", r.CHORD = "chord", r.PIE = "pie", r.PROJECT = "square", r.SQUARE = "butt", r.ROUND = "round", r.BEVEL = "bevel", r.MITER = "miter", r.RGB = "rgb", r.HSB = "hsb", r.HSL = "hsl", r.AUTO = "auto", r.ALT = 18, r.BACKSPACE = 8, r.CONTROL = 17, r.DELETE = 46, r.DOWN_ARROW = 40, r.ENTER = 13, r.ESCAPE = 27, r.LEFT_ARROW = 37, r.OPTION = 18, r.RETURN = 13, r.RIGHT_ARROW = 39, r.SHIFT = 16, r.TAB = 9, r.UP_ARROW = 38, r.BLEND = "source-over", r.REMOVE = "destination-out", r.ADD = "lighter", r.DARKEST = "darken", r.LIGHTEST = "lighten", r.DIFFERENCE = "difference", r.SUBTRACT = "subtract", r.EXCLUSION = "exclusion", r.MULTIPLY = "multiply", r.SCREEN = "screen", r.REPLACE = "copy", r.OVERLAY = "overlay", r.HARD_LIGHT = "hard-light", r.SOFT_LIGHT = "soft-light", r.DODGE = "color-dodge", r.BURN = "color-burn", r.THRESHOLD = "threshold", r.GRAY = "gray", r.OPAQUE = "opaque", r.INVERT = "invert", r.POSTERIZE = "posterize", r.DILATE = "dilate", r.ERODE = "erode", r.BLUR = "blur", r.NORMAL = "normal", r.ITALIC = "italic", r.BOLD = "bold", r.BOLDITALIC = "bold italic", r.CHAR = "CHAR", r.WORD = "WORD", r._DEFAULT_TEXT_FILL = "#000000", r._DEFAULT_LEADMULT = 1.25, r._CTX_MIDDLE = "middle", r.LINEAR = "linear", r.QUADRATIC = "quadratic", r.BEZIER = "bezier", r.CURVE = "curve", r.STROKE = "stroke", r.FILL = "fill", r.TEXTURE = "texture", r.IMMEDIATE = "immediate", r.IMAGE = "image", r.NEAREST = "nearest", r.REPEAT = "repeat", r.CLAMP = "clamp", r.MIRROR = "mirror", r.FLAT = "flat", r.SMOOTH = "smooth", r.LANDSCAPE = "landscape", r.PORTRAIT = "portrait", r._DEFAULT_STROKE = "#000000", r._DEFAULT_FILL = "#FFFFFF", r.GRID = "grid", r.AXES = "axes", r.LABEL = "label", r.FALLBACK = "fallback", r.CONTAIN = "contain", r.COVER = "cover", r.UNSIGNED_BYTE = "unsigned-byte", r.UNSIGNED_INT = "unsigned-int", r.FLOAT = "float", r.HALF_FLOAT = "half-float";
                 r.RGBA = "rgba";
             },
             {}
         ],
-        270: [
+        273: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -19051,10 +19106,12 @@ new (0, _p5Default.default)((sketch)=>{
                     return this._targetFrameRate;
                 }, n.default.prototype.noCursor = function() {
                     this._curElement.elt.style.cursor = "none";
-                }, n.default.prototype.webglVersion = s.P2D, n.default.prototype.displayWidth = screen.width, n.default.prototype.displayHeight = screen.height, n.default.prototype.windowWidth = d(), n.default.prototype.windowHeight = h(), n.default.prototype._onresize = function(e1) {
+                }, n.default.prototype.webglVersion = s.P2D, n.default.prototype.displayWidth = screen.width, n.default.prototype.displayHeight = screen.height, n.default.prototype.windowWidth = 0, n.default.prototype.windowHeight = 0, n.default.prototype._onresize = function(e1) {
                     this._setProperty("windowWidth", d()), this._setProperty("windowHeight", h());
                     var t = this._isGlobal ? window : this;
                     "function" != typeof t.windowResized || void 0 === (t = t.windowResized(e1)) || t || e1.preventDefault();
+                }, n.default.prototype._updateWindowSize = function() {
+                    this._setProperty("windowWidth", d()), this._setProperty("windowHeight", h());
                 }, n.default.prototype.width = 0, n.default.prototype.height = 0, n.default.prototype.fullscreen = function(e1) {
                     if (n.default._validateParameters("fullscreen", arguments), void 0 === e1) return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
                     if (e1) {
@@ -19081,27 +19138,27 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "./constants": 269,
-                "./main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.search": 202,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./constants": 272,
+                "./main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.search": 205,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        271: [
+        274: [
             function(r, e1, t) {
                 "use strict";
                 r("core-js/modules/es.symbol"), r("core-js/modules/es.symbol.description"), r("core-js/modules/es.symbol.iterator"), r("core-js/modules/es.array.concat"), r("core-js/modules/es.array.filter"), r("core-js/modules/es.array.for-each"), r("core-js/modules/es.array.includes"), r("core-js/modules/es.array.iterator"), r("core-js/modules/es.array.join"), r("core-js/modules/es.array.map"), r("core-js/modules/es.array.slice"), r("core-js/modules/es.array.some"), r("core-js/modules/es.function.name"), r("core-js/modules/es.object.assign"), r("core-js/modules/es.object.get-own-property-names"), r("core-js/modules/es.object.keys"), r("core-js/modules/es.object.to-string"), r("core-js/modules/es.regexp.constructor"), r("core-js/modules/es.regexp.exec"), r("core-js/modules/es.regexp.to-string"), r("core-js/modules/es.string.iterator"), r("core-js/modules/es.string.match"), r("core-js/modules/es.string.replace"), r("core-js/modules/es.string.split"), r("core-js/modules/es.string.starts-with"), r("core-js/modules/web.dom-collections.for-each"), r("core-js/modules/web.dom-collections.iterator"), r("core-js/modules/es.symbol"), r("core-js/modules/es.symbol.description"), r("core-js/modules/es.symbol.iterator"), r("core-js/modules/es.array.concat"), r("core-js/modules/es.array.filter"), r("core-js/modules/es.array.for-each"), r("core-js/modules/es.array.includes"), r("core-js/modules/es.array.iterator"), r("core-js/modules/es.array.join"), r("core-js/modules/es.array.map"), r("core-js/modules/es.array.slice"), r("core-js/modules/es.array.some"), r("core-js/modules/es.function.name"), r("core-js/modules/es.object.assign"), r("core-js/modules/es.object.get-own-property-names"), r("core-js/modules/es.object.keys"), r("core-js/modules/es.object.to-string"), r("core-js/modules/es.regexp.constructor"), r("core-js/modules/es.regexp.exec"), r("core-js/modules/es.regexp.to-string"), r("core-js/modules/es.string.iterator"), r("core-js/modules/es.string.match"), r("core-js/modules/es.string.replace"), r("core-js/modules/es.string.split"), r("core-js/modules/es.string.starts-with"), r("core-js/modules/web.dom-collections.for-each"), r("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(t, "__esModule", {
@@ -19139,40 +19196,40 @@ new (0, _p5Default.default)((sketch)=>{
                 t.default = l;
             },
             {
-                "../constants": 269,
-                "../internationalization": 278,
-                "../main": 280,
+                "../constants": 272,
+                "../internationalization": 281,
+                "../main": 283,
                 "./browser_errors": void 0,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.some": 169,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.get-own-property-names": 184,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.constructor": 191,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.match": 198,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.starts-with": 204,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.some": 170,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.get-own-property-names": 187,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.constructor": 194,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.match": 201,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.starts-with": 207,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        272: [
+        275: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -19187,11 +19244,11 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../internationalization": 278,
-                "../main": 280
+                "../internationalization": 281,
+                "../main": 283
             }
         ],
-        273: [
+        276: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -19211,14 +19268,14 @@ new (0, _p5Default.default)((sketch)=>{
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.constructor"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.string.trim"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.regexp.constructor"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.string.trim"), e1("core-js/modules/web.dom-collections.for-each"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var n = O(e1("../main")), s = e1("../internationalization"), a = C(e1("../constants")), l, u, c, d, h, f, p, m, y, g, v, b, _, j, x, w, S, T, E, M, I;
+                var n = C(e1("../main")), s = e1("../internationalization"), a = O(e1("../constants")), l, u, c, d, h, f, p, m, y, g, v, b, j, _, x, w, S, T, E, M, I;
                 function k() {
                     var e1;
                     return "function" != typeof WeakMap ? null : (e1 = new WeakMap, k = function() {
                         return e1;
                     }, e1);
                 }
-                function C(e1) {
+                function O(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
                         default: e1
@@ -19229,7 +19286,7 @@ new (0, _p5Default.default)((sketch)=>{
                     for(r in e1)Object.prototype.hasOwnProperty.call(e1, r) && ((o = s ? Object.getOwnPropertyDescriptor(e1, r) : null) && (o.get || o.set) ? Object.defineProperty(n, r, o) : n[r] = e1[r]);
                     return n.default = e1, t && t.set(e1, n), n;
                 }
-                function O(e1) {
+                function C(e1) {
                     return e1 && e1.__esModule ? e1 : {
                         default: e1
                     };
@@ -19254,38 +19311,38 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = R;
             },
             {
-                "../constants": 269,
-                "../internationalization": 278,
-                "../main": 280,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.constructor": 191,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.match": 198,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.trim": 206,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../constants": 272,
+                "../internationalization": 281,
+                "../main": 283,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.constructor": 194,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.match": 201,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.trim": 209,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        274: [
+        277: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), Object.defineProperty(r, "__esModule", {
@@ -19392,19 +19449,19 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../main": 280,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.match": 198,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203
+                "../main": 283,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.match": 201,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206
             }
         ],
-        275: [
+        278: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -19451,41 +19508,41 @@ new (0, _p5Default.default)((sketch)=>{
             },
             {
                 "../../../docs/parameterData.json": void 0,
-                "../constants": 269,
-                "../internationalization": 278,
-                "../main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.last-index-of": 166,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.map": 174,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.set": 194,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../constants": 272,
+                "../internationalization": 281,
+                "../main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.last-index-of": 167,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.map": 175,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.set": 197,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        276: [
+        279: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -19553,19 +19610,19 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "./constants": 269,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./constants": 272,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        277: [
+        280: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator");
@@ -19584,16 +19641,16 @@ new (0, _p5Default.default)((sketch)=>{
                 });
             },
             {
-                "../core/main": 280,
-                "./internationalization": 278,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "./internationalization": 281,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        278: [
+        281: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.split"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.split"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
@@ -19712,23 +19769,23 @@ new (0, _p5Default.default)((sketch)=>{
             {
                 "../../translations": void 0,
                 "../../translations/dev": void 0,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/web.dom-collections.iterator": 243,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/web.dom-collections.iterator": 246,
                 i18next: 3,
                 "i18next-browser-languagedetector": 3
             }
         ],
-        279: [
+        282: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -19750,10 +19807,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "./main": 280
+                "./main": 283
             }
         ],
-        280: [
+        283: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -19910,8 +19967,8 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                             }
                             d._lastTargetFrameTime = window.performance.now(), d._lastRealFrameTime = window.performance.now(), d._setupDone = !0, (d._accessibleOutputs.grid || d._accessibleOutputs.text) && d._updateAccsOutput(), d.callRegisteredHooksFor("afterSetup");
-                        }, this._draw = function() {
-                            var e1 = window.performance.now(), t = e1 - d._lastTargetFrameTime, r = 1e3 / d._targetFrameRate;
+                        }, this._draw = function(e1) {
+                            var e1 = e1 || window.performance.now(), t = e1 - d._lastTargetFrameTime, r = 1e3 / d._targetFrameRate;
                             (!d._loop || r - 5 <= t) && (d.deltaTime = e1 - d._lastRealFrameTime, d._setProperty("deltaTime", d.deltaTime), d._frameRate = 1e3 / d.deltaTime, d.redraw(), d._lastTargetFrameTime = Math.max(d._lastTargetFrameTime + r, e1), d._lastRealFrameTime = e1, void 0 !== d._updateMouseCoords && (d._updateMouseCoords(), d._setProperty("movedX", 0), d._setProperty("movedY", 0))), d._loop && (d._requestAnimId = window.requestAnimationFrame(d._draw));
                         }, this._setProperty = function(e1, t) {
                             d[e1] = t, d._isGlobal && (window[e1] = t);
@@ -19953,7 +20010,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                                 g.instance = null;
                             }
-                        }, this._registeredMethods.init.forEach(function(e1) {
+                        }, this._updateWindowSize(), this._registeredMethods.init.forEach(function(e1) {
                             void 0 !== e1 && e1.call(this);
                         }, this), this._setupPromisePreloads();
                         var l, u, c = this._createFriendlyGlobalFunctionBinder();
@@ -20064,25 +20121,25 @@ new (0, _p5Default.default)((sketch)=>{
                 }, u.prototype._registeredPreloadMethods = {}, r.default = u;
             },
             {
-                "./constants": 269,
-                "./shim": 291,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-own-property-names": 184,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./constants": 272,
+                "./shim": 294,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-own-property-names": 187,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        281: [
+        284: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -20236,10 +20293,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "./main": 280
+                "./main": 283
             }
         ],
-        282: [
+        285: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -20354,6 +20411,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 this.elt.parentNode && this.elt.parentNode.removeChild(this.elt);
                                 var e1, t = this._pInst._elements.indexOf(this);
                                 for(e1 in -1 !== t && this._pInst._elements.splice(t, 1), this._events)this.elt.removeEventListener(e1, this._events[e1]);
+                                this._renderer = void 0, this.canvas = void 0, this.elt = void 0;
                             }
                         },
                         {
@@ -20368,25 +20426,25 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = u;
             },
             {
-                "./constants": 269,
-                "./main": 280,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./constants": 272,
+                "./main": 283,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        283: [
+        286: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -20617,9 +20675,9 @@ new (0, _p5Default.default)((sketch)=>{
                                             }
                                             var b = 0;
                                             this._textBaseline === A.CENTER ? b = (p.length - 1) * u.textLeading() / 2 : this._textBaseline === A.BOTTOM && (b = (p.length - 1) * u.textLeading());
-                                            for(var _ = 0; _ < s.length; _++){
-                                                y = "", g = s[_].split(" ");
-                                                for(var j = 0; j < g.length; j++)i = "".concat(y + g[j]) + " ", o < (a = this.textWidth(i)) && 0 < y.length ? (this._renderText(u, y.trim(), t, r - b, d, h), y = "".concat(g[j]) + " ", r += u.textLeading()) : y = i;
+                                            for(var j = 0; j < s.length; j++){
+                                                y = "", g = s[j].split(" ");
+                                                for(var _ = 0; _ < g.length; _++)i = "".concat(y + g[_]) + " ", o < (a = this.textWidth(i)) && 0 < y.length ? (this._renderText(u, y.trim(), t, r - b, d, h), y = "".concat(g[_]) + " ", r += u.textLeading()) : y = i;
                                                 this._renderText(u, y.trim(), t, r - b, d, h), r += u.textLeading();
                                             }
                                         } else {
@@ -20634,9 +20692,9 @@ new (0, _p5Default.default)((sketch)=>{
                                             this._renderText(u, y.trim(), t, r - E, d, h), r += u.textLeading();
                                         }
                                     } else {
-                                        var C = 0;
-                                        this._textBaseline === A.CENTER ? C = (s.length - 1) * u.textLeading() / 2 : this._textBaseline === A.BOTTOM && (C = (s.length - 1) * u.textLeading());
-                                        for(var O = 0; O < s.length; O++)this._renderText(u, s[O], t, r - C, d, h - C), r += u.textLeading();
+                                        var O = 0;
+                                        this._textBaseline === A.CENTER ? O = (s.length - 1) * u.textLeading() / 2 : this._textBaseline === A.BOTTOM && (O = (s.length - 1) * u.textLeading());
+                                        for(var C = 0; C < s.length; C++)this._renderText(u, s[C], t, r - O, d, h - O), r += u.textLeading();
                                     }
                                     return u;
                                 }
@@ -20680,29 +20738,29 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "./main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.trim": 206,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "./main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.trim": 209,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        284: [
+        287: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -21226,33 +21284,33 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "./constants": 269,
-                "./main": 280,
-                "./p5.Renderer": 283,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.number.to-fixed": 180,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.reflect.get": 190,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./constants": 272,
+                "./main": 283,
+                "./p5.Renderer": 286,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.number.to-fixed": 182,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.reflect.get": 193,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        285: [
+        288: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.assign"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.assign"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator");
@@ -21312,19 +21370,19 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "./main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        286: [
+        289: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -21412,24 +21470,24 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = n;
             },
             {
-                "../webgl/p5.RendererGL": 337,
-                "./constants": 269,
-                "./main": 280,
-                "./p5.Graphics": 282,
-                "./p5.Renderer2D": 284,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../webgl/p5.RendererGL": 341,
+                "./constants": 272,
+                "./main": 283,
+                "./p5.Graphics": 285,
+                "./p5.Renderer2D": 287,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        287: [
+        290: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -21569,27 +21627,27 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../constants": 269,
-                "../friendly_errors/fes_core": 271,
-                "../friendly_errors/file_errors": 272,
-                "../friendly_errors/validate_params": 275,
-                "../helpers": 276,
-                "../main": 280,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../constants": 272,
+                "../friendly_errors/fes_core": 274,
+                "../friendly_errors/file_errors": 275,
+                "../friendly_errors/validate_params": 278,
+                "../helpers": 279,
+                "../main": 283,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        288: [
+        291: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -21651,20 +21709,20 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = l;
             },
             {
-                "../constants": 269,
-                "../main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../constants": 272,
+                "../main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        289: [
+        292: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -21706,13 +21764,13 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = o;
             },
             {
-                "../friendly_errors/fes_core": 271,
-                "../friendly_errors/file_errors": 272,
-                "../friendly_errors/validate_params": 275,
-                "../main": 280
+                "../friendly_errors/fes_core": 274,
+                "../friendly_errors/file_errors": 275,
+                "../friendly_errors/validate_params": 278,
+                "../main": 283
             }
         ],
-        290: [
+        293: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -21812,25 +21870,25 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = y;
             },
             {
-                "../constants": 269,
-                "../main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../constants": 272,
+                "../main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        291: [
+        294: [
             function(e1, t, r) {},
             {}
         ],
-        292: [
+        295: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.object.assign"), e1("core-js/modules/es.object.assign"), Object.defineProperty(r, "__esModule", {
@@ -21876,11 +21934,11 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "./main": 280,
-                "core-js/modules/es.object.assign": 181
+                "./main": 283,
+                "core-js/modules/es.object.assign": 183
             }
         ],
-        293: [
+        296: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.get-prototype-of"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.get-prototype-of"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), Object.defineProperty(r, "__esModule", {
@@ -21932,44 +21990,44 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "./main": 280,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "./main": 283,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        294: [
+        297: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -21979,7 +22037,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return e1 && "function" == typeof Symbol && e1.constructor === Symbol && e1 !== Symbol.prototype ? "symbol" : typeof e1;
                     })(e1);
                 }
-                e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.ends-with"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.ends-with"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator");
+                e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.ends-with"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.ends-with"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator");
                 var n = (e1 = e1("../core/main")) && e1.__esModule ? e1 : {
                     default: e1
                 };
@@ -22041,26 +22099,34 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     return t;
                 }, n.default.prototype.clearStorage = function() {
-                    localStorage.clear();
+                    var t = this;
+                    Object.keys(localStorage).forEach(function(e1) {
+                        e1.endsWith("p5TypeID") && t.removeItem(e1.replace("p5TypeID", ""));
+                    });
                 }, n.default.prototype.removeItem = function(e1) {
                     "string" != typeof e1 && console.log("The argument that you passed to removeItem() - ".concat(e1, " is not a string.")), localStorage.removeItem(e1), localStorage.removeItem("".concat(e1, "p5TypeID"));
                 };
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.ends-with": 195,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.ends-with": 198,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        295: [
+        298: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -22331,22 +22397,22 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        296: [
+        299: [
             function(t, r, o) {
                 "use strict";
                 function n(e1) {
@@ -22460,7 +22526,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return 0 === arguments.length ? this.elt.checked : (this.elt.checked = !(arguments.length <= 0 || !arguments[0]), this);
                     }, t) : "VIDEO" === e1.tagName || "AUDIO" === e1.tagName ? new f.default.MediaElement(e1, this) : "SELECT" === e1.tagName ? this.createSelect(new f.default.Element(e1, this)) : 0 < r.length && r.every(function(e1) {
                         return "INPUT" === e1.tagName || "LABEL" === e1.tagName;
-                    }) ? this.createRadio(new f.default.Element(e1, this)) : new f.default.Element(e1, this);
+                    }) && ("DIV" === e1.tagName || "SPAN" === e1.tagName) ? this.createRadio(new f.default.Element(e1, this)) : new f.default.Element(e1, this);
                 }, f.default.prototype.removeElements = function(e1) {
                     f.default._validateParameters("removeElements", arguments);
                     this._elements.filter(function(e1) {
@@ -22765,7 +22831,9 @@ new (0, _p5Default.default)((sketch)=>{
                         } catch (e1) {
                             d.src = t;
                         }
-                    }, console.error), m(d, this, !0));
+                    }).catch(function(e1) {
+                        "NotFoundError" === e1.name && f.default._friendlyError("No webcam found on this device", "createCapture"), "NotAllowedError" === e1.name && f.default._friendlyError("Access to the camera was denied", "createCapture"), console.error(e1);
+                    }), m(d, this, !0));
                     return h.loadedmetadata = !1, d.addEventListener("loadedmetadata", function() {
                         d.play(), d.width ? (h.width = d.width, h.height = d.height, i && (h.elt.style.transform = "scaleX(-1)")) : (h.width = h.elt.width = d.videoWidth, h.height = h.elt.height = d.videoHeight), h.loadedmetadata = !0, o && o(d.srcObject);
                     }), h.flipped = i, h;
@@ -23171,37 +23239,37 @@ new (0, _p5Default.default)((sketch)=>{
                 o.default = t;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.every": 154,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.trim": 206,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                "core-js/modules/web.url": 245
+                "../core/main": 283,
+                "core-js/modules/es.array.every": 155,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.trim": 209,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                "core-js/modules/web.url": 248
             }
         ],
-        297: [
+        300: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -23231,10 +23299,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        298: [
+        301: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -23265,10 +23333,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        299: [
+        302: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -23352,20 +23420,20 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        300: [
+        303: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -23403,10 +23471,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        301: [
+        304: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.int32-array"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.int32-array"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), Object.defineProperty(r, "__esModule", {
@@ -23471,16 +23539,16 @@ new (0, _p5Default.default)((sketch)=>{
                     },
                     blur: function(e1, D) {
                         for(var t, r, o, n, s, i, a, l, u, c, d = V._toPixels(e1), h = e1.width, f = e1.height, p = h * f, m = new Int32Array(p), y = 0; y < p; y++)m[y] = V._getARGB(d, y);
-                        var g, v, b, _, j, x, w, S, T = new Int32Array(p), E = new Int32Array(p), M = new Int32Array(p), F = new Int32Array(p), k = 0, C = 3.5 * D | 0;
-                        if (U !== (C = C < 1 ? 1 : C < 248 ? C : 248)) {
-                            N = 1 + (U = C) << 1, B = new Int32Array(N), G = new Array(N);
-                            for(var O = 0; O < N; O++)G[O] = new Int32Array(256);
-                            for(var A = 1, P = C - 1; A < C; A++){
-                                B[C + A] = B[P] = x = P * P, w = G[C + A], S = G[P--];
+                        var g, v, b, j, _, x, w, S, T = new Int32Array(p), E = new Int32Array(p), M = new Int32Array(p), F = new Int32Array(p), k = 0, O = 3.5 * D | 0;
+                        if (U !== (O = O < 1 ? 1 : O < 248 ? O : 248)) {
+                            N = 1 + (U = O) << 1, B = new Int32Array(N), G = new Array(N);
+                            for(var C = 0; C < N; C++)G[C] = new Int32Array(256);
+                            for(var A = 1, P = O - 1; A < O; A++){
+                                B[O + A] = B[P] = x = P * P, w = G[O + A], S = G[P--];
                                 for(var L = 0; L < 256; L++)w[L] = S[L] = x * L;
                             }
-                            j = B[C] = C * C, w = G[C];
-                            for(var R = 0; R < 256; R++)w[R] = j * R;
+                            _ = B[O] = O * O, w = G[O];
+                            for(var R = 0; R < 256; R++)w[R] = _ * R;
                         }
                         for(v = 0; v < f; v++){
                             for(g = 0; g < h; g++){
@@ -23491,7 +23559,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                                 for(b = c; b < N && !(h <= i); b++){
                                     var I = m[i + k];
-                                    _ = G[b], s += _[(-16777216 & I) >>> 24], r += _[(16711680 & I) >> 16], o += _[(65280 & I) >> 8], n += _[255 & I], t += B[b], i++;
+                                    j = G[b], s += j[(-16777216 & I) >>> 24], r += j[(16711680 & I) >> 16], o += j[(65280 & I) >> 8], n += j[255 & I], t += B[b], i++;
                                 }
                                 T[a = k + g] = s / t, E[a] = r / t, M[a] = o / t, F[a] = n / t;
                             }
@@ -23504,7 +23572,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     if (f <= l) break;
                                     c = 0, a = l, i = g + u;
                                 }
-                                for(b = c; b < N && !(f <= a); b++)_ = G[b], s += _[T[i]], r += _[E[i]], o += _[M[i]], n += _[F[i]], t += B[b], a++, i += h;
+                                for(b = c; b < N && !(f <= a); b++)j = G[b], s += j[T[i]], r += j[E[i]], o += j[M[i]], n += j[F[i]], t += B[b], a++, i += h;
                                 m[g + k] = s / t << 24 | r / t << 16 | o / t << 8 | n / t;
                             }
                             k += h, u += h, l++;
@@ -23515,42 +23583,42 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = V;
             },
             {
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.int32-array": 222,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint8-array": 239
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.int32-array": 225,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint8-array": 242
             }
         ],
-        302: [
+        305: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var C = o(e1("../core/main")), O = o(e1("omggif"));
+                var O = o(e1("../core/main")), C = o(e1("omggif"));
                 function o(e1) {
                     return e1 && e1.__esModule ? e1 : {
                         default: e1
@@ -23568,22 +23636,25 @@ new (0, _p5Default.default)((sketch)=>{
                         throw new TypeError("Invalid attempt to spread non-iterable instance");
                     }();
                 }
-                C.default.prototype.createImage = function(e1, t) {
-                    return C.default._validateParameters("createImage", arguments), new C.default.Image(e1, t);
-                }, C.default.prototype.saveCanvas = function() {
+                O.default.prototype.createImage = function(e1, t) {
+                    return O.default._validateParameters("createImage", arguments), new O.default.Image(e1, t);
+                }, O.default.prototype.saveCanvas = function() {
                     for(var e1, t, r, o, n, s, i = arguments.length, a = new Array(i), l = 0; l < i; l++)a[l] = arguments[l];
-                    switch(C.default._validateParameters("saveCanvas", a), a[0] instanceof HTMLCanvasElement ? (e1 = a[0], a.shift()) : a[0] instanceof C.default.Element ? (e1 = a[0].elt, a.shift()) : a[0] instanceof C.default.Framebuffer ? (o = a[0], (n = this.createGraphics(o.width, o.height)).pixelDensity(pixelDensity()), o.loadPixels(), n.loadPixels(), n.pixels.set(o.pixels), n.updatePixels(), e1 = n.elt, a.shift()) : e1 = this._curElement && this._curElement.elt, 1 <= a.length && (t = a[0]), r = (r = 2 <= a.length ? a[1] : r) || C.default.prototype._checkFileExtension(t, r)[1] || "png"){
+                    switch(O.default._validateParameters("saveCanvas", a), a[0] instanceof HTMLCanvasElement ? (e1 = a[0], a.shift()) : a[0] instanceof O.default.Element ? (e1 = a[0].elt, a.shift()) : a[0] instanceof O.default.Framebuffer ? (o = a[0], (n = this.createGraphics(o.width, o.height)).pixelDensity(pixelDensity()), o.loadPixels(), n.loadPixels(), n.pixels.set(o.pixels), n.updatePixels(), e1 = n.elt, a.shift()) : e1 = this._curElement && this._curElement.elt, 1 <= a.length && (t = a[0]), r = (r = 2 <= a.length ? a[1] : r) || O.default.prototype._checkFileExtension(t, r)[1] || "png"){
                         default:
                             s = "image/png";
+                            break;
+                        case "webp":
+                            s = "image/webp";
                             break;
                         case "jpeg":
                         case "jpg":
                             s = "image/jpeg";
                     }
                     e1.toBlob(function(e1) {
-                        C.default.prototype.downloadFile(e1, t, r), n && n.remove();
+                        O.default.prototype.downloadFile(e1, t, r), n && n.remove();
                     }, s);
-                }, C.default.prototype.encodeAndDownloadGif = function(d, e1) {
+                }, O.default.prototype.encodeAndDownloadGif = function(d, e1) {
                     for(var h = d.gifProperties, t = h.loopLimit, r = (1 === t ? t = null : null === t && (t = 0), new Uint8Array(d.width * d.height * h.numFrames)), f = [], o = {}, n = 0; n < h.numFrames; n++){
                         for(var s = new Set, i = h.frames[n].image.data, a = i.length, l = new Uint32Array(d.width * d.height), u = 0, c = 0; u < a; u += 4, c++){
                             var p = i[u + 0] << 16 | i[u + 1] << 8 | i[u + 2] << 0;
@@ -23601,15 +23672,15 @@ new (0, _p5Default.default)((sketch)=>{
                         return o[t].freq - o[e1].freq;
                     }), v = g[0].split(",").map(function(e1) {
                         return parseInt(e1);
-                    }), y = y.concat(o[v].frames), b = new Set(v), _ = 1; _ < g.length; _++){
-                        var j = g[_].split(",").map(function(e1) {
+                    }), y = y.concat(o[v].frames), b = new Set(v), j = 1; j < g.length; j++){
+                        var _ = g[j].split(",").map(function(e1) {
                             return parseInt(e1);
                         }).filter(function(e1) {
                             return !b.has(e1);
                         });
-                        if (v.length + j.length <= 256) {
-                            for(var x = 0; x < j.length; x++)v.push(j[x]), b.add(j[x]);
-                            y = y.concat(o[g[_]].frames);
+                        if (v.length + _.length <= 256) {
+                            for(var x = 0; x < _.length; x++)v.push(_[x]), b.add(_[x]);
+                            y = y.concat(o[g[j]].frames);
                         }
                     }
                     y = new Set(y);
@@ -23619,7 +23690,7 @@ new (0, _p5Default.default)((sketch)=>{
                     for(var t = {
                         loop: t,
                         palette: new Uint32Array(v)
-                    }, E = new O.default.GifWriter(r, d.width, d.height, t), M = {}, k = 0; k < h.numFrames; k++)!function(r) {
+                    }, E = new C.default.GifWriter(r, d.width, d.height, t), M = {}, k = 0; k < h.numFrames; k++)!function(r) {
                         var o = !y.has(r), n = o ? [] : v, s = new Uint8Array(d.width * d.height), i = {}, a = new Set, e1 = (f[r].forEach(function(e1, t) {
                             o ? (void 0 === i[e1] && (i[e1] = n.length, n.push(e1)), s[t] = i[e1]) : s[t] = w[e1], 0 < r && f[r - 1][t] !== e1 && a.add(e1);
                         }), {}), t = n.filter(function(e1) {
@@ -23647,23 +23718,23 @@ new (0, _p5Default.default)((sketch)=>{
                     ], {
                         type: "image/gif"
                     });
-                    C.default.prototype.downloadFile(t, e1, "gif");
-                }, C.default.prototype.saveFrames = function(e1, t, r, o, n) {
-                    C.default._validateParameters("saveFrames", arguments);
-                    r = C.default.prototype.constrain(r = r || 3, 0, 15);
+                    O.default.prototype.downloadFile(t, e1, "gif");
+                }, O.default.prototype.saveFrames = function(e1, t, r, o, n) {
+                    O.default._validateParameters("saveFrames", arguments);
+                    r = O.default.prototype.constrain(r = r || 3, 0, 15);
                     r *= 1e3;
-                    var o = C.default.prototype.constrain(o || 15, 0, 22), s = 0, i = C.default.prototype._makeFrame, a = this._curElement.elt, l = [], u = setInterval(function() {
+                    var o = O.default.prototype.constrain(o || 15, 0, 22), s = 0, i = O.default.prototype._makeFrame, a = this._curElement.elt, l = [], u = setInterval(function() {
                         l.push(i(e1 + s, t, a)), s++;
                     }, 1e3 / o);
                     setTimeout(function() {
                         if (clearInterval(u), n) n(l);
                         else for(var e1 = 0, t = l; e1 < t.length; e1++){
                             var r = t[e1];
-                            C.default.prototype.downloadFile(r.imageData, r.filename, r.ext);
+                            O.default.prototype.downloadFile(r.imageData, r.filename, r.ext);
                         }
                         l = [];
                     }, .01 + r);
-                }, C.default.prototype._makeFrame = function(e1, t, r) {
+                }, O.default.prototype._makeFrame = function(e1, t, r) {
                     var o, r = this ? this._curElement.elt : r;
                     if (t) switch(t.toLowerCase()){
                         case "png":
@@ -23680,60 +23751,60 @@ new (0, _p5Default.default)((sketch)=>{
                     var r = (r = r.toDataURL(o)).replace(o, "image/octet-stream"), n = {};
                     return n.imageData = r, n.filename = e1, n.ext = t, n;
                 };
-                e1 = C.default;
+                e1 = O.default;
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.set": 194,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint32-array": 238,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                omggif: 253
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.set": 197,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint32-array": 241,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                omggif: 256
             }
         ],
-        303: [
+        306: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -23753,7 +23824,7 @@ new (0, _p5Default.default)((sketch)=>{
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.copy-within"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint8-clamped-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.copy-within"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.promise"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint8-clamped-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0, e1("regenerator-runtime/runtime");
-                var O = n(e1("../core/main")), m = n(e1("../core/helpers")), _ = function(e1) {
+                var C = n(e1("../core/main")), m = n(e1("../core/helpers")), j = function(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
                         default: e1
@@ -23789,12 +23860,12 @@ new (0, _p5Default.default)((sketch)=>{
                 }
                 function y(e1, t, r, o, n, s, i, a, l, u, c) {
                     var d, h, f, p, m, y, g, v, b;
-                    return e1 === _.COVER && (d = t, f = r, g = s, v = i, y = a, b = l, h = u, p = c, m = Math.max(g / h, v / p), g /= m, v /= m, m = y, y = b, d === _.CENTER ? m += (h - g) / 2 : d === _.RIGHT && (m += h - g), f === _.CENTER ? y += (p - v) / 2 : f === _.BOTTOM && (y += p - v), a = (b = {
+                    return e1 === j.COVER && (d = t, f = r, g = s, v = i, y = a, b = l, h = u, p = c, m = Math.max(g / h, v / p), g /= m, v /= m, m = y, y = b, d === j.CENTER ? m += (h - g) / 2 : d === j.RIGHT && (m += h - g), f === j.CENTER ? y += (p - v) / 2 : f === j.BOTTOM && (y += p - v), a = (b = {
                         x: m,
                         y: y,
                         w: g,
                         h: v
-                    }).x, l = b.y, u = b.w, c = b.h), e1 === _.CONTAIN && (d = t, h = r, f = o, p = n, m = s, y = i, g = u, v = c, b = Math.max(g / m, v / y), g /= b, v /= b, b = f, f = p, d === _.CENTER ? b += (m - g) / 2 : d === _.RIGHT && (b += m - g), h === _.CENTER ? f += (y - v) / 2 : h === _.BOTTOM && (f += y - v), o = (e1 = {
+                    }).x, l = b.y, u = b.w, c = b.h), e1 === j.CONTAIN && (d = t, h = r, f = o, p = n, m = s, y = i, g = u, v = c, b = Math.max(g / m, v / y), g /= b, v /= b, b = f, f = p, d === j.CENTER ? b += (m - g) / 2 : d === j.RIGHT && (b += m - g), h === j.CENTER ? f += (y - v) / 2 : h === j.BOTTOM && (f += y - v), o = (e1 = {
                         x: b,
                         y: f,
                         w: g,
@@ -23813,9 +23884,9 @@ new (0, _p5Default.default)((sketch)=>{
                 function v(e1, t) {
                     return 0 < e1 && e1 < t ? e1 : t;
                 }
-                e1("../core/friendly_errors/validate_params"), e1("../core/friendly_errors/file_errors"), e1("../core/friendly_errors/fes_core"), O.default.prototype.loadImage = function(o, f, p) {
-                    O.default._validateParameters("loadImage", arguments);
-                    var m = new O.default.Image(1, 1, this), y = this, e1 = new Request(o, {
+                e1("../core/friendly_errors/validate_params"), e1("../core/friendly_errors/file_errors"), e1("../core/friendly_errors/fes_core"), C.default.prototype.loadImage = function(o, f, p) {
+                    C.default._validateParameters("loadImage", arguments);
+                    var m = new C.default.Image(1, 1, this), y = this, e1 = new Request(o, {
                         method: "GET",
                         mode: "cors"
                     });
@@ -23830,7 +23901,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         try {
                                             t.decodeAndBlitFrameRGBA(e1, l);
                                         } catch (e1) {
-                                            O.default._friendlyFileLoadError(8, r.src), "function" == typeof o ? o(e1) : console.error(e1);
+                                            C.default._friendlyFileLoadError(8, r.src), "function" == typeof o ? o(e1) : console.error(e1);
                                         }
                                     }(u, s), new ImageData(l, r.width, r.height)), h = (r.drawingContext.putImageData(h, 0, 0), c.delay);
                                     0 === h && (h = 10), i.push({
@@ -23854,18 +23925,18 @@ new (0, _p5Default.default)((sketch)=>{
                         }) : ((t = new Image).onload = function() {
                             m.width = m.canvas.width = t.width, m.height = m.canvas.height = t.height, m.drawingContext.drawImage(t, 0, 0), m.modified = !0, "function" == typeof f && f(m), y._decrementPreload();
                         }, t.onerror = function(e1) {
-                            O.default._friendlyFileLoadError(0, t.src), "function" == typeof p ? (p(e1), y._decrementPreload()) : console.error(e1);
+                            C.default._friendlyFileLoadError(0, t.src), "function" == typeof p ? (p(e1), y._decrementPreload()) : console.error(e1);
                         }, 0 !== o.indexOf("data:image/") && (t.crossOrigin = "Anonymous"), t.src = o), m.modified = !0;
                     }).catch(function(e1) {
-                        O.default._friendlyFileLoadError(0, o), "function" == typeof p ? (p(e1), y._decrementPreload()) : console.error(e1);
+                        C.default._friendlyFileLoadError(0, o), "function" == typeof p ? (p(e1), y._decrementPreload()) : console.error(e1);
                     }), m;
-                }, O.default.prototype.saveGif = function() {
+                }, C.default.prototype.saveGif = function() {
                     a = regeneratorRuntime.mark(function e1(t, r) {
-                        var o, n, s, i, a, l, u, c, d, h, f, p, m, y, g, v, b, _, j, x, w, S, T, E, M, k, C = arguments;
+                        var o, n, s, i, a, l, u, c, d, h, f, p, m, y, g, v, b, j, _, x, w, S, T, E, M, k, O = arguments;
                         return regeneratorRuntime.wrap(function(e1) {
                             for(;;)switch(e1.prev = e1.next){
                                 case 0:
-                                    if (o = 2 < C.length && void 0 !== C[2] ? C[2] : {
+                                    if (o = 2 < O.length && void 0 !== O[2] ? O[2] : {
                                         delay: 0,
                                         units: "seconds",
                                         silent: !1,
@@ -23899,9 +23970,9 @@ new (0, _p5Default.default)((sketch)=>{
                                     e1.next = 20;
                                     break;
                                 case 20:
-                                    return this._recording = !0, h = this._targetFrameRate, u = (u = 1 / (h = h !== 1 / 0 && void 0 !== h && 0 !== h ? h : 60) * 1e3) < 20 ? 20 : u, d = (c = "seconds" === s ? r * h : r) + (h = "seconds" === s ? n * h : n), h, this.frameCount = h, f = this._pixelDensity, this.pixelDensity(1), p = [], null !== document.getElementById(l) && document.getElementById(l).remove(), i || ((m = this.createP("")).id(l), m.style("font-size", "16px"), m.style("font-family", "Montserrat"), m.style("background-color", "#ffffffa0"), m.style("padding", "8px"), m.style("border-radius", "10px"), m.position(0, 0)), this._renderer instanceof O.default.RendererGL && (g = this.drawingContext, y = new Uint8Array(g.drawingBufferWidth * g.drawingBufferHeight * 4)), this.noLoop(), e1.next = 39, Promise.resolve();
+                                    return this._recording = !0, h = this._targetFrameRate, u = (u = 1 / (h = h !== 1 / 0 && void 0 !== h && 0 !== h ? h : 60) * 1e3) < 20 ? 20 : u, d = (c = "seconds" === s ? r * h : r) + (h = "seconds" === s ? n * h : n), h, this.frameCount = h, f = this._pixelDensity, this.pixelDensity(1), p = [], null !== document.getElementById(l) && document.getElementById(l).remove(), i || ((m = this.createP("")).id(l), m.style("font-size", "16px"), m.style("font-family", "Montserrat"), m.style("background-color", "#ffffffa0"), m.style("padding", "8px"), m.style("border-radius", "10px"), m.position(0, 0)), this._renderer instanceof C.default.RendererGL && (g = this.drawingContext, y = new Uint8Array(g.drawingBufferWidth * g.drawingBufferHeight * 4)), this.noLoop(), e1.next = 39, Promise.resolve();
                                 case 39:
-                                    if (h < d) return this.redraw(), E = void 0, E = this._renderer instanceof O.default.RendererGL ? (y = new Uint8Array(g.drawingBufferWidth * g.drawingBufferHeight * 4), g.readPixels(0, 0, g.drawingBufferWidth, g.drawingBufferHeight, g.RGBA, g.UNSIGNED_BYTE, y), function(e1, t, r) {
+                                    if (h < d) return this.redraw(), E = void 0, E = this._renderer instanceof C.default.RendererGL ? (y = new Uint8Array(g.drawingBufferWidth * g.drawingBufferHeight * 4), g.readPixels(0, 0, g.drawingBufferWidth, g.drawingBufferHeight, g.RGBA, g.UNSIGNED_BYTE, y), function(e1, t, r) {
                                         for(var o = parseInt(r / 2), n = 4 * t, s = new Uint8Array(4 * t), i = 0; i < o; ++i){
                                             var a = i * n, l = (r - i - 1) * n;
                                             s.set(e1.subarray(a, a + n)), e1.copyWithin(a, l, l + n), e1.set(s, l);
@@ -23934,10 +24005,10 @@ new (0, _p5Default.default)((sketch)=>{
                                             0
                                         ]);
                                         return o;
-                                    }(p), _ = {}, j = function(e1) {
+                                    }(p), j = {}, _ = function(e1) {
                                         for(var t = e1.length / 4, r = new Uint8Array(t), o = 0; o < t; o++){
                                             var n = e1[4 * o] << 24 | e1[4 * o + 1] << 16 | e1[4 * o + 2] << 8 | e1[4 * o + 3];
-                                            void 0 === _[n] && (_[n] = (0, A.nearestColorIndex)(b, e1.slice(4 * o, 4 * (o + 1)))), r[o] = _[n];
+                                            void 0 === j[n] && (j[n] = (0, A.nearestColorIndex)(b, e1.slice(4 * o, 4 * (o + 1)))), r[o] = j[n];
                                         }
                                         return r;
                                     }, x = b.length - 1, w = [], S = 0;
@@ -23946,7 +24017,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         e1.next = 71;
                                         break;
                                     }
-                                    if (T = j(p[S]), E = T.slice(), 0 === S) v.writeFrame(T, this.width, this.height, {
+                                    if (T = _(p[S]), E = T.slice(), 0 === S) v.writeFrame(T, this.width, this.height, {
                                         palette: b,
                                         delay: u,
                                         dispose: 1
@@ -23973,7 +24044,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         type: "image/gif"
                                     }), p = [], this._recording = !1, this.loop(), i || (m.html("Done. Downloading your gif!\uD83C\uDF38"), 0 < a && setTimeout(function() {
                                         return m.remove();
-                                    }, 1e3 * a)), O.default.prototype.downloadFile(k, t, "gif");
+                                    }, 1e3 * a)), C.default.prototype.downloadFile(k, t, "gif");
                                 case 80:
                                 case "end":
                                     return e1.stop();
@@ -23996,97 +24067,97 @@ new (0, _p5Default.default)((sketch)=>{
                     return function(e1, t) {
                         return r.apply(this, arguments);
                     };
-                }(), O.default.prototype.image = function(e1, t, r, o, n, s, i, a, l, u, c, d) {
-                    O.default._validateParameters("image", arguments);
-                    var h = e1.width, f = e1.height, p = (d = d || _.CENTER, c = c || _.CENTER, e1.elt && (h = void 0 !== h ? h : e1.elt.width, f = void 0 !== f ? f : e1.elt.height), e1.elt && e1.elt.videoWidth && !e1.canvas && (h = void 0 !== h ? h : e1.elt.videoWidth, f = void 0 !== f ? f : e1.elt.videoHeight), o || h), n = n || f, s = s || 0, i = i || 0, a = v(void 0 !== a ? a : h, h), h = v(void 0 !== l ? l : f, f), l = 1;
+                }(), C.default.prototype.image = function(e1, t, r, o, n, s, i, a, l, u, c, d) {
+                    C.default._validateParameters("image", arguments);
+                    var h = e1.width, f = e1.height, p = (d = d || j.CENTER, c = c || j.CENTER, e1.elt && (h = void 0 !== h ? h : e1.elt.width, f = void 0 !== f ? f : e1.elt.height), e1.elt && e1.elt.videoWidth && !e1.canvas && (h = void 0 !== h ? h : e1.elt.videoWidth, f = void 0 !== f ? f : e1.elt.videoHeight), o || h), n = n || f, s = s || 0, i = i || 0, a = v(void 0 !== a ? a : h, h), h = v(void 0 !== l ? l : f, f), l = 1;
                     e1.elt && !e1.canvas && e1.elt.style.width && (l = e1.elt.videoWidth && !o ? e1.elt.videoWidth : e1.elt.width, l /= parseInt(e1.elt.style.width, 10)), s *= l, i *= l, h *= l, a *= l;
                     f = y(u, c, d, (f = m.default.modeAdjust(t, r, p, n, this._renderer._imageMode)).x, f.y, f.w, f.h, s, i, a, h);
                     this._renderer.image(e1, f.sx, f.sy, f.sw, f.sh, f.dx, f.dy, f.dw, f.dh);
-                }, O.default.prototype.tint = function() {
+                }, C.default.prototype.tint = function() {
                     for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
-                    O.default._validateParameters("tint", t);
+                    C.default._validateParameters("tint", t);
                     var o = this.color.apply(this, t);
                     this._renderer._tint = o.levels;
-                }, O.default.prototype.noTint = function() {
+                }, C.default.prototype.noTint = function() {
                     this._renderer._tint = null;
-                }, O.default.prototype._getTintedImageCanvas = O.default.Renderer2D.prototype._getTintedImageCanvas, O.default.prototype.imageMode = function(e1) {
-                    O.default._validateParameters("imageMode", arguments), e1 !== _.CORNER && e1 !== _.CORNERS && e1 !== _.CENTER || (this._renderer._imageMode = e1);
+                }, C.default.prototype._getTintedImageCanvas = C.default.Renderer2D.prototype._getTintedImageCanvas, C.default.prototype.imageMode = function(e1) {
+                    C.default._validateParameters("imageMode", arguments), e1 !== j.CORNER && e1 !== j.CORNERS && e1 !== j.CENTER || (this._renderer._imageMode = e1);
                 };
-                e1 = O.default;
+                e1 = C.default;
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "../core/friendly_errors/fes_core": 271,
-                "../core/friendly_errors/file_errors": 272,
-                "../core/friendly_errors/validate_params": 275,
-                "../core/helpers": 276,
-                "../core/main": 280,
-                "core-js/modules/es.array.copy-within": 153,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/es.typed-array.uint8-clamped-array": 240,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                gifenc: 250,
-                omggif: 253,
-                "regenerator-runtime/runtime": 257
+                "../core/constants": 272,
+                "../core/friendly_errors/fes_core": 274,
+                "../core/friendly_errors/file_errors": 275,
+                "../core/friendly_errors/validate_params": 278,
+                "../core/helpers": 279,
+                "../core/main": 283,
+                "core-js/modules/es.array.copy-within": 154,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/es.typed-array.uint8-clamped-array": 243,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                gifenc: 253,
+                omggif: 256,
+                "regenerator-runtime/runtime": 260
             }
         ],
-        304: [
+        307: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var s = o(e1("../core/main")), n = o(e1("./filters"));
+                var i = o(e1("../core/main")), n = o(e1("./filters"));
                 function o(e1) {
                     return e1 && e1.__esModule ? e1 : {
                         default: e1
                     };
                 }
-                function i(e1, t) {
+                function s(e1, t) {
                     for(var r = 0; r < t.length; r++){
                         var o = t[r];
                         o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
                     }
                 }
-                s.default.Image = function() {
+                i.default.Image = function() {
                     function r(e1, t) {
                         if (!(this instanceof r)) throw new TypeError("Cannot call a class as a function");
                         this.width = e1, this.height = t, this.canvas = document.createElement("canvas"), this.canvas.width = this.width, this.canvas.height = this.height, this.drawingContext = this.canvas.getContext("2d"), (this._pixelsState = this)._pixelDensity = 1, this.gifProperties = null, this._modified = !1, this.pixels = [];
@@ -24096,7 +24167,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "pixelDensity",
                             value: function(e1) {
-                                return void 0 !== e1 ? (e1 <= 0 && (s.default._friendlyParamError({
+                                return void 0 !== e1 ? (e1 <= 0 && (i.default._friendlyParamError({
                                     type: "INVALID_VALUE",
                                     format: {
                                         types: [
@@ -24110,7 +24181,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_animateGif",
                             value: function(e1) {
-                                var t, r = this.gifProperties, e1 = e1._lastRealFrameTime;
+                                var t, r = this.gifProperties, e1 = e1._lastRealFrameTime || window.performance.now();
                                 0 === r.lastChangeTime && (r.lastChangeTime = e1), r.playing && (r.timeDisplayed = e1 - r.lastChangeTime, t = r.frames[r.displayIndex].delay, r.timeDisplayed >= t && (t = Math.floor(r.timeDisplayed / t), r.timeDisplayed = 0, r.lastChangeTime = e1, r.displayIndex += t, r.loopCount = Math.floor(r.displayIndex / r.numFrames), null !== r.loopLimit && r.loopCount >= r.loopLimit ? r.playing = !1 : (e1 = r.displayIndex % r.numFrames, this.drawingContext.putImageData(r.frames[e1].image, 0, 0), r.displayIndex = e1, this.setModified(!0))));
                             }
                         },
@@ -24123,32 +24194,32 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "loadPixels",
                             value: function() {
-                                s.default.Renderer2D.prototype.loadPixels.call(this), this.setModified(!0);
+                                i.default.Renderer2D.prototype.loadPixels.call(this), this.setModified(!0);
                             }
                         },
                         {
                             key: "updatePixels",
                             value: function(e1, t, r, o) {
-                                s.default.Renderer2D.prototype.updatePixels.call(this, e1, t, r, o), this.setModified(!0);
+                                i.default.Renderer2D.prototype.updatePixels.call(this, e1, t, r, o), this.setModified(!0);
                             }
                         },
                         {
                             key: "get",
                             value: function(e1, t, r, o) {
-                                return s.default._validateParameters("p5.Image.get", arguments), s.default.Renderer2D.prototype.get.apply(this, arguments);
+                                return i.default._validateParameters("p5.Image.get", arguments), i.default.Renderer2D.prototype.get.apply(this, arguments);
                             }
                         },
                         {
                             key: "_getPixel",
                             value: function() {
                                 for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
-                                return s.default.Renderer2D.prototype._getPixel.apply(this, t);
+                                return i.default.Renderer2D.prototype._getPixel.apply(this, t);
                             }
                         },
                         {
                             key: "set",
                             value: function(e1, t, r) {
-                                s.default.Renderer2D.prototype.set.call(this, e1, t, r), this.setModified(!0);
+                                i.default.Renderer2D.prototype.set.call(this, e1, t, r), this.setModified(!0);
                             }
                         },
                         {
@@ -24170,27 +24241,27 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "copy",
                             value: function() {
                                 for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
-                                s.default.prototype.copy.apply(this, t);
+                                i.default.prototype.copy.apply(this, t);
                             }
                         },
                         {
                             key: "mask",
                             value: function(e1) {
-                                var t = this.drawingContext.globalCompositeOperation, r = 1, o = [
+                                var t = this.drawingContext.globalCompositeOperation, r = this._pixelDensity, o = 1, n = [
                                     e1 = void 0 === e1 ? this : e1,
                                     0,
                                     0,
-                                    (r = e1 instanceof s.default.Renderer ? e1._pInst._pixelDensity : r) * e1.width,
-                                    r * e1.height,
+                                    (o = e1 instanceof i.default.Renderer ? e1._pInst._pixelDensity : o) * e1.width,
+                                    o * e1.height,
                                     0,
                                     0,
-                                    this.width,
-                                    this.height
+                                    r * this.width,
+                                    r * this.height
                                 ];
                                 if (this.drawingContext.globalCompositeOperation = "destination-in", this.gifProperties) {
-                                    for(var n = 0; n < this.gifProperties.frames.length; n++)this.drawingContext.putImageData(this.gifProperties.frames[n].image, 0, 0), this.copy.apply(this, o), this.gifProperties.frames[n].image = this.drawingContext.getImageData(0, 0, this.width, this.height);
+                                    for(var s = 0; s < this.gifProperties.frames.length; s++)this.drawingContext.putImageData(this.gifProperties.frames[s].image, 0, 0), this.copy.apply(this, n), this.gifProperties.frames[s].image = this.drawingContext.getImageData(0, 0, r * this.width, r * this.height);
                                     this.drawingContext.putImageData(this.gifProperties.frames[this.gifProperties.displayIndex].image, 0, 0);
-                                } else this.copy.apply(this, o);
+                                } else this.copy.apply(this, n);
                                 this.drawingContext.globalCompositeOperation = t, this.setModified(!0);
                             }
                         },
@@ -24204,7 +24275,7 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "blend",
                             value: function() {
                                 for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
-                                s.default._validateParameters("p5.Image.blend", arguments), s.default.prototype.blend.apply(this, t), this.setModified(!0);
+                                i.default._validateParameters("p5.Image.blend", arguments), i.default.prototype.blend.apply(this, t), this.setModified(!0);
                             }
                         },
                         {
@@ -24222,7 +24293,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "save",
                             value: function(e1, t) {
-                                this.gifProperties ? s.default.prototype.encodeAndDownloadGif(this, e1) : s.default.prototype.saveCanvas(this.canvas, e1, t);
+                                this.gifProperties ? i.default.prototype.encodeAndDownloadGif(this, e1) : i.default.prototype.saveCanvas(this.canvas, e1, t);
                             }
                         },
                         {
@@ -24287,24 +24358,24 @@ new (0, _p5Default.default)((sketch)=>{
                                 }
                             }
                         }
-                    ], i(e1.prototype, t), o && i(e1, o), r;
+                    ], s(e1.prototype, t), o && s(e1, o), r;
                 }();
-                e1 = s.default.Image;
+                e1 = i.default.Image;
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "./filters": 301,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "./filters": 304,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        305: [
+        308: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.filter"), Object.defineProperty(r, "__esModule", {
@@ -24360,13 +24431,13 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../color/p5.Color": 267,
-                "../core/main": 280,
-                "./filters": 301,
-                "core-js/modules/es.array.filter": 156
+                "../color/p5.Color": 270,
+                "../core/main": 283,
+                "./filters": 304,
+                "core-js/modules/es.array.filter": 157
             }
         ],
-        306: [
+        309: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -24640,63 +24711,63 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/friendly_errors/fes_core": 271,
-                "../core/friendly_errors/file_errors": 272,
-                "../core/friendly_errors/validate_params": 275,
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.last-index-of": 166,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.object.from-entries": 182,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                "core-js/modules/web.url": 245,
-                "es6-promise/auto": 246,
-                "fetch-jsonp": 248,
-                "file-saver": 249,
-                "whatwg-fetch": 258
+                "../core/friendly_errors/fes_core": 274,
+                "../core/friendly_errors/file_errors": 275,
+                "../core/friendly_errors/validate_params": 278,
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.last-index-of": 167,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.object.from-entries": 185,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                "core-js/modules/web.url": 248,
+                "es6-promise/auto": 249,
+                "fetch-jsonp": 251,
+                "file-saver": 252,
+                "whatwg-fetch": 261
             }
         ],
-        307: [
+        310: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.splice"), e1("core-js/modules/es.regexp.constructor"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.splice"), e1("core-js/modules/es.regexp.constructor"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.replace"), Object.defineProperty(r, "__esModule", {
@@ -24712,12 +24783,13 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                 }
                 n.default.Table = function() {
-                    function t(e1) {
-                        if (!(this instanceof t)) throw new TypeError("Cannot call a class as a function");
-                        this.columns = [], this.rows = [];
+                    function o() {
+                        var e1 = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : [], t = this, r = o;
+                        if (!(t instanceof r)) throw new TypeError("Cannot call a class as a function");
+                        this.columns = [], this.rows = e1;
                     }
-                    var e1, r, o;
-                    return e1 = t, r = [
+                    var e1, t, r;
+                    return e1 = o, t = [
                         {
                             key: "addRow",
                             value: function(e1) {
@@ -24917,25 +24989,25 @@ new (0, _p5Default.default)((sketch)=>{
                                 return e1;
                             }
                         }
-                    ], s(e1.prototype, r), o && s(e1, o), t;
+                    ], s(e1.prototype, t), r && s(e1, r), o;
                 }();
                 e1 = n.default;
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.regexp.constructor": 191,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.match": 198,
-                "core-js/modules/es.string.replace": 201
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.regexp.constructor": 194,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.match": 201,
+                "core-js/modules/es.string.replace": 204
             }
         ],
-        308: [
+        311: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.from-entries"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.split"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.from-entries"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.split"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
@@ -25013,18 +25085,18 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.from-entries": 182,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.from-entries": 185,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        309: [
+        312: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
@@ -25067,7 +25139,7 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function(e1) {
                                 var t = this.DOM.innerHTML, r = this.DOM.attributes, o = document.implementation.createDocument(null, "default").createElement(e1);
                                 o.innerHTML = t;
-                                for(var n = 0; n < r.length; n++)o.setAttribute(r[n].nodeName, r.nodeValue);
+                                for(var n = 0; n < r.length; n++)o.setAttribute(r[n].nodeName, r[n].nodeValue);
                                 this.DOM = o;
                             }
                         },
@@ -25251,20 +25323,20 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        310: [
+        313: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.math.hypot"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.math.hypot"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.string.includes"), Object.defineProperty(r, "__esModule", {
@@ -25323,26 +25395,26 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.math.hypot": 175,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.math.hypot": 176,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        311: [
+        314: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.reflect.construct"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.slice"), Object.defineProperty(r, "__esModule", {
@@ -25383,15 +25455,15 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.to-string": 193
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.to-string": 196
             }
         ],
-        312: [
+        315: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -25403,16 +25475,16 @@ new (0, _p5Default.default)((sketch)=>{
                 function b(e1) {
                     return .5 * (1 - Math.cos(e1 * Math.PI));
                 }
-                var _, j = 4095, x = 4, w = .5, e1 = (e1.default.prototype.noise = function(e1) {
+                var j, _ = 4095, x = 4, w = .5, e1 = (e1.default.prototype.noise = function(e1) {
                     var t = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : 0, r = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : 0;
-                    if (null == _) {
-                        _ = new Array(4096);
-                        for(var o = 0; o < 4096; o++)_[o] = Math.random();
+                    if (null == j) {
+                        j = new Array(4096);
+                        for(var o = 0; o < 4096; o++)j[o] = Math.random();
                     }
                     e1 < 0 && (e1 = -e1), t < 0 && (t = -t), r < 0 && (r = -r);
                     for(var n, s, i = Math.floor(e1), a = Math.floor(t), l = Math.floor(r), u = e1 - i, c = t - a, d = r - l, h = 0, f = .5, p = 0; p < x; p++){
-                        var m = i + (a << 4) + (l << 8), y = b(u), g = b(c), v = _[m & j];
-                        v += y * (_[m + 1 & j] - v), n = _[m + 16 & j], v += g * ((n += y * (_[m + 16 + 1 & j] - n)) - v), n = _[(m += 256) & j], n += y * (_[m + 1 & j] - n), s = _[m + 16 & j], n += g * ((s += y * (_[m + 16 + 1 & j] - s)) - n), h += (v += b(d) * (n - v)) * f, f *= w, i <<= 1, a <<= 1, l <<= 1, 1 <= (u *= 2) && (i++, u--), 1 <= (c *= 2) && (a++, c--), 1 <= (d *= 2) && (l++, d--);
+                        var m = i + (a << 4) + (l << 8), y = b(u), g = b(c), v = j[m & _];
+                        v += y * (j[m + 1 & _] - v), n = j[m + 16 & _], v += g * ((n += y * (j[m + 16 + 1 & _] - n)) - v), n = j[(m += 256) & _], n += y * (j[m + 1 & _] - n), s = j[m + 16 & _], n += g * ((s += y * (j[m + 16 + 1 & _] - s)) - n), h += (v += b(d) * (n - v)) * f, f *= w, i <<= 1, a <<= 1, l <<= 1, 1 <= (u *= 2) && (i++, u--), 1 <= (c *= 2) && (a++, c--), 1 <= (d *= 2) && (l++, d--);
                     }
                     return h;
                 }, e1.default.prototype.noiseDetail = function(e1, t) {
@@ -25430,16 +25502,16 @@ new (0, _p5Default.default)((sketch)=>{
                             return (r = (1664525 * r + 1013904223) % o) / o;
                         }
                     };
-                    n.setSeed(e1), _ = new Array(4096);
-                    for(var s = 0; s < 4096; s++)_[s] = n.rand();
+                    n.setSeed(e1), j = new Array(4096);
+                    for(var s = 0; s < 4096; s++)j[s] = n.rand();
                 }, e1.default);
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        313: [
+        316: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -25456,17 +25528,17 @@ new (0, _p5Default.default)((sketch)=>{
                         return e1 && "function" == typeof Symbol && e1.constructor === Symbol && e1 !== Symbol.prototype ? "symbol" : o(e1);
                     })(e1);
                 }
-                e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.every"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.math.sign"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.number.is-finite"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.every"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.math.sign"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.number.is-finite"), e1("core-js/modules/es.string.sub"), Object.defineProperty(r, "__esModule", {
+                e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.every"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.math.sign"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.number.epsilon"), e1("core-js/modules/es.number.is-finite"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.every"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.math.sign"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.number.epsilon"), e1("core-js/modules/es.number.is-finite"), e1("core-js/modules/es.string.sub"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var a = (n = e1("../core/main")) && n.__esModule ? n : {
+                var u = (n = e1("../core/main")) && n.__esModule ? n : {
                     default: n
                 }, s = function(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
                         default: e1
                     };
-                    var t = l();
+                    var t = a();
                     if (t && t.has(e1)) return t.get(e1);
                     var r, o = {}, n = Object.defineProperty && Object.getOwnPropertyDescriptor;
                     for(r in e1){
@@ -25476,19 +25548,19 @@ new (0, _p5Default.default)((sketch)=>{
                     o.default = e1, t && t.set(e1, o);
                     return o;
                 }(e1("../core/constants"));
-                function l() {
+                function a() {
                     var e1;
-                    return "function" != typeof WeakMap ? null : (e1 = new WeakMap, l = function() {
+                    return "function" != typeof WeakMap ? null : (e1 = new WeakMap, a = function() {
                         return e1;
                     }, e1);
                 }
-                function u(e1, t) {
+                function l(e1, t) {
                     for(var r = 0; r < t.length; r++){
                         var o = t[r];
                         o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
                     }
                 }
-                a.default.Vector = function() {
+                u.default.Vector = function() {
                     function n() {
                         var e1 = this, t = n;
                         if (!(e1 instanceof t)) throw new TypeError("Cannot call a class as a function");
@@ -25499,16 +25571,16 @@ new (0, _p5Default.default)((sketch)=>{
                     return e1 = n, r = [
                         {
                             key: "fromAngle",
-                            value: function(e1, t) {
-                                return new a.default.Vector((t = void 0 === t ? 1 : t) * Math.cos(e1), t * Math.sin(e1), 0);
+                            value: function(e1) {
+                                var t = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : 1;
+                                return new u.default.Vector(t * Math.cos(e1), t * Math.sin(e1), 0);
                             }
                         },
                         {
                             key: "fromAngles",
-                            value: function(e1, t, r) {
-                                void 0 === r && (r = 1);
-                                var o = Math.cos(t), t = Math.sin(t), n = Math.cos(e1), e1 = Math.sin(e1);
-                                return new a.default.Vector(r * e1 * t, -r * n, r * e1 * o);
+                            value: function(e1, t) {
+                                var r = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : 1, o = Math.cos(t), t = Math.sin(t), n = Math.cos(e1), e1 = Math.sin(e1);
+                                return new u.default.Vector(r * e1 * t, -r * n, r * e1 * o);
                             }
                         },
                         {
@@ -25521,7 +25593,7 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "random3D",
                             value: function() {
                                 var e1 = Math.random() * s.TWO_PI, t = 2 * Math.random() - 1, r = Math.sqrt(1 - t * t), o = r * Math.cos(e1), r = r * Math.sin(e1);
-                                return new a.default.Vector(o, r, t);
+                                return new u.default.Vector(o, r, t);
                             }
                         },
                         {
@@ -25532,38 +25604,48 @@ new (0, _p5Default.default)((sketch)=>{
                         },
                         {
                             key: "add",
-                            value: function(e1, t, r) {
-                                return r ? r.set(e1) : (r = e1.copy(), 3 === arguments.length && a.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.add")), r.add(t), r;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return s ? s.set(o) : (s = o.copy(), 3 === t.length && u.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.add")), s.add(n), s;
                             }
                         },
                         {
                             key: "rem",
                             value: function(e1, t) {
-                                if (e1 instanceof a.default.Vector && t instanceof a.default.Vector) return (e1 = e1.copy()).rem(t), e1;
+                                if (e1 instanceof u.default.Vector && t instanceof u.default.Vector) return (e1 = e1.copy()).rem(t), e1;
                             }
                         },
                         {
                             key: "sub",
-                            value: function(e1, t, r) {
-                                return r ? r.set(e1) : (r = e1.copy(), 3 === arguments.length && a.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.sub")), r.sub(t), r;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return s ? s.set(o) : (s = o.copy(), 3 === t.length && u.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.sub")), s.sub(n), s;
                             }
                         },
                         {
                             key: "mult",
-                            value: function(e1, t, r) {
-                                return r ? r.set(e1) : (r = e1.copy(), 3 === arguments.length && a.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.mult")), r.mult(t), r;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return s ? s.set(o) : (s = o.copy(), 3 === t.length && u.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.mult")), s.mult(n), s;
                             }
                         },
                         {
                             key: "rotate",
-                            value: function(e1, t, r) {
-                                return 2 === arguments.length ? r = e1.copy() : (r instanceof a.default.Vector || a.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.rotate"), r.set(e1)), r.rotate(t), r;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return 2 === t.length ? s = o.copy() : (s instanceof u.default.Vector || u.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.rotate"), s.set(o)), s.rotate(n), s;
                             }
                         },
                         {
                             key: "div",
-                            value: function(e1, t, r) {
-                                return r ? r.set(e1) : (r = e1.copy(), 3 === arguments.length && a.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.div")), r.div(t), r;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return s ? s.set(o) : (s = o.copy(), 3 === t.length && u.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.div")), s.div(n), s;
                             }
                         },
                         {
@@ -25586,14 +25668,18 @@ new (0, _p5Default.default)((sketch)=>{
                         },
                         {
                             key: "lerp",
-                            value: function(e1, t, r, o) {
-                                return o ? o.set(e1) : (o = e1.copy(), 4 === arguments.length && a.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.lerp")), o.lerp(t, r), o;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2], i = t[3];
+                                return i ? i.set(o) : (i = o.copy(), 4 === t.length && u.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.lerp")), i.lerp(n, s), i;
                             }
                         },
                         {
                             key: "slerp",
-                            value: function(e1, t, r, o) {
-                                return o ? o.set(e1) : (o = e1.copy(), 4 === arguments.length && a.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.slerp")), o.slerp(t, r), o;
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2], i = t[3];
+                                return i ? i.set(o) : (i = o.copy(), 4 === t.length && u.default._friendlyError("The target parameter is undefined, it should be of type p5.Vector", "p5.Vector.slerp")), i.slerp(n, s), i;
                             }
                         },
                         {
@@ -25610,20 +25696,26 @@ new (0, _p5Default.default)((sketch)=>{
                         },
                         {
                             key: "normalize",
-                            value: function(e1, t) {
-                                return arguments.length < 2 ? t = e1.copy() : (t instanceof a.default.Vector || a.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.normalize"), t.set(e1)), t.normalize();
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1];
+                                return t.length < 2 ? n = o.copy() : (n instanceof u.default.Vector || u.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.normalize"), n.set(o)), n.normalize();
                             }
                         },
                         {
                             key: "limit",
-                            value: function(e1, t, r) {
-                                return arguments.length < 3 ? r = e1.copy() : (r instanceof a.default.Vector || a.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.limit"), r.set(e1)), r.limit(t);
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return t.length < 3 ? s = o.copy() : (s instanceof u.default.Vector || u.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.limit"), s.set(o)), s.limit(n);
                             }
                         },
                         {
                             key: "setMag",
-                            value: function(e1, t, r) {
-                                return arguments.length < 3 ? r = e1.copy() : (r instanceof a.default.Vector || a.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.setMag"), r.set(e1)), r.setMag(t);
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return t.length < 3 ? s = o.copy() : (s instanceof u.default.Vector || u.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.setMag"), s.set(o)), s.setMag(n);
                             }
                         },
                         {
@@ -25640,8 +25732,10 @@ new (0, _p5Default.default)((sketch)=>{
                         },
                         {
                             key: "reflect",
-                            value: function(e1, t, r) {
-                                return arguments.length < 3 ? r = e1.copy() : (r instanceof a.default.Vector || a.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.reflect"), r.set(e1)), r.reflect(t);
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                return t.length < 3 ? s = o.copy() : (s instanceof u.default.Vector || u.default._friendlyError("The target parameter should be of type p5.Vector", "p5.Vector.reflect"), s.set(o)), s.reflect(n);
                             }
                         },
                         {
@@ -25654,7 +25748,7 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "equals",
                             value: function(e1, t) {
                                 var r;
-                                return e1 instanceof a.default.Vector ? r = e1 : Array.isArray(e1) ? r = (new a.default.Vector).set(e1) : a.default._friendlyError("The v1 parameter should be of type Array or p5.Vector", "p5.Vector.equals"), r.equals(t);
+                                return e1 instanceof u.default.Vector ? r = e1 : Array.isArray(e1) ? r = (new u.default.Vector).set(e1) : u.default._friendlyError("The v1 parameter should be of type Array or p5.Vector", "p5.Vector.equals"), r.equals(t);
                             }
                         }
                     ], t = [
@@ -25667,19 +25761,19 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "set",
                             value: function(e1, t, r) {
-                                return e1 instanceof a.default.Vector ? (this.x = e1.x || 0, this.y = e1.y || 0, this.z = e1.z || 0) : Array.isArray(e1) ? (this.x = e1[0] || 0, this.y = e1[1] || 0, this.z = e1[2] || 0) : (this.x = e1 || 0, this.y = t || 0, this.z = r || 0), this;
+                                return e1 instanceof u.default.Vector ? (this.x = e1.x || 0, this.y = e1.y || 0, this.z = e1.z || 0) : Array.isArray(e1) ? (this.x = e1[0] || 0, this.y = e1[1] || 0, this.z = e1[2] || 0) : (this.x = e1 || 0, this.y = t || 0, this.z = r || 0), this;
                             }
                         },
                         {
                             key: "copy",
                             value: function() {
-                                return this.isPInst ? new a.default.Vector(this._fromRadians, this._toRadians, this.x, this.y, this.z) : new a.default.Vector(this.x, this.y, this.z);
+                                return this.isPInst ? new u.default.Vector(this._fromRadians, this._toRadians, this.x, this.y, this.z) : new u.default.Vector(this.x, this.y, this.z);
                             }
                         },
                         {
                             key: "add",
                             value: function(e1, t, r) {
-                                return e1 instanceof a.default.Vector ? (this.x += e1.x || 0, this.y += e1.y || 0, this.z += e1.z || 0) : Array.isArray(e1) ? (this.x += e1[0] || 0, this.y += e1[1] || 0, this.z += e1[2] || 0) : (this.x += e1 || 0, this.y += t || 0, this.z += r || 0), this;
+                                return e1 instanceof u.default.Vector ? (this.x += e1.x || 0, this.y += e1.y || 0, this.z += e1.z || 0) : Array.isArray(e1) ? (this.x += e1[0] || 0, this.y += e1[1] || 0, this.z += e1[2] || 0) : (this.x += e1 || 0, this.y += t || 0, this.z += r || 0), this;
                             }
                         },
                         {
@@ -25696,87 +25790,74 @@ new (0, _p5Default.default)((sketch)=>{
                         },
                         {
                             key: "rem",
-                            value: function(e1, t, r) {
-                                var o;
-                                if (e1 instanceof a.default.Vector) {
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o, n, s, i = t[0], a = t[1], l = t[2];
+                                if (i instanceof u.default.Vector) {
                                     if ([
-                                        e1.x,
-                                        e1.y,
-                                        e1.z
-                                    ].every(Number.isFinite)) return n = parseFloat(e1.x), s = parseFloat(e1.y), o = parseFloat(e1.z), this.calculateRemainder3D(n, s, o);
-                                } else if (Array.isArray(e1)) {
-                                    if (e1.every(function(e1) {
-                                        return Number.isFinite(e1);
-                                    })) return 2 === e1.length ? this.calculateRemainder2D(e1[0], e1[1]) : 3 === e1.length ? this.calculateRemainder3D(e1[0], e1[1], e1[2]) : void 0;
-                                } else if (1 === arguments.length) {
-                                    if (Number.isFinite(e1) && 0 !== e1) return this.x = this.x % e1, this.y = this.y % e1, this.z = this.z % e1, this;
-                                } else if (2 === arguments.length) {
-                                    var n = Array.prototype.slice.call(arguments);
-                                    if (n.every(function(e1) {
-                                        return Number.isFinite(e1);
-                                    }) && 2 === n.length) return this.calculateRemainder2D(n[0], n[1]);
-                                } else if (3 === arguments.length) {
-                                    var s = Array.prototype.slice.call(arguments);
-                                    if (s.every(function(e1) {
-                                        return Number.isFinite(e1);
-                                    }) && 3 === s.length) return this.calculateRemainder3D(s[0], s[1], s[2]);
-                                }
+                                        i.x,
+                                        i.y,
+                                        i.z
+                                    ].every(Number.isFinite)) return o = parseFloat(i.x), n = parseFloat(i.y), s = parseFloat(i.z), this.calculateRemainder3D(o, n, s);
+                                } else if (Array.isArray(i)) {
+                                    if (i.every(Number.isFinite)) return 2 === i.length ? this.calculateRemainder2D(i[0], i[1]) : 3 === i.length ? this.calculateRemainder3D(i[0], i[1], i[2]) : void 0;
+                                } else if (1 === t.length) {
+                                    if (Number.isFinite(i) && 0 !== i) return this.x = this.x % i, this.y = this.y % i, this.z = this.z % i, this;
+                                } else if (2 === t.length) {
+                                    if (t.every(Number.isFinite)) return this.calculateRemainder2D(i, a);
+                                } else if (3 === t.length && t.every(Number.isFinite)) return this.calculateRemainder3D(i, a, l);
                             }
                         },
                         {
                             key: "sub",
                             value: function(e1, t, r) {
-                                return e1 instanceof a.default.Vector ? (this.x -= e1.x || 0, this.y -= e1.y || 0, this.z -= e1.z || 0) : Array.isArray(e1) ? (this.x -= e1[0] || 0, this.y -= e1[1] || 0, this.z -= e1[2] || 0) : (this.x -= e1 || 0, this.y -= t || 0, this.z -= r || 0), this;
+                                return e1 instanceof u.default.Vector ? (this.x -= e1.x || 0, this.y -= e1.y || 0, this.z -= e1.z || 0) : Array.isArray(e1) ? (this.x -= e1[0] || 0, this.y -= e1[1] || 0, this.z -= e1[2] || 0) : (this.x -= e1 || 0, this.y -= t || 0, this.z -= r || 0), this;
                             }
                         },
                         {
                             key: "mult",
-                            value: function(e1, t, r) {
-                                var o;
-                                return e1 instanceof a.default.Vector ? Number.isFinite(e1.x) && Number.isFinite(e1.y) && Number.isFinite(e1.z) && "number" == typeof e1.x && "number" == typeof e1.y && "number" == typeof e1.z ? (this.x *= e1.x, this.y *= e1.y, this.z *= e1.z) : console.warn("p5.Vector.prototype.mult:", "x contains components that are either undefined or not finite numbers") : Array.isArray(e1) ? e1.every(function(e1) {
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o, n = t[0], s = t[1], i = t[2];
+                                return n instanceof u.default.Vector ? Number.isFinite(n.x) && Number.isFinite(n.y) && Number.isFinite(n.z) && "number" == typeof n.x && "number" == typeof n.y && "number" == typeof n.z ? (this.x *= n.x, this.y *= n.y, this.z *= n.z) : console.warn("p5.Vector.prototype.mult:", "x contains components that are either undefined or not finite numbers") : Array.isArray(n) ? n.every(function(e1) {
                                     return Number.isFinite(e1);
-                                }) && e1.every(function(e1) {
+                                }) && n.every(function(e1) {
                                     return "number" == typeof e1;
-                                }) ? 1 === e1.length ? (this.x *= e1[0], this.y *= e1[0], this.z *= e1[0]) : 2 === e1.length ? (this.x *= e1[0], this.y *= e1[1]) : 3 === e1.length && (this.x *= e1[0], this.y *= e1[1], this.z *= e1[2]) : console.warn("p5.Vector.prototype.mult:", "x contains elements that are either undefined or not finite numbers") : (o = Array.prototype.slice.call(arguments)).every(function(e1) {
+                                }) ? 1 === n.length ? (this.x *= n[0], this.y *= n[0], this.z *= n[0]) : 2 === n.length ? (this.x *= n[0], this.y *= n[1]) : 3 === n.length && (this.x *= n[0], this.y *= n[1], this.z *= n[2]) : console.warn("p5.Vector.prototype.mult:", "x contains elements that are either undefined or not finite numbers") : (o = t).every(function(e1) {
                                     return Number.isFinite(e1);
                                 }) && o.every(function(e1) {
                                     return "number" == typeof e1;
-                                }) ? (1 === arguments.length && (this.x *= e1, this.y *= e1, this.z *= e1), 2 === arguments.length && (this.x *= e1, this.y *= t), 3 === arguments.length && (this.x *= e1, this.y *= t, this.z *= r)) : console.warn("p5.Vector.prototype.mult:", "x, y, or z arguments are either undefined or not a finite number"), this;
+                                }) ? (1 === t.length && (this.x *= n, this.y *= n, this.z *= n), 2 === t.length && (this.x *= n, this.y *= s), 3 === t.length && (this.x *= n, this.y *= s, this.z *= i)) : console.warn("p5.Vector.prototype.mult:", "x, y, or z arguments are either undefined or not a finite number"), this;
                             }
                         },
                         {
                             key: "div",
-                            value: function(e1, t, r) {
-                                if (e1 instanceof a.default.Vector) {
-                                    if (Number.isFinite(e1.x) && Number.isFinite(e1.y) && Number.isFinite(e1.z) && "number" == typeof e1.x && "number" == typeof e1.y && "number" == typeof e1.z) {
-                                        var o = 0 === e1.z && 0 === this.z;
-                                        if (0 === e1.x || 0 === e1.y || !o && 0 === e1.z) return console.warn("p5.Vector.prototype.div:", "divide by 0"), this;
-                                        this.x /= e1.x, this.y /= e1.y, o || (this.z /= e1.z);
+                            value: function() {
+                                for(var e1 = arguments.length, t = new Array(e1), r = 0; r < e1; r++)t[r] = arguments[r];
+                                var o = t[0], n = t[1], s = t[2];
+                                if (o instanceof u.default.Vector) {
+                                    if (Number.isFinite(o.x) && Number.isFinite(o.y) && Number.isFinite(o.z) && "number" == typeof o.x && "number" == typeof o.y && "number" == typeof o.z) {
+                                        var i = 0 === o.z && 0 === this.z;
+                                        if (0 === o.x || 0 === o.y || !i && 0 === o.z) return console.warn("p5.Vector.prototype.div:", "divide by 0"), this;
+                                        this.x /= o.x, this.y /= o.y, i || (this.z /= o.z);
                                     } else console.warn("p5.Vector.prototype.div:", "x contains components that are either undefined or not finite numbers");
-                                } else if (Array.isArray(e1)) {
-                                    if (e1.every(function(e1) {
-                                        return Number.isFinite(e1);
-                                    }) && e1.every(function(e1) {
-                                        return "number" == typeof e1;
-                                    })) {
-                                        if (e1.some(function(e1) {
-                                            return 0 === e1;
-                                        })) return console.warn("p5.Vector.prototype.div:", "divide by 0"), this;
-                                        1 === e1.length ? (this.x /= e1[0], this.y /= e1[0], this.z /= e1[0]) : 2 === e1.length ? (this.x /= e1[0], this.y /= e1[1]) : 3 === e1.length && (this.x /= e1[0], this.y /= e1[1], this.z /= e1[2]);
-                                    } else console.warn("p5.Vector.prototype.div:", "x contains components that are either undefined or not finite numbers");
-                                } else {
-                                    o = Array.prototype.slice.call(arguments);
-                                    if (o.every(function(e1) {
-                                        return Number.isFinite(e1);
-                                    }) && o.every(function(e1) {
+                                } else if (Array.isArray(o)) {
+                                    if (o.every(Number.isFinite) && o.every(function(e1) {
                                         return "number" == typeof e1;
                                     })) {
                                         if (o.some(function(e1) {
                                             return 0 === e1;
                                         })) return console.warn("p5.Vector.prototype.div:", "divide by 0"), this;
-                                        1 === arguments.length && (this.x /= e1, this.y /= e1, this.z /= e1), 2 === arguments.length && (this.x /= e1, this.y /= t), 3 === arguments.length && (this.x /= e1, this.y /= t, this.z /= r);
-                                    } else console.warn("p5.Vector.prototype.div:", "x, y, or z arguments are either undefined or not a finite number");
-                                }
+                                        1 === o.length ? (this.x /= o[0], this.y /= o[0], this.z /= o[0]) : 2 === o.length ? (this.x /= o[0], this.y /= o[1]) : 3 === o.length && (this.x /= o[0], this.y /= o[1], this.z /= o[2]);
+                                    } else console.warn("p5.Vector.prototype.div:", "x contains components that are either undefined or not finite numbers");
+                                } else if (t.every(Number.isFinite) && t.every(function(e1) {
+                                    return "number" == typeof e1;
+                                })) {
+                                    if (t.some(function(e1) {
+                                        return 0 === e1;
+                                    })) return console.warn("p5.Vector.prototype.div:", "divide by 0"), this;
+                                    1 === t.length && (this.x /= o, this.y /= o, this.z /= o), 2 === t.length && (this.x /= o, this.y /= n), 3 === t.length && (this.x /= o, this.y /= n, this.z /= s);
+                                } else console.warn("p5.Vector.prototype.div:", "x, y, or z arguments are either undefined or not a finite number");
                                 return this;
                             }
                         },
@@ -25796,14 +25877,14 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "dot",
                             value: function(e1, t, r) {
-                                return e1 instanceof a.default.Vector ? this.dot(e1.x, e1.y, e1.z) : this.x * (e1 || 0) + this.y * (t || 0) + this.z * (r || 0);
+                                return e1 instanceof u.default.Vector ? this.dot(e1.x, e1.y, e1.z) : this.x * (e1 || 0) + this.y * (t || 0) + this.z * (r || 0);
                             }
                         },
                         {
                             key: "cross",
                             value: function(e1) {
                                 var t = this.y * e1.z - this.z * e1.y, r = this.z * e1.x - this.x * e1.z, e1 = this.x * e1.y - this.y * e1.x;
-                                return this.isPInst ? new a.default.Vector(this._fromRadians, this._toRadians, t, r, e1) : new a.default.Vector(t, r, e1);
+                                return this.isPInst ? new u.default.Vector(this._fromRadians, this._toRadians, t, r, e1) : new u.default.Vector(t, r, e1);
                             }
                         },
                         {
@@ -25864,7 +25945,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "lerp",
                             value: function(e1, t, r, o) {
-                                return e1 instanceof a.default.Vector ? this.lerp(e1.x, e1.y, e1.z, t) : (this.x += (e1 - this.x) * o || 0, this.y += (t - this.y) * o || 0, this.z += (r - this.z) * o || 0, this);
+                                return e1 instanceof u.default.Vector ? this.lerp(e1.x, e1.y, e1.z, t) : (this.x += (e1 - this.x) * o || 0, this.y += (t - this.y) * o || 0, this.z += (r - this.z) * o || 0, this);
                             }
                         },
                         {
@@ -25891,7 +25972,8 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "reflect",
                             value: function(e1) {
-                                return e1.normalize(), this.sub(e1.mult(2 * this.dot(e1)));
+                                e1 = u.default.Vector.normalize(e1);
+                                return this.sub(e1.mult(2 * this.dot(e1)));
                             }
                         },
                         {
@@ -25907,38 +25989,50 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "equals",
                             value: function(e1, t, r) {
-                                var o, n, e1 = e1 instanceof a.default.Vector ? (o = e1.x || 0, n = e1.y || 0, e1.z || 0) : Array.isArray(e1) ? (o = e1[0] || 0, n = e1[1] || 0, e1[2] || 0) : (o = e1 || 0, n = t || 0, r || 0);
+                                var o, n, e1 = e1 instanceof u.default.Vector ? (o = e1.x || 0, n = e1.y || 0, e1.z || 0) : Array.isArray(e1) ? (o = e1[0] || 0, n = e1[1] || 0, e1[2] || 0) : (o = e1 || 0, n = t || 0, r || 0);
                                 return this.x === o && this.y === n && this.z === e1;
                             }
+                        },
+                        {
+                            key: "clampToZero",
+                            value: function() {
+                                return this.x = this._clampToZero(this.x), this.y = this._clampToZero(this.y), this.z = this._clampToZero(this.z), this;
+                            }
+                        },
+                        {
+                            key: "_clampToZero",
+                            value: function(e1) {
+                                return Math.abs(+(e1 || 0)) <= Number.EPSILON ? 0 : e1;
+                            }
                         }
-                    ], u(e1.prototype, t), r && u(e1, r), n;
+                    ], l(e1.prototype, t), r && l(e1, r), n;
                 }();
-                var n = a.default.Vector;
+                var n = u.default.Vector;
                 r.default = n;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.every": 154,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.some": 169,
-                "core-js/modules/es.math.sign": 177,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.number.is-finite": 179,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.sub": 205,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.every": 155,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.some": 170,
+                "core-js/modules/es.math.sign": 178,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.number.epsilon": 180,
+                "core-js/modules/es.number.is-finite": 181,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.sub": 208,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        314: [
+        317: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -25968,10 +26062,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        315: [
+        318: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -26048,20 +26142,20 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = l;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        316: [
+        319: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), Object.defineProperty(r, "__esModule", {
@@ -26096,20 +26190,21 @@ new (0, _p5Default.default)((sketch)=>{
                 }, i.default.prototype._updateTextMetrics = function() {
                     return this._renderer._updateTextMetrics();
                 }, i.default.prototype.textWrap = function(e1) {
-                    if ("WORD" !== e1 && "CHAR" !== e1) throw "Error: textWrap accepts only WORD or CHAR";
-                    return this._renderer.textWrap(e1);
+                    return i.default._validateParameters("textWrap", [
+                        e1
+                    ]), this._renderer.textWrap(e1);
                 };
                 e1 = i.default;
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203
+                "../core/main": 283,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206
             }
         ],
-        317: [
+        320: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -26177,30 +26272,30 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = c;
             },
             {
-                "../core/constants": 269,
-                "../core/friendly_errors/fes_core": 271,
-                "../core/friendly_errors/file_errors": 272,
-                "../core/friendly_errors/validate_params": 275,
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.last-index-of": 166,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                "opentype.js": 254
+                "../core/constants": 272,
+                "../core/friendly_errors/fes_core": 274,
+                "../core/friendly_errors/file_errors": 275,
+                "../core/friendly_errors/validate_params": 278,
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.last-index-of": 167,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                "opentype.js": 257
             }
         ],
-        318: [
+        321: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -26217,7 +26312,7 @@ new (0, _p5Default.default)((sketch)=>{
                     default: n
                 }, v = function(e1) {
                     if (e1 && e1.__esModule) return e1;
-                    if (null === e1 || "object" !== _(e1) && "function" != typeof e1) return {
+                    if (null === e1 || "object" !== j(e1) && "function" != typeof e1) return {
                         default: e1
                     };
                     var t = i();
@@ -26236,8 +26331,8 @@ new (0, _p5Default.default)((sketch)=>{
                         return e1;
                     }, e1);
                 }
-                function _(e1) {
-                    return (_ = "function" == typeof Symbol && "symbol" === o(Symbol.iterator) ? function(e1) {
+                function j(e1) {
+                    return (j = "function" == typeof Symbol && "symbol" === o(Symbol.iterator) ? function(e1) {
                         return o(e1);
                     } : function(e1) {
                         return e1 && "function" == typeof Symbol && e1.constructor === Symbol && e1 !== Symbol.prototype ? "symbol" : o(e1);
@@ -26249,7 +26344,7 @@ new (0, _p5Default.default)((sketch)=>{
                         o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
                     }
                 }
-                function j(e1, t) {
+                function _(e1, t) {
                     var r = e1.length;
                     return e1[t < 0 ? t % r + r : t % r];
                 }
@@ -26486,32 +26581,32 @@ new (0, _p5Default.default)((sketch)=>{
                             y: e1 * Math.sin(r) + t * Math.cos(r)
                         };
                     }
-                    var d, h = Math.PI, f = 120 * h / 180, p = h / 180 * (+n || 0), m = [], y = (u ? (x = u[0], d = u[1], _ = u[2], j = u[3]) : (e1 = (v = c(e1, t, -p)).x, t = v.y, 1 < (y = (g = (e1 - (a = (v = c(a, l, -p)).x)) / 2) * g / (r * r) + (v = (t - (l = v.y)) / 2) * v / (o * o)) && (r *= y = Math.sqrt(y), o *= y), y = r * r, b = o * o, _ = (s = (s === i ? -1 : 1) * Math.sqrt(Math.abs((y * b - y * v * v - b * g * g) / (y * v * v + b * g * g)))) * r * v / o + (e1 + a) / 2, j = s * -o * g / r + (t + l) / 2, x = Math.asin(((t - j) / o).toFixed(9)), d = Math.asin(((l - j) / o).toFixed(9)), (x = e1 < _ ? h - x : x) < 0 && (x = 2 * h + x), (d = a < _ ? h - d : d) < 0 && (d = 2 * h + d), i && d < x && (x -= 2 * h), !i && x < d && (d -= 2 * h)), d - x), g = (Math.abs(y) > f && (b = d, v = a, s = l, d = x + f * (i && x < d ? 1 : -1), m = E(a = _ + r * Math.cos(d), l = j + o * Math.sin(d), r, o, n, 0, i, v, s, [
+                    var d, h = Math.PI, f = 120 * h / 180, p = h / 180 * (+n || 0), m = [], y = (u ? (x = u[0], d = u[1], j = u[2], _ = u[3]) : (e1 = (v = c(e1, t, -p)).x, t = v.y, 1 < (y = (g = (e1 - (a = (v = c(a, l, -p)).x)) / 2) * g / (r * r) + (v = (t - (l = v.y)) / 2) * v / (o * o)) && (r *= y = Math.sqrt(y), o *= y), y = r * r, b = o * o, j = (s = (s === i ? -1 : 1) * Math.sqrt(Math.abs((y * b - y * v * v - b * g * g) / (y * v * v + b * g * g)))) * r * v / o + (e1 + a) / 2, _ = s * -o * g / r + (t + l) / 2, x = Math.asin(((t - _) / o).toFixed(9)), d = Math.asin(((l - _) / o).toFixed(9)), (x = e1 < j ? h - x : x) < 0 && (x = 2 * h + x), (d = a < j ? h - d : d) < 0 && (d = 2 * h + d), i && d < x && (x -= 2 * h), !i && x < d && (d -= 2 * h)), d - x), g = (Math.abs(y) > f && (b = d, v = a, s = l, d = x + f * (i && x < d ? 1 : -1), m = E(a = j + r * Math.cos(d), l = _ + o * Math.sin(d), r, o, n, 0, i, v, s, [
                         d,
                         b,
-                        _,
-                        j
+                        j,
+                        _
                     ])), y = d - x, Math.cos(x)), h = Math.sin(x), f = Math.cos(d), n = Math.sin(d), i = Math.tan(y / 4), v = 4 / 3 * r * i, s = 4 / 3 * o * i, b = [
                         e1,
                         t
-                    ], _ = [
+                    ], j = [
                         e1 + v * h,
                         t - s * g
-                    ], j = [
+                    ], _ = [
                         a + v * n,
                         l - s * f
                     ], x = [
                         a,
                         l
                     ];
-                    if (_[0] = 2 * b[0] - _[0], _[1] = 2 * b[1] - _[1], u) return [
-                        _,
+                    if (j[0] = 2 * b[0] - j[0], j[1] = 2 * b[1] - j[1], u) return [
                         j,
+                        _,
                         x
                     ].concat(m);
                     for(var w = [], S = 0, T = (m = [
-                        _,
                         j,
+                        _,
                         x
                     ].concat(m).join().split(",")).length; S < T; S++)w[S] = S % 2 ? c(m[S - 1], m[S], p).y : c(m[S], m[S + 1], p).x;
                     return w;
@@ -26671,7 +26766,7 @@ new (0, _p5Default.default)((sketch)=>{
                                             return r.push(t), r;
                                         }(p[m].getPath(t, r, o).commands), g = 0; g < y.length; g++)for(var v = function(e1, t) {
                                             for(var t = function(e1, t) {
-                                                if ("object" !== _(e1)) e1 = t;
+                                                if ("object" !== j(e1)) e1 = t;
                                                 else for(var r in t)void 0 === e1[r] && (e1[r] = t[r]);
                                                 return e1;
                                             }(t, {
@@ -26679,7 +26774,7 @@ new (0, _p5Default.default)((sketch)=>{
                                                 simplifyThreshold: 0
                                             }), r = w(e1, 0, 1), o = r / (r * t.sampleFactor), n = [], s = 0; s < r; s += o)n.push(w(e1, s));
                                             t.simplifyThreshold && !function(e1) {
-                                                for(var t = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : 0, r = 0, o = e1.length - 1; 3 < e1.length && 0 <= o; --o)x(j(e1, o - 1), j(e1, o), j(e1, o + 1), t) && (e1.splice(o % e1.length, 1), r++);
+                                                for(var t = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : 0, r = 0, o = e1.length - 1; 3 < e1.length && 0 <= o; --o)x(_(e1, o - 1), _(e1, o), _(e1, o + 1), t) && (e1.splice(o % e1.length, 1), r++);
                                             }(n, t.simplifyThreshold);
                                             return n;
                                         }(y[g], n), b = 0; b < v.length; b++)v[b].x += h, i.push(v[b]);
@@ -26707,20 +26802,20 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "_getPathData",
                             value: function(e1, t, r, o) {
                                 var n = 3;
-                                return "string" == typeof e1 && 2 < arguments.length ? e1 = this._getPath(e1, t, r, o) : "object" === _(t) && (o = t), o && "number" == typeof o.decimals && (n = o.decimals), e1.toPathData(n);
+                                return "string" == typeof e1 && 2 < arguments.length ? e1 = this._getPath(e1, t, r, o) : "object" === j(t) && (o = t), o && "number" == typeof o.decimals && (n = o.decimals), e1.toPathData(n);
                             }
                         },
                         {
                             key: "_getSVG",
                             value: function(e1, t, r, o) {
                                 var n = 3;
-                                return "string" == typeof e1 && 2 < arguments.length ? e1 = this._getPath(e1, t, r, o) : "object" === _(t) && (o = t), o && ("number" == typeof o.decimals && (n = o.decimals), "number" == typeof o.strokeWidth && (e1.strokeWidth = o.strokeWidth), void 0 !== o.fill && (e1.fill = o.fill), void 0 !== o.stroke && (e1.stroke = o.stroke)), e1.toSVG(n);
+                                return "string" == typeof e1 && 2 < arguments.length ? e1 = this._getPath(e1, t, r, o) : "object" === j(t) && (o = t), o && ("number" == typeof o.decimals && (n = o.decimals), "number" == typeof o.strokeWidth && (e1.strokeWidth = o.strokeWidth), void 0 !== o.fill && (e1.fill = o.fill), void 0 !== o.stroke && (e1.stroke = o.stroke)), e1.toSVG(n);
                             }
                         },
                         {
                             key: "_renderPath",
                             value: function(e1, t, r, o) {
-                                var n = o && o.renderer || this.parent._renderer, s = n.drawingContext, e1 = ("object" === _(e1) && e1.commands ? e1 : this._getPath(e1, t, r, o)).commands, i = (s.beginPath(), !0), t = !1, r = void 0;
+                                var n = o && o.renderer || this.parent._renderer, s = n.drawingContext, e1 = ("object" === j(e1) && e1.commands ? e1 : this._getPath(e1, t, r, o)).commands, i = (n._clipping || s.beginPath(), !0), t = !1, r = void 0;
                                 try {
                                     for(var a, l = e1[Symbol.iterator](); !(i = (a = l.next()).done); i = !0){
                                         var u = a.value;
@@ -26795,30 +26890,30 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.number.to-fixed": 180,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.number.to-fixed": 182,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        319: [
+        322: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.splice"), e1("core-js/modules/es.array-buffer.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.splice"), e1("core-js/modules/es.array-buffer.constructor"), e1("core-js/modules/es.object.to-string"), Object.defineProperty(r, "__esModule", {
@@ -26861,15 +26956,15 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array-buffer.constructor": 151,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.object.to-string": 187
+                "../core/main": 283,
+                "core-js/modules/es.array-buffer.constructor": 152,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.object.to-string": 190
             }
         ],
-        320: [
+        323: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.map"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.repeat"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.repeat"), Object.defineProperty(r, "__esModule", {
@@ -26913,15 +27008,15 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.repeat": 200
+                "../core/main": 283,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.repeat": 203
             }
         ],
-        321: [
+        324: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.number.to-fixed"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.constructor"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.pad-start"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.string.trim"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.join"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.number.to-fixed"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.constructor"), e1("core-js/modules/es.regexp.exec"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.match"), e1("core-js/modules/es.string.pad-start"), e1("core-js/modules/es.string.replace"), e1("core-js/modules/es.string.split"), e1("core-js/modules/es.string.trim"), Object.defineProperty(r, "__esModule", {
@@ -27012,34 +27107,34 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = u;
             },
             {
-                "../core/friendly_errors/fes_core": 271,
-                "../core/friendly_errors/file_errors": 272,
-                "../core/friendly_errors/validate_params": 275,
-                "../core/main": 280,
-                "core-js/modules/es.array.filter": 156,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.number.to-fixed": 180,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.constructor": 191,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.match": 198,
-                "core-js/modules/es.string.pad-start": 199,
-                "core-js/modules/es.string.replace": 201,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.trim": 206,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/friendly_errors/fes_core": 274,
+                "../core/friendly_errors/file_errors": 275,
+                "../core/friendly_errors/validate_params": 278,
+                "../core/main": 283,
+                "core-js/modules/es.array.filter": 157,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.number.to-fixed": 182,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.constructor": 194,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.match": 201,
+                "core-js/modules/es.string.pad-start": 202,
+                "core-js/modules/es.string.replace": 204,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.trim": 209,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        322: [
+        325: [
             function(e1, t, r) {
                 "use strict";
                 Object.defineProperty(r, "__esModule", {
@@ -27067,10 +27162,10 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280
+                "../core/main": 283
             }
         ],
-        323: [
+        326: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -27092,7 +27187,7 @@ new (0, _p5Default.default)((sketch)=>{
                 }), r.default = void 0;
                 var S = (n = e1("../core/main")) && n.__esModule ? n : {
                     default: n
-                }, j = (e1("./p5.Geometry"), function(e1) {
+                }, _ = (e1("./p5.Geometry"), function(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
                         default: e1
@@ -27242,8 +27337,8 @@ new (0, _p5Default.default)((sketch)=>{
                     for(var a, l, u = (s = void 0 === s || s) ? -2 : 0, c = (n = n < 1 ? 1 : n) + ((i = void 0 === i ? 0 !== t : i) ? 2 : 0), d = Math.atan2(e1 - t, r), h = Math.sin(d), f = Math.cos(d), p = u; p <= c; ++p){
                         var m = p / n, y = r * m, g = void 0, g = p < 0 ? (m = y = 0, e1) : n < p ? (y = r, m = 1, t) : e1 + (t - e1) * m;
                         for(-2 !== p && p !== n + 2 || (g = 0), y -= r / 2, a = 0; a < o; ++a){
-                            var v = a / (o - 1), b = 2 * Math.PI * v, _ = Math.sin(b), b = Math.cos(b), j = (this.vertices.push(new S.default.Vector(_ * g, y, b * g)), void 0), j = p < 0 ? new S.default.Vector(0, -1, 0) : n < p && t ? new S.default.Vector(0, 1, 0) : new S.default.Vector(_ * f, h, b * f);
-                            this.vertexNormals.push(j), this.uvs.push(v, m);
+                            var v = a / (o - 1), b = 2 * Math.PI * v, j = Math.sin(b), b = Math.cos(b), _ = (this.vertices.push(new S.default.Vector(j * g, y, b * g)), void 0), _ = p < 0 ? new S.default.Vector(0, -1, 0) : n < p && t ? new S.default.Vector(0, 1, 0) : new S.default.Vector(j * f, h, b * f);
+                            this.vertexNormals.push(_), this.uvs.push(v, m);
                         }
                     }
                     var x = 0;
@@ -27336,7 +27431,7 @@ new (0, _p5Default.default)((sketch)=>{
                             1,
                             1
                         ];
-                    }))._edgesToVertices(), i.computeNormals(), this.createBuffers("tri", i)), this.uMVMatrix.copy());
+                    }))._edgesToVertices(), i.computeNormals(), this.createBuffers("tri", i)), this.uModelMatrix.copy());
                     try {
                         var a = Math.sign(t * n - o * r + o * e1 - s * n + s * r - t * e1), l = new S.default.Matrix([
                             o - t,
@@ -27355,18 +27450,18 @@ new (0, _p5Default.default)((sketch)=>{
                             r,
                             0,
                             1
-                        ]).mult(this.uMVMatrix);
-                        this.uMVMatrix = l, this.drawBuffers("tri");
+                        ]).mult(this.uModelMatrix);
+                        this.uModelMatrix = l, this.drawBuffers("tri");
                     } finally{
-                        this.uMVMatrix = i;
+                        this.uModelMatrix = i;
                     }
                     return this;
                 }, S.default.RendererGL.prototype.ellipse = function(e1) {
-                    this.arc(e1[0], e1[1], e1[2], e1[3], 0, j.TWO_PI, j.OPEN, e1[4]);
+                    this.arc(e1[0], e1[1], e1[2], e1[3], 0, _.TWO_PI, _.OPEN, e1[4]);
                 }, S.default.RendererGL.prototype.arc = function() {
-                    var e1, t = arguments.length <= 0 ? void 0 : arguments[0], r = arguments.length <= 1 ? void 0 : arguments[1], o = arguments.length <= 2 ? void 0 : arguments[2], n = arguments.length <= 3 ? void 0 : arguments[3], s = arguments.length <= 4 ? void 0 : arguments[4], i = arguments.length <= 5 ? void 0 : arguments[5], a = arguments.length <= 6 ? void 0 : arguments[6], l = (arguments.length <= 7 ? void 0 : arguments[7]) || 25, u = (Math.abs(i - s) >= j.TWO_PI ? "".concat(c = "ellipse", "|") : "".concat(c = "arc", "|").concat(s, "|").concat(i, "|").concat(a, "|")).concat(l, "|"), c = (this.geometryInHash(u) || ((e1 = new S.default.Geometry(l, 1, function() {
+                    var e1, t = arguments.length <= 0 ? void 0 : arguments[0], r = arguments.length <= 1 ? void 0 : arguments[1], o = arguments.length <= 2 ? void 0 : arguments[2], n = arguments.length <= 3 ? void 0 : arguments[3], s = arguments.length <= 4 ? void 0 : arguments[4], i = arguments.length <= 5 ? void 0 : arguments[5], a = arguments.length <= 6 ? void 0 : arguments[6], l = (arguments.length <= 7 ? void 0 : arguments[7]) || 25, u = (Math.abs(i - s) >= _.TWO_PI ? "".concat(c = "ellipse", "|") : "".concat(c = "arc", "|").concat(s, "|").concat(i, "|").concat(a, "|")).concat(l, "|"), c = (this.geometryInHash(u) || ((e1 = new S.default.Geometry(l, 1, function() {
                         if (s.toFixed(10) !== i.toFixed(10)) {
-                            a !== j.PIE && void 0 !== a || (this.vertices.push(new S.default.Vector(.5, .5, 0)), this.uvs.push([
+                            a !== _.PIE && void 0 !== a || (this.vertices.push(new S.default.Vector(.5, .5, 0)), this.uvs.push([
                                 .5,
                                 .5
                             ]));
@@ -27385,7 +27480,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 ]));
                             }
                             switch(a){
-                                case j.PIE:
+                                case _.PIE:
                                     this.faces.push([
                                         0,
                                         this.vertices.length - 2,
@@ -27401,7 +27496,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         this.vertices.length - 1
                                     ]);
                                     break;
-                                case j.CHORD:
+                                case _.CHORD:
                                     this.edges.push([
                                         0,
                                         1
@@ -27410,7 +27505,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         this.vertices.length - 1
                                     ]);
                                     break;
-                                case j.OPEN:
+                                case _.OPEN:
                                     this.edges.push([
                                         0,
                                         1
@@ -27427,15 +27522,15 @@ new (0, _p5Default.default)((sketch)=>{
                                     ]);
                             }
                         }
-                    })).computeNormals(), l <= 50 ? e1._edgesToVertices(e1) : this._doStroke && console.log("Cannot apply a stroke to an ".concat(c, " with more than 50 detail")), this.createBuffers(u, e1)), this.uMVMatrix.copy());
+                    })).computeNormals(), l <= 50 ? e1._edgesToVertices(e1) : this._doStroke && console.log("Cannot apply a stroke to an ".concat(c, " with more than 50 detail")), this.createBuffers(u, e1)), this.uModelMatrix.copy());
                     try {
-                        this.uMVMatrix.translate([
+                        this.uModelMatrix.translate([
                             t,
                             r,
                             0
-                        ]), this.uMVMatrix.scale(o, n, 1), this.drawBuffers(u);
+                        ]), this.uModelMatrix.scale(o, n, 1), this.drawBuffers(u);
                     } finally{
-                        this.uMVMatrix = c;
+                        this.uModelMatrix = c;
                     }
                     return this;
                 }, S.default.RendererGL.prototype.rect = function(e1) {
@@ -27464,22 +27559,22 @@ new (0, _p5Default.default)((sketch)=>{
                                     0
                                 ]
                             ]);
-                        })).computeFaces().computeNormals()._edgesToVertices(), this.createBuffers(s, l)), this.uMVMatrix.copy());
+                        })).computeFaces().computeNormals()._edgesToVertices(), this.createBuffers(s, l)), this.uModelMatrix.copy());
                         try {
-                            this.uMVMatrix.translate([
+                            this.uModelMatrix.translate([
                                 t,
                                 r,
                                 0
-                            ]), this.uMVMatrix.scale(o, n, 1), this.drawBuffers(s);
+                            ]), this.uModelMatrix.scale(o, n, 1), this.drawBuffers(s);
                         } finally{
-                            this.uMVMatrix = l;
+                            this.uModelMatrix = l;
                         }
                     } else {
                         var s = e1[4], l = void 0 === e1[5] ? s : e1[5], u = void 0 === e1[6] ? l : e1[6], e1 = void 0 === e1[7] ? u : e1[7], c = o, d = n, h = ((c += t) < t && (h = t, t = c, c = h), (d += r) < r && (h = r, r = d, d = h), Math.min((c - t) / 2, (d - r) / 2)), f = (h < s && (s = h), h < l && (l = h), h < u && (u = h), h < e1 && (e1 = h), t), p = r, h = c, t = d, m = (this.beginShape(), 0 !== l ? (this.vertex(h - l, p), this.quadraticVertex(h, p, h, p + l)) : this.vertex(h, p), 0 !== u ? (this.vertex(h, t - u), this.quadraticVertex(h, t, h - u, t)) : this.vertex(h, t), 0 !== e1 ? (this.vertex(f + e1, t), this.quadraticVertex(f, t, f, t - e1)) : this.vertex(f, t), 0 !== s ? (this.vertex(f, p + s), this.quadraticVertex(f, p, f + s, p)) : this.vertex(f, p), this.immediateMode.geometry.uvs.length = 0, true), r = !1, c = void 0;
                         try {
                             for(var y, g = this.immediateMode.geometry.vertices[Symbol.iterator](); !(m = (y = g.next()).done); m = !0){
-                                var v = y.value, b = (v.x - f) / o, _ = (v.y - p) / n;
-                                this.immediateMode.geometry.uvs.push(b, _);
+                                var v = y.value, b = (v.x - f) / o, j = (v.y - p) / n;
+                                this.immediateMode.geometry.uvs.push(b, j);
                             }
                         } catch (e1) {
                             r = !0, c = e1;
@@ -27490,7 +27585,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 if (r) throw c;
                             }
                         }
-                        this.endShape(j.CLOSE);
+                        this.endShape(_.CLOSE);
                     }
                     return this;
                 }, S.default.RendererGL.prototype.quad = function(i, a, l, u, c, d, h, f, p, m, y, g) {
@@ -27507,7 +27602,7 @@ new (0, _p5Default.default)((sketch)=>{
                         });
                         o.faces = [];
                         for(var n = 0; n < t - 1; n++)for(var s = 0; s < e1 - 1; s++){
-                            var v = s + n * e1, b = s + 1 + (n + 1) * e1, _ = s + (n + 1) * e1;
+                            var v = s + n * e1, b = s + 1 + (n + 1) * e1, j = s + (n + 1) * e1;
                             o.faces.push([
                                 v,
                                 s + 1 + n * e1,
@@ -27515,18 +27610,18 @@ new (0, _p5Default.default)((sketch)=>{
                             ]), o.faces.push([
                                 v,
                                 b,
-                                _
+                                j
                             ]);
                         }
                         o.computeNormals();
-                        for(var j = [
+                        for(var _ = [
                             o.edges.length = 0,
                             2,
                             3,
                             1
-                        ], x = 0; x < j.length; x++)o.edges.push([
-                            j[x],
-                            j[(x + 1) % j.length]
+                        ], x = 0; x < _.length; x++)o.edges.push([
+                            _[x],
+                            _[(x + 1) % _.length]
                         ]);
                         o._edgesToVertices(), this.createBuffers(r, o);
                     }
@@ -27550,7 +27645,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     return this.endShape(), this;
                 }, S.default.RendererGL.prototype.line = function() {
-                    return 6 === arguments.length ? (this.beginShape(j.LINES), this.vertex(arguments.length <= 0 ? void 0 : arguments[0], arguments.length <= 1 ? void 0 : arguments[1], arguments.length <= 2 ? void 0 : arguments[2]), this.vertex(arguments.length <= 3 ? void 0 : arguments[3], arguments.length <= 4 ? void 0 : arguments[4], arguments.length <= 5 ? void 0 : arguments[5]), this.endShape()) : 4 === arguments.length && (this.beginShape(j.LINES), this.vertex(arguments.length <= 0 ? void 0 : arguments[0], arguments.length <= 1 ? void 0 : arguments[1], 0), this.vertex(arguments.length <= 2 ? void 0 : arguments[2], arguments.length <= 3 ? void 0 : arguments[3], 0), this.endShape()), this;
+                    return 6 === arguments.length ? (this.beginShape(_.LINES), this.vertex(arguments.length <= 0 ? void 0 : arguments[0], arguments.length <= 1 ? void 0 : arguments[1], arguments.length <= 2 ? void 0 : arguments[2]), this.vertex(arguments.length <= 3 ? void 0 : arguments[3], arguments.length <= 4 ? void 0 : arguments[4], arguments.length <= 5 ? void 0 : arguments[5]), this.endShape()) : 4 === arguments.length && (this.beginShape(_.LINES), this.vertex(arguments.length <= 0 ? void 0 : arguments[0], arguments.length <= 1 ? void 0 : arguments[1], 0), this.vertex(arguments.length <= 2 ? void 0 : arguments[2], arguments.length <= 3 ? void 0 : arguments[3], 0), this.endShape()), this;
                 }, S.default.RendererGL.prototype.bezierVertex = function() {
                     if (0 === this.immediateMode._bezierVertex.length) throw Error("vertex() must be used once before calling bezierVertex()");
                     var e1, t, r, o, n, s, i = [], a = [], l = arguments.length;
@@ -27612,13 +27707,13 @@ new (0, _p5Default.default)((sketch)=>{
                             arguments.length <= 4 ? void 0 : arguments[4],
                             arguments.length <= 7 ? void 0 : arguments[7]
                         ];
-                        var _ = [
+                        var j = [
                             this.immediateMode._bezierVertex[2],
                             arguments.length <= 2 ? void 0 : arguments[2],
                             arguments.length <= 5 ? void 0 : arguments[5],
                             arguments.length <= 8 ? void 0 : arguments[8]
-                        ], j = Math.hypot(i[0] - i[1], a[0] - a[1], _[0] - _[1]), v = Math.hypot(i[1] - i[2], a[1] - a[2], _[1] - _[2]), x = Math.hypot(i[2] - i[3], a[2] - a[3], _[2] - _[3]), l = j + v + x;
-                        for(j /= l, x /= l, n = 0; n < 4; n++)p[1].push(p[0][n] * (1 - j) + p[3][n] * j), p[2].push(p[0][n] * x + p[3][n] * (1 - x)), y[1].push(y[0][n] * (1 - j) + y[3][n] * j), y[2].push(y[0][n] * x + y[3][n] * (1 - x));
+                        ], _ = Math.hypot(i[0] - i[1], a[0] - a[1], j[0] - j[1]), v = Math.hypot(i[1] - i[2], a[1] - a[2], j[1] - j[2]), x = Math.hypot(i[2] - i[3], a[2] - a[3], j[2] - j[3]), l = _ + v + x;
+                        for(_ /= l, x /= l, n = 0; n < 4; n++)p[1].push(p[0][n] * (1 - _) + p[3][n] * _), p[2].push(p[0][n] * x + p[3][n] * (1 - x)), y[1].push(y[0][n] * (1 - _) + y[3][n] * _), y[2].push(y[0][n] * x + y[3][n] * (1 - x));
                         for(o = 0; o < f; o++){
                             for(this.curFillColor = [
                                 0,
@@ -27632,7 +27727,7 @@ new (0, _p5Default.default)((sketch)=>{
                                 0
                             ], m = e1 = t = r = 0; m < 4; m++){
                                 for(n = 0; n < 4; n++)this.curFillColor[n] += this._lookUpTableBezier[o][m] * p[m][n], this.curStrokeColor[n] += this._lookUpTableBezier[o][m] * y[m][n];
-                                e1 += i[m] * this._lookUpTableBezier[o][m], t += a[m] * this._lookUpTableBezier[o][m], r += _[m] * this._lookUpTableBezier[o][m];
+                                e1 += i[m] * this._lookUpTableBezier[o][m], t += a[m] * this._lookUpTableBezier[o][m], r += j[m] * this._lookUpTableBezier[o][m];
                             }
                             this.vertex(e1, t, r);
                         }
@@ -27768,35 +27863,35 @@ new (0, _p5Default.default)((sketch)=>{
                         for(n = 0; n < l; n++)this.immediateMode._curveVertex.shift();
                     }
                 }, S.default.RendererGL.prototype.image = function(e1, t, r, o, n, s, i, a, l) {
-                    this._isErasing && this.blendMode(this._cachedBlendMode), this._pInst.push(), this._pInst.noLights(), this._pInst.noStroke(), this._pInst.texture(e1), this._pInst.textureMode(j.NORMAL);
+                    this._isErasing && this.blendMode(this._cachedBlendMode), this._pInst.push(), this._pInst.noLights(), this._pInst.noStroke(), this._pInst.texture(e1), this._pInst.textureMode(_.NORMAL);
                     var u = 0, c = (t <= e1.width && (u = t / e1.width), 1), t = (t + o <= e1.width && (c = (t + o) / e1.width), 0), o = (r <= e1.height && (t = r / e1.height), 1);
-                    r + n <= e1.height && (o = (r + n) / e1.height), this.beginShape(), this.vertex(s, i, 0, u, t), this.vertex(s + a, i, 0, c, t), this.vertex(s + a, i + l, 0, c, o), this.vertex(s, i + l, 0, u, o), this.endShape(j.CLOSE), this._pInst.pop(), this._isErasing && this.blendMode(j.REMOVE);
+                    r + n <= e1.height && (o = (r + n) / e1.height), this.beginShape(), this.vertex(s, i, 0, u, t), this.vertex(s + a, i, 0, c, t), this.vertex(s + a, i + l, 0, c, o), this.vertex(s, i + l, 0, u, o), this.endShape(_.CLOSE), this._pInst.pop(), this._isErasing && this.blendMode(_.REMOVE);
                 };
                 var n = S.default;
                 r.default = n;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.Geometry": 332,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.math.hypot": 175,
-                "core-js/modules/es.math.sign": 177,
-                "core-js/modules/es.number.to-fixed": 180,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.Geometry": 335,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.math.hypot": 176,
+                "core-js/modules/es.math.sign": 178,
+                "core-js/modules/es.number.to-fixed": 182,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        324: [
+        327: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -27860,7 +27955,7 @@ new (0, _p5Default.default)((sketch)=>{
                 var c = function() {
                     function t(e1) {
                         if (!(this instanceof t)) throw new TypeError("Cannot call a class as a function");
-                        (this.renderer = e1)._pInst.push(), this.identityMatrix = new n.default.Matrix, e1.uMVMatrix = new n.default.Matrix, this.geometry = new n.default.Geometry, this.geometry.gid = "_p5_GeometryBuilder_".concat(t.nextGeometryId), t.nextGeometryId++, this.hasTransform = !1;
+                        (this.renderer = e1)._pInst.push(), this.identityMatrix = new n.default.Matrix, e1.uModelMatrix = new n.default.Matrix, this.geometry = new n.default.Geometry, this.geometry.gid = "_p5_GeometryBuilder_".concat(t.nextGeometryId), t.nextGeometryId++, this.hasTransform = !1;
                     }
                     var e1, r, o;
                     return e1 = t, r = [
@@ -27869,7 +27964,7 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function(e1) {
                                 var t = this;
                                 return this.hasTransform ? e1.map(function(e1) {
-                                    return t.renderer.uMVMatrix.multiplyPoint(e1);
+                                    return t.renderer.uModelMatrix.multiplyPoint(e1);
                                 }) : e1;
                             }
                         },
@@ -27885,9 +27980,9 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "addGeometry",
                             value: function(e1) {
-                                for(var t, r = this, o = (this.hasTransform = !this.renderer.uMVMatrix.mat4.every(function(e1, t) {
+                                for(var t, r = this, o = (this.hasTransform = !this.renderer.uModelMatrix.mat4.every(function(e1, t) {
                                     return e1 === r.identityMatrix.mat4[t];
-                                }), this.hasTransform && this.renderer.uNMatrix.inverseTranspose(this.renderer.uMVMatrix), this.geometry.vertices.length), n = ((t = this.geometry.vertices).push.apply(t, s(this.transformVertices(e1.vertices))), (t = this.geometry.vertexNormals).push.apply(t, s(this.transformNormals(e1.vertexNormals))), (t = this.geometry.uvs).push.apply(t, s(e1.uvs)), this.renderer._doFill && (t = this.geometry.faces).push.apply(t, s(e1.faces.map(function(e1) {
+                                }), this.hasTransform && this.renderer.uNMatrix.inverseTranspose(this.renderer.uModelMatrix), this.geometry.vertices.length), n = ((t = this.geometry.vertices).push.apply(t, s(this.transformVertices(e1.vertices))), (t = this.geometry.vertexNormals).push.apply(t, s(this.transformNormals(e1.vertexNormals))), (t = this.geometry.uvs).push.apply(t, s(e1.uvs)), this.renderer._doFill && (t = this.geometry.faces).push.apply(t, s(e1.faces.map(function(e1) {
                                     return e1.map(function(e1) {
                                         return e1 + o;
                                     });
@@ -27946,25 +28041,25 @@ new (0, _p5Default.default)((sketch)=>{
                 c.nextGeometryId = 0, r.default = c;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.every": 154,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.every": 155,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        325: [
+        328: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -28040,40 +28135,40 @@ new (0, _p5Default.default)((sketch)=>{
                     void 0 === e1 && (e1 = this.width / 2), void 0 === r && (r = Math.round(e1 / 30) < 4 ? 4 : Math.round(e1 / 30)), void 0 === o && (o = 0), void 0 === n && (n = 0), void 0 === s && (s = 0);
                     var i = e1 / r, a = e1 / 2;
                     return function() {
-                        this.push(), this.stroke(255 * this._renderer.curStrokeColor[0], 255 * this._renderer.curStrokeColor[1], 255 * this._renderer.curStrokeColor[2]), this._renderer.uMVMatrix.set(this._renderer._curCamera.cameraMatrix);
+                        this.push(), this.stroke(255 * this._renderer.curStrokeColor[0], 255 * this._renderer.curStrokeColor[1], 255 * this._renderer.curStrokeColor[2]), this._renderer.uModelMatrix.reset();
                         for(var e1 = 0; e1 <= r; e1++)this.beginShape(this.LINES), this.vertex(-a + o, n, e1 * i - a + s), this.vertex(a + o, n, e1 * i - a + s), this.endShape();
                         for(var t = 0; t <= r; t++)this.beginShape(this.LINES), this.vertex(t * i - a + o, n, -a + s), this.vertex(t * i - a + o, n, a + s), this.endShape();
                         this.pop();
                     };
                 }, g.default.prototype._axesIcon = function(e1, t, r, o) {
                     return void 0 === e1 && (e1 = 40 < this.width / 20 ? this.width / 20 : 40), void 0 === t && (t = -this.width / 4), void 0 === r && (r = t), void 0 === o && (o = t), function() {
-                        this.push(), this._renderer.uMVMatrix.set(this._renderer._curCamera.cameraMatrix), this.strokeWeight(2), this.stroke(255, 0, 0), this.beginShape(this.LINES), this.vertex(t, r, o), this.vertex(t + e1, r, o), this.endShape(), this.stroke(0, 255, 0), this.beginShape(this.LINES), this.vertex(t, r, o), this.vertex(t, r + e1, o), this.endShape(), this.stroke(0, 0, 255), this.beginShape(this.LINES), this.vertex(t, r, o), this.vertex(t, r, o + e1), this.endShape(), this.pop();
+                        this.push(), this._renderer.uModelMatrix.reset(), this.strokeWeight(2), this.stroke(255, 0, 0), this.beginShape(this.LINES), this.vertex(t, r, o), this.vertex(t + e1, r, o), this.endShape(), this.stroke(0, 255, 0), this.beginShape(this.LINES), this.vertex(t, r, o), this.vertex(t, r + e1, o), this.endShape(), this.stroke(0, 0, 255), this.beginShape(this.LINES), this.vertex(t, r, o), this.vertex(t, r, o + e1), this.endShape(), this.pop();
                     };
                 };
                 var s = g.default;
                 r.default = s;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.math.hypot": 175,
-                "core-js/modules/es.math.sign": 177,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.math.hypot": 176,
+                "core-js/modules/es.math.sign": 178,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        326: [
+        329: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.filter"), e1("core-js/modules/es.array.filter"), Object.defineProperty(r, "__esModule", {
@@ -28158,11 +28253,11 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.filter": 156
+                "../core/main": 283,
+                "core-js/modules/es.array.filter": 157
             }
         ],
-        327: [
+        330: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -28322,9 +28417,9 @@ new (0, _p5Default.default)((sketch)=>{
                             }(t)) !function(e1, t) {
                                 for(var r, o, n, s, i, a, l, u = new DataView(t), c = u.getUint32(80, !0), d = !1, h = 0; h < 70; h++)1129270351 === u.getUint32(h, !1) && 82 === u.getUint8(h + 4) && 61 === u.getUint8(h + 5) && (d = !0, s = [], i = u.getUint8(h + 6) / 255, a = u.getUint8(h + 7) / 255, l = u.getUint8(h + 8) / 255);
                                 for(var f = 0; f < c; f++){
-                                    for(var p, m = 84 + 50 * f, y = u.getFloat32(m, !0), g = u.getFloat32(4 + m, !0), v = u.getFloat32(8 + m, !0), b = (d && (p = u.getUint16(48 + m, !0), n = 0 == (32768 & p) ? (r = (31 & p) / 31, o = (p >> 5 & 31) / 31, (p >> 10 & 31) / 31) : (r = i, o = a, l)), new x.default.Vector(y, g, v)), _ = 1; _ <= 3; _++){
-                                        var j = m + 12 * _, j = new x.default.Vector(u.getFloat32(j, !0), u.getFloat32(4 + j, !0), u.getFloat32(8 + j, !0));
-                                        e1.vertices.push(j), e1.vertexNormals.push(b), d && s.push(r, o, n);
+                                    for(var p, m = 84 + 50 * f, y = u.getFloat32(m, !0), g = u.getFloat32(4 + m, !0), v = u.getFloat32(8 + m, !0), b = (d && (p = u.getUint16(48 + m, !0), n = 0 == (32768 & p) ? (r = (31 & p) / 31, o = (p >> 5 & 31) / 31, (p >> 10 & 31) / 31) : (r = i, o = a, l)), new x.default.Vector(y, g, v)), j = 1; j <= 3; j++){
+                                        var _ = m + 12 * j, _ = new x.default.Vector(u.getFloat32(_, !0), u.getFloat32(4 + _, !0), u.getFloat32(8 + _, !0));
+                                        e1.vertices.push(_), e1.vertexNormals.push(b), d && s.push(r, o, n);
                                     }
                                     e1.faces.push([
                                         3 * f,
@@ -28423,16 +28518,16 @@ new (0, _p5Default.default)((sketch)=>{
                                                             h - 1,
                                                             h
                                                         ], m = 0; m < p.length; ++m){
-                                                            for(var y, g = c[p[m]].split("/"), v = 0; v < g.length; v++)g[v] = parseInt(g[v]) - 1;
-                                                            n[g[0]] || (n[g[0]] = {}), void 0 === n[g[0]][s] ? (y = e1.vertices.length, e1.vertices.push(o.v[g[0]].copy()), e1.uvs.push(o.vt[g[1]] ? o.vt[g[1]].slice() : [
+                                                            for(var y, g = c[p[m]], v = g.split("/"), b = 0; b < v.length; b++)v[b] = parseInt(v[b]) - 1;
+                                                            n[g] || (n[g] = {}), void 0 === n[g][s] ? (y = e1.vertices.length, e1.vertices.push(o.v[v[0]].copy()), e1.uvs.push(o.vt[v[1]] ? o.vt[v[1]].slice() : [
                                                                 0,
                                                                 0
-                                                            ]), e1.vertexNormals.push(o.vn[g[2]] ? o.vn[g[2]].copy() : new x.default.Vector), n[g[0]][s] = y, f.push(y), s && r[s] && r[s].diffuseColor && i.add(o.v[g[0]])) : f.push(n[g[0]][s]);
+                                                            ]), e1.vertexNormals.push(o.vn[v[2]] ? o.vn[v[2]].copy() : new x.default.Vector), n[g][s] = y, f.push(y), s && r[s] && r[s].diffuseColor && i.add(o.v[v[0]])) : f.push(n[g][s]);
                                                         }
                                                         if (f[0] !== f[1] && f[0] !== f[2] && f[1] !== f[2]) {
                                                             if (e1.faces.push(f), s && r[s] && r[s].diffuseColor) {
                                                                 a = a = !0;
-                                                                for(var b = r[s].diffuseColor, _ = 0; _ < f.length; _++)e1.vertexColors.push(b[0]), e1.vertexColors.push(b[1]), e1.vertexColors.push(b[2]);
+                                                                for(var j = r[s].diffuseColor, _ = 0; _ < f.length; _++)e1.vertexColors.push(j[0]), e1.vertexColors.push(j[1]), e1.vertexColors.push(j[2]);
                                                             } else l = !0;
                                                         }
                                                     }
@@ -28471,33 +28566,33 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = n;
             },
             {
-                "../core/main": 280,
-                "./p5.Geometry": 332,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.splice": 170,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.promise": 188,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.set": 194,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.match": 198,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.trim": 206,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                "regenerator-runtime/runtime": 257
+                "../core/main": 283,
+                "./p5.Geometry": 335,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.splice": 171,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.promise": 191,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.set": 197,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.match": 201,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.trim": 209,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                "regenerator-runtime/runtime": 260
             }
         ],
-        328: [
+        331: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -28652,30 +28747,30 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = s;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.Texture": 339,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.join": 165,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.Texture": 343,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.join": 166,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        329: [
+        332: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.math.hypot"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.math.hypot"), e1("core-js/modules/es.string.sub"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var j = (e1 = e1("../core/main")) && e1.__esModule ? e1 : {
+                var _ = (e1 = e1("../core/main")) && e1.__esModule ? e1 : {
                     default: e1
                 };
                 function n(e1, t) {
@@ -28684,45 +28779,45 @@ new (0, _p5Default.default)((sketch)=>{
                         o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
                     }
                 }
-                j.default.prototype.camera = function() {
+                _.default.prototype.camera = function() {
                     var e1;
                     this._assert3d("camera");
                     for(var t = arguments.length, r = new Array(t), o = 0; o < t; o++)r[o] = arguments[o];
-                    return j.default._validateParameters("camera", r), (e1 = this._renderer._curCamera).camera.apply(e1, r), this;
-                }, j.default.prototype.perspective = function() {
+                    return _.default._validateParameters("camera", r), (e1 = this._renderer._curCamera).camera.apply(e1, r), this;
+                }, _.default.prototype.perspective = function() {
                     var e1;
                     this._assert3d("perspective");
                     for(var t = arguments.length, r = new Array(t), o = 0; o < t; o++)r[o] = arguments[o];
-                    return j.default._validateParameters("perspective", r), (e1 = this._renderer._curCamera).perspective.apply(e1, r), this;
-                }, j.default.prototype.linePerspective = function(e1) {
-                    if (j.default._validateParameters("linePerspective", arguments), !(this._renderer instanceof j.default.RendererGL)) throw new Error("linePerspective() must be called in WebGL mode.");
+                    return _.default._validateParameters("perspective", r), (e1 = this._renderer._curCamera).perspective.apply(e1, r), this;
+                }, _.default.prototype.linePerspective = function(e1) {
+                    if (_.default._validateParameters("linePerspective", arguments), !(this._renderer instanceof _.default.RendererGL)) throw new Error("linePerspective() must be called in WebGL mode.");
                     if (void 0 === e1) return this._renderer._curCamera.useLinePerspective;
                     this._renderer._curCamera.useLinePerspective = e1;
-                }, j.default.prototype.ortho = function() {
+                }, _.default.prototype.ortho = function() {
                     var e1;
                     this._assert3d("ortho");
                     for(var t = arguments.length, r = new Array(t), o = 0; o < t; o++)r[o] = arguments[o];
-                    return j.default._validateParameters("ortho", r), (e1 = this._renderer._curCamera).ortho.apply(e1, r), this;
-                }, j.default.prototype.frustum = function() {
+                    return _.default._validateParameters("ortho", r), (e1 = this._renderer._curCamera).ortho.apply(e1, r), this;
+                }, _.default.prototype.frustum = function() {
                     var e1;
                     this._assert3d("frustum");
                     for(var t = arguments.length, r = new Array(t), o = 0; o < t; o++)r[o] = arguments[o];
-                    return j.default._validateParameters("frustum", r), (e1 = this._renderer._curCamera).frustum.apply(e1, r), this;
-                }, j.default.prototype.createCamera = function() {
+                    return _.default._validateParameters("frustum", r), (e1 = this._renderer._curCamera).frustum.apply(e1, r), this;
+                }, _.default.prototype.createCamera = function() {
                     this._assert3d("createCamera");
-                    var e1 = new j.default.Camera(this._renderer);
+                    var e1 = new _.default.Camera(this._renderer);
                     return e1._computeCameraDefaultSettings(), e1._setDefaultCamera(), this._renderer._curCamera = e1;
-                }, j.default.Camera = function() {
+                }, _.default.Camera = function() {
                     function t(e1) {
                         if (!(this instanceof t)) throw new TypeError("Cannot call a class as a function");
-                        this._renderer = e1, this.cameraType = "default", this.useLinePerspective = !0, this.cameraMatrix = new j.default.Matrix, this.projMatrix = new j.default.Matrix, this.yScale = 1;
+                        this._renderer = e1, this.cameraType = "default", this.useLinePerspective = !0, this.cameraMatrix = new _.default.Matrix, this.projMatrix = new _.default.Matrix, this.yScale = 1;
                     }
                     var e1, r, o;
                     return e1 = t, r = [
                         {
                             key: "perspective",
                             value: function(e1, t, r, o) {
-                                this.cameraType = 0 < arguments.length ? "custom" : "default", void 0 === e1 ? (e1 = this.defaultCameraFOV, this.cameraFOV = e1) : this.cameraFOV = this._renderer._pInst._toRadians(e1), void 0 === t && (t = this.defaultAspectRatio), void 0 === r && (r = this.defaultCameraNear), void 0 === o && (o = this.defaultCameraFar), r <= 1e-4 && (r = .01, console.log("Avoid perspective near plane values close to or below 0. Setting value to 0.01.")), o < r && console.log("Perspective far plane value is less than near plane value. Nothing will be shown."), this.aspectRatio = t, this.cameraNear = r, this.cameraFar = o, this.projMatrix = j.default.Matrix.identity();
+                                this.cameraType = 0 < arguments.length ? "custom" : "default", void 0 === e1 ? (e1 = this.defaultCameraFOV, this.cameraFOV = e1) : this.cameraFOV = this._renderer._pInst._toRadians(e1), void 0 === t && (t = this.defaultAspectRatio), void 0 === r && (r = this.defaultCameraNear), void 0 === o && (o = this.defaultCameraFar), r <= 1e-4 && (r = .01, console.log("Avoid perspective near plane values close to or below 0. Setting value to 0.01.")), o < r && console.log("Perspective far plane value is less than near plane value. Nothing will be shown."), this.aspectRatio = t, this.cameraNear = r, this.cameraFar = o, this.projMatrix = _.default.Matrix.identity();
                                 var e1 = 1 / Math.tan(this.cameraFOV / 2), n = 1 / (this.cameraNear - this.cameraFar);
                                 this.projMatrix.set(e1 / t, 0, 0, 0, 0, -e1 * this.yScale, 0, 0, 0, 0, (o + r) * n, -1, 0, 0, 2 * o * r * n, 0), this._isActive() && this._renderer.uPMatrix.set(this.projMatrix);
                             }
@@ -28730,9 +28825,8 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "ortho",
                             value: function(e1, t, r, o, n, s) {
-                                void 0 === e1 && (e1 = -this._renderer.width / 2), void 0 === t && (t = +this._renderer.width / 2), void 0 === r && (r = -this._renderer.height / 2), void 0 === o && (o = +this._renderer.height / 2), void 0 === n && (n = 0), void 0 === s && (s = Math.max(this._renderer.width, this._renderer.height) + 800), this.cameraNear = n;
-                                var i = t - e1, a = o - r, l = (this.cameraFar = s) - n, u = 2 / i, c = 2 / a * this.yScale, d = -2 / l, t = -(t + e1) / i, e1 = -(o + r) / a, i = -(s + n) / l;
-                                this.projMatrix = j.default.Matrix.identity(), this.projMatrix.set(u, 0, 0, 0, 0, -c, 0, 0, 0, 0, d, 0, t, e1, i, 1), this._isActive() && this._renderer.uPMatrix.set(this.projMatrix), this.cameraType = "custom";
+                                var i = this.fbo || this._renderer, i = (void 0 === e1 && (e1 = -i.width / 2), void 0 === t && (t = +i.width / 2), void 0 === r && (r = -i.height / 2), void 0 === o && (o = +i.height / 2), void 0 === n && (n = 0), void 0 === s && (s = Math.max(i.width, i.height) + 800), this.cameraNear = n, t - e1), a = o - r, l = (this.cameraFar = s) - n, u = 2 / i, c = 2 / a * this.yScale, d = -2 / l, t = -(t + e1) / i, e1 = -(o + r) / a, i = -(s + n) / l;
+                                this.projMatrix = _.default.Matrix.identity(), this.projMatrix.set(u, 0, 0, 0, 0, -c, 0, 0, 0, 0, d, 0, t, e1, i, 1), this._isActive() && this._renderer.uPMatrix.set(this.projMatrix), this.cameraType = "custom";
                             }
                         },
                         {
@@ -28740,18 +28834,25 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function(e1, t, r, o, n, s) {
                                 void 0 === e1 && (e1 = .05 * -this._renderer.width), void 0 === t && (t = .05 * +this._renderer.width), void 0 === r && (r = .05 * +this._renderer.height), void 0 === o && (o = .05 * -this._renderer.height), void 0 === n && (n = this.defaultCameraNear), void 0 === s && (s = this.defaultCameraFar), this.cameraNear = n;
                                 var i = t - e1, a = o - r, l = (this.cameraFar = s) - n, u = 2 * n / i, c = 2 * n / a * this.yScale, d = -2 * s * n / l, t = (t + e1) / i, e1 = (o + r) / a, i = -(s + n) / l;
-                                this.projMatrix = j.default.Matrix.identity(), this.projMatrix.set(u, 0, 0, 0, 0, -c, 0, 0, t, e1, i, -1, 0, 0, d, 0), this._isActive() && this._renderer.uPMatrix.set(this.projMatrix), this.cameraType = "custom";
+                                this.projMatrix = _.default.Matrix.identity(), this.projMatrix.set(u, 0, 0, 0, 0, -c, 0, 0, t, e1, i, -1, 0, 0, d, 0), this._isActive() && this._renderer.uPMatrix.set(this.projMatrix), this.cameraType = "custom";
                             }
                         },
                         {
                             key: "_rotateView",
                             value: function(e1, t, r, o) {
-                                var n = this.centerX, s = this.centerY, i = this.centerZ, a = (n -= this.eyeX, s -= this.eyeY, i -= this.eyeZ, j.default.Matrix.identity(this._renderer._pInst)), e1 = (a.rotate(this._renderer._pInst._toRadians(e1), t, r, o), [
+                                var n = this.centerX, s = this.centerY, i = this.centerZ, a = (n -= this.eyeX, s -= this.eyeY, i -= this.eyeZ, _.default.Matrix.identity(this._renderer._pInst)), e1 = (a.rotate(this._renderer._pInst._toRadians(e1), t, r, o), [
                                     n * a.mat4[0] + s * a.mat4[4] + i * a.mat4[8],
                                     n * a.mat4[1] + s * a.mat4[5] + i * a.mat4[9],
                                     n * a.mat4[2] + s * a.mat4[6] + i * a.mat4[10]
                                 ]);
                                 e1[0] += this.eyeX, e1[1] += this.eyeY, e1[2] += this.eyeZ, this.camera(this.eyeX, this.eyeY, this.eyeZ, e1[0], e1[1], e1[2], this.upX, this.upY, this.upZ);
+                            }
+                        },
+                        {
+                            key: "roll",
+                            value: function(e1) {
+                                var t = this._getLocalAxes(), e1 = _.default.Quat.fromAxisAngle(this._renderer._pInst._toRadians(e1), t.z[0], t.z[1], t.z[2]).rotateVector(new _.default.Vector(this.upX, this.upY, this.upZ));
+                                this.camera(this.eyeX, this.eyeY, this.eyeZ, this.centerX, this.centerY, this.centerZ, e1.x, e1.y, e1.z);
                             }
                         },
                         {
@@ -28783,7 +28884,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     n,
                                     -t,
                                     -r
-                                ]), this._isActive() && this._renderer.uMVMatrix.set(this.cameraMatrix), this;
+                                ]), this._isActive() && this._renderer.uViewMatrix.set(this.cameraMatrix), this;
                             }
                         },
                         {
@@ -28835,14 +28936,14 @@ new (0, _p5Default.default)((sketch)=>{
                                     var o = r[t];
                                     this[o] = e1[o];
                                 }
-                                this.cameraMatrix = e1.cameraMatrix.copy(), this.projMatrix = e1.projMatrix.copy(), this._isActive() && (this._renderer.uMVMatrix.mat4 = this.cameraMatrix.mat4.slice(), this._renderer.uPMatrix.mat4 = this.projMatrix.mat4.slice());
+                                this.cameraMatrix = e1.cameraMatrix.copy(), this.projMatrix = e1.projMatrix.copy(), this._isActive() && (this._renderer.uModelMatrix.reset(), this._renderer.uViewMatrix.set(this.cameraMatrix), this._renderer.uPMatrix.set(this.projMatrix));
                             }
                         },
                         {
                             key: "slerp",
                             value: function(e1, t, r) {
-                                var o, n, s, i, a, l, u, c, d, h, f, p, m, y, g, v, b, _;
-                                0 === r ? this.set(e1) : 1 === r ? this.set(t) : (0 !== this.projMatrix.mat4[15] && (this.projMatrix.mat4[0] = e1.projMatrix.mat4[0] * Math.pow(t.projMatrix.mat4[0] / e1.projMatrix.mat4[0], r), this.projMatrix.mat4[5] = e1.projMatrix.mat4[5] * Math.pow(t.projMatrix.mat4[5] / e1.projMatrix.mat4[5], r), this._isActive() && (this._renderer.uPMatrix.mat4 = this.projMatrix.mat4.slice())), i = new j.default.Vector(e1.eyeX, e1.eyeY, e1.eyeZ), a = new j.default.Vector(t.eyeX, t.eyeY, t.eyeZ), v = new j.default.Vector(e1.centerX, e1.centerY, e1.centerZ), _ = new j.default.Vector(t.centerX, t.centerY, t.centerZ), s = j.default.Vector.dist(i, v), o = j.default.Vector.dist(a, _), o = s * Math.pow(o / s, r), s = j.default.Vector.sub(i, a), n = 1, 1e-6 < (b = (y = i.copy().sub(a).sub(v).add(_)).magSq()) && (n = j.default.Vector.dot(s, y) / b, n = Math.max(0, Math.min(n, 1))), s = j.default.Vector.lerp(j.default.Vector.lerp(i, v, n), j.default.Vector.lerp(a, _, n), r), y = e1.cameraMatrix.createSubMatrix3x3(), b = t.cameraMatrix.createSubMatrix3x3(), i = y.row(2), v = b.row(2), a = y.row(1), _ = b.row(1), e1 = new j.default.Vector, t = new j.default.Vector, l = new j.default.Vector, u = new j.default.Vector, 1 - (c = .5 * ((y = (b = b.mult3x3(y.copy().transpose3x3())).diagonal())[0] + y[1] + y[2] - 1)) < 1e-7 ? (e1.set(j.default.Vector.lerp(i, v, r)).normalize(), l.set(e1).mult(n * o).add(s), u.set(e1).mult((n - 1) * o).add(s), t.set(j.default.Vector.lerp(a, _, r)).normalize()) : (v = 1 / (1 - c), _ = Math.max(y[0], y[1], y[2]), p = b.mat3[1] + b.mat3[3], m = b.mat3[2] + b.mat3[6], g = b.mat3[5] + b.mat3[7], _ = _ === y[0] ? (h = .5 * p * (v /= d = Math.sqrt((y[0] - c) * v)), f = .5 * m * v, .5 * (b.mat3[7] - b.mat3[5]) / d) : _ === y[1] ? (f = .5 * g * (v /= h = Math.sqrt((y[1] - c) * v)), d = .5 * p * v, .5 * (b.mat3[2] - b.mat3[6]) / h) : (d = .5 * m * (v /= f = Math.sqrt((y[2] - c) * v)), h = .5 * g * v, .5 * (b.mat3[3] - b.mat3[1]) / f), p = r * Math.atan2(_, c), m = Math.cos(p), y = Math.sin(p), (_ = new j.default.Matrix("mat3", [
+                                var o, n, s, i, a, l, u, c, d, h, f, p, m, y, g, v, b, j;
+                                0 === r ? this.set(e1) : 1 === r ? this.set(t) : (0 !== this.projMatrix.mat4[15] && (this.projMatrix.mat4[0] = e1.projMatrix.mat4[0] * Math.pow(t.projMatrix.mat4[0] / e1.projMatrix.mat4[0], r), this.projMatrix.mat4[5] = e1.projMatrix.mat4[5] * Math.pow(t.projMatrix.mat4[5] / e1.projMatrix.mat4[5], r), this._isActive() && (this._renderer.uPMatrix.mat4 = this.projMatrix.mat4.slice())), i = new _.default.Vector(e1.eyeX, e1.eyeY, e1.eyeZ), a = new _.default.Vector(t.eyeX, t.eyeY, t.eyeZ), v = new _.default.Vector(e1.centerX, e1.centerY, e1.centerZ), j = new _.default.Vector(t.centerX, t.centerY, t.centerZ), s = _.default.Vector.dist(i, v), o = _.default.Vector.dist(a, j), o = s * Math.pow(o / s, r), s = _.default.Vector.sub(i, a), n = 1, 1e-6 < (b = (y = i.copy().sub(a).sub(v).add(j)).magSq()) && (n = _.default.Vector.dot(s, y) / b, n = Math.max(0, Math.min(n, 1))), s = _.default.Vector.lerp(_.default.Vector.lerp(i, v, n), _.default.Vector.lerp(a, j, n), r), y = e1.cameraMatrix.createSubMatrix3x3(), b = t.cameraMatrix.createSubMatrix3x3(), i = y.row(2), v = b.row(2), a = y.row(1), j = b.row(1), e1 = new _.default.Vector, t = new _.default.Vector, l = new _.default.Vector, u = new _.default.Vector, 1 - (c = .5 * ((y = (b = b.mult3x3(y.copy().transpose3x3())).diagonal())[0] + y[1] + y[2] - 1)) < 1e-7 ? (e1.set(_.default.Vector.lerp(i, v, r)).normalize(), l.set(e1).mult(n * o).add(s), u.set(e1).mult((n - 1) * o).add(s), t.set(_.default.Vector.lerp(a, j, r)).normalize()) : (v = 1 / (1 - c), j = Math.max(y[0], y[1], y[2]), p = b.mat3[1] + b.mat3[3], m = b.mat3[2] + b.mat3[6], g = b.mat3[5] + b.mat3[7], j = j === y[0] ? (h = .5 * p * (v /= d = Math.sqrt((y[0] - c) * v)), f = .5 * m * v, .5 * (b.mat3[7] - b.mat3[5]) / d) : j === y[1] ? (f = .5 * g * (v /= h = Math.sqrt((y[1] - c) * v)), d = .5 * p * v, .5 * (b.mat3[2] - b.mat3[6]) / h) : (d = .5 * m * (v /= f = Math.sqrt((y[2] - c) * v)), h = .5 * g * v, .5 * (b.mat3[3] - b.mat3[1]) / f), p = r * Math.atan2(j, c), m = Math.cos(p), y = Math.sin(p), (j = new _.default.Matrix("mat3", [
                                     m + (g = 1 - m) * d * d,
                                     g * (v = d * h) + y * f,
                                     g * (b = f * d) - y * h,
@@ -28852,7 +28953,7 @@ new (0, _p5Default.default)((sketch)=>{
                                     g * b + y * h,
                                     g * r - y * d,
                                     m + g * f * f
-                                ])).multiplyVec3(i, e1), l.set(e1).mult(n * o).add(s), u.set(e1).mult((n - 1) * o).add(s), _.multiplyVec3(a, t)), this.camera(l.x, l.y, l.z, u.x, u.y, u.z, t.x, t.y, t.z));
+                                ])).multiplyVec3(i, e1), l.set(e1).mult(n * o).add(s), u.set(e1).mult((n - 1) * o).add(s), j.multiplyVec3(a, t)), this.camera(l.x, l.y, l.z, u.x, u.y, u.z, t.x, t.y, t.z));
                             }
                         },
                         {
@@ -28876,7 +28977,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "copy",
                             value: function() {
-                                var e1 = new j.default.Camera(this._renderer);
+                                var e1 = new _.default.Camera(this._renderer);
                                 return e1.cameraFOV = this.cameraFOV, e1.aspectRatio = this.aspectRatio, e1.eyeX = this.eyeX, e1.eyeY = this.eyeY, e1.eyeZ = this.eyeZ, e1.centerX = this.centerX, e1.centerY = this.centerY, e1.centerZ = this.centerZ, e1.upX = this.upX, e1.upY = this.upY, e1.upZ = this.upZ, e1.cameraNear = this.cameraNear, e1.cameraFar = this.cameraFar, e1.cameraType = this.cameraType, e1.cameraMatrix = this.cameraMatrix.copy(), e1.projMatrix = this.projMatrix.copy(), e1.yScale = this.yScale, e1;
                             }
                         },
@@ -28906,14 +29007,14 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_orbit",
                             value: function(e1, t, r) {
-                                var o = this.eyeX - this.centerX, n = this.eyeY - this.centerY, s = this.eyeZ - this.centerZ, i = Math.hypot(o, n, s), o = new j.default.Vector(o, n, s).normalize(), n = new j.default.Vector(this.upX, this.upY, this.upZ).normalize(), s = j.default.Vector.cross(n, o).normalize(), a = j.default.Vector.cross(s, n), r = ((i = (i *= Math.pow(10, r)) < this.cameraNear ? this.cameraNear : i) > this.cameraFar && (i = this.cameraFar), Math.acos(Math.max(-1, Math.min(1, j.default.Vector.dot(o, n)))) + t), t = e1;
+                                var o = this.eyeX - this.centerX, n = this.eyeY - this.centerY, s = this.eyeZ - this.centerZ, i = Math.hypot(o, n, s), o = new _.default.Vector(o, n, s).normalize(), n = new _.default.Vector(this.upX, this.upY, this.upZ).normalize(), s = _.default.Vector.cross(n, o).normalize(), a = _.default.Vector.cross(s, n), r = ((i = (i *= Math.pow(10, r)) < this.cameraNear ? this.cameraNear : i) > this.cameraFar && (i = this.cameraFar), Math.acos(Math.max(-1, Math.min(1, _.default.Vector.dot(o, n)))) + t), t = e1;
                                 (r <= 0 || r >= Math.PI) && (this.upX *= -1, this.upY *= -1, this.upZ *= -1), n.mult(Math.cos(r)), a.mult(Math.cos(t) * Math.sin(r)), s.mult(Math.sin(t) * Math.sin(r)), o.set(n).add(a).add(s), this.eyeX = i * o.x + this.centerX, this.eyeY = i * o.y + this.centerY, this.eyeZ = i * o.z + this.centerZ, this.camera(this.eyeX, this.eyeY, this.eyeZ, this.centerX, this.centerY, this.centerZ, this.upX, this.upY, this.upZ);
                             }
                         },
                         {
                             key: "_orbitFree",
                             value: function(e1, t, r) {
-                                var o = this.eyeX - this.centerX, n = this.eyeY - this.centerY, s = this.eyeZ - this.centerZ, i = Math.hypot(o, n, s), o = new j.default.Vector(o, n, s).normalize(), n = new j.default.Vector(this.upX, this.upY, this.upZ), s = j.default.Vector.cross(n, o).normalize(), a = j.default.Vector.cross(o, s), l = Math.atan2(t, e1), l = (a.mult(Math.sin(l)), s.mult(Math.cos(l)).add(a), Math.sqrt(e1 * e1 + t * t)), a = j.default.Vector.cross(o, s), e1 = ((i = (i *= Math.pow(10, r)) < this.cameraNear ? this.cameraNear : i) > this.cameraFar && (i = this.cameraFar), Math.cos(l)), t = Math.sin(l), r = n.dot(o), l = n.dot(s), u = r * e1 + l * t, r = -r * t + l * e1, l = n.dot(a);
+                                var o = this.eyeX - this.centerX, n = this.eyeY - this.centerY, s = this.eyeZ - this.centerZ, i = Math.hypot(o, n, s), o = new _.default.Vector(o, n, s).normalize(), n = new _.default.Vector(this.upX, this.upY, this.upZ), s = _.default.Vector.cross(n, o).normalize(), a = _.default.Vector.cross(o, s), l = Math.atan2(t, e1), l = (a.mult(Math.sin(l)), s.mult(Math.cos(l)).add(a), Math.sqrt(e1 * e1 + t * t)), a = _.default.Vector.cross(o, s), e1 = ((i = (i *= Math.pow(10, r)) < this.cameraNear ? this.cameraNear : i) > this.cameraFar && (i = this.cameraFar), Math.cos(l)), t = Math.sin(l), r = n.dot(o), l = n.dot(s), u = r * e1 + l * t, r = -r * t + l * e1, l = n.dot(a);
                                 n.x = u * o.x + r * s.x + l * a.x, n.y = u * o.y + r * s.y + l * a.y, n.z = u * o.z + r * s.z + l * a.z, s.mult(-t), o.mult(e1).add(s).mult(i), this.camera(o.x + this.centerX, o.y + this.centerY, o.z + this.centerZ, this.centerX, this.centerY, this.centerZ, n.x, n.y, n.z);
                             }
                         },
@@ -28924,20 +29025,20 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                         }
                     ], n(e1.prototype, r), o && n(e1, o), t;
-                }(), j.default.prototype.setCamera = function(e1) {
-                    this._renderer._curCamera = e1, this._renderer.uPMatrix.set(e1.projMatrix);
+                }(), _.default.prototype.setCamera = function(e1) {
+                    this._renderer._curCamera = e1, this._renderer.uPMatrix.set(e1.projMatrix), this._renderer.uViewMatrix.set(e1.cameraMatrix);
                 };
-                e1 = j.default.Camera;
+                e1 = _.default.Camera;
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.math.hypot": 175,
-                "core-js/modules/es.string.sub": 205
+                "../core/main": 283,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.math.hypot": 176,
+                "core-js/modules/es.string.sub": 208
             }
         ],
-        330: [
+        333: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.math.log2"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.math.log2"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), Object.defineProperty(r, "__esModule", {
@@ -29019,38 +29120,38 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.math.log2": 176,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.float32-array": 216,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236
+                "../core/main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.math.log2": 177,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.float32-array": 219,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239
             }
         ],
-        331: [
+        334: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -29070,8 +29171,8 @@ new (0, _p5Default.default)((sketch)=>{
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.fill"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.get-prototype-of"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.reflect.construct"), e1("core-js/modules/es.reflect.get"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint8-clamped-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.array.fill"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.get-prototype-of"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint8-clamped-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var f = (j = e1("../core/main")) && j.__esModule ? j : {
-                    default: j
+                var f = (_ = e1("../core/main")) && _.__esModule ? _ : {
+                    default: _
                 }, a = function(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
@@ -29195,7 +29296,7 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                         }
                     ]), o;
-                }(f.default.Camera), _ = (f.default.FramebufferCamera = b, function() {
+                }(f.default.Camera), j = (f.default.FramebufferCamera = b, function() {
                     function r(e1, t) {
                         d(this, r), this.framebuffer = e1, this.property = t;
                     }
@@ -29219,10 +29320,10 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                         }
                     ]), r;
-                }()), j = (f.default.FramebufferTexture = _, function() {
+                }()), _ = (f.default.FramebufferTexture = j, function() {
                     function s(e1) {
                         var t = this, r = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {}, o = (d(this, s), this.target = e1, this.target._renderer.framebuffers.add(this), this._isClipApplied = !1, this.pixels = [], this.format = r.format || a.UNSIGNED_BYTE, this.channels = r.channels || (e1._renderer._pInst._glAttributes.alpha ? a.RGBA : a.RGB), this.useDepth = void 0 === r.depth || r.depth, this.depthFormat = r.depthFormat || a.FLOAT, this.textureFiltering = r.textureFiltering || a.LINEAR, void 0 === r.antialias ? this.antialiasSamples = e1._renderer._pInst._glAttributes.antialias ? 2 : 0 : "number" == typeof r.antialias ? this.antialiasSamples = r.antialias : this.antialiasSamples = r.antialias ? 2 : 0, this.antialias = 0 < this.antialiasSamples, this.antialias && e1.webglVersion !== a.WEBGL2 && (console.warn("Antialiasing is unsupported in a WebGL 1 context"), this.antialias = !1), this.density = r.density || e1.pixelDensity(), e1._renderer.GL);
-                        if (this.gl = o, r.width && r.height ? (n = e1._renderer._adjustDimensions(r.width, r.height), this.width = n.adjustedWidth, this.height = n.adjustedHeight, this.autoSized = !1) : (void 0 === r.width != (void 0 === r.height) && console.warn("Please supply both width and height for a framebuffer to give it a size. Only one was given, so the framebuffer will match the size of its canvas."), this.width = e1.width, this.height = e1.height, this.autoSized = !0), this._checkIfFormatsAvailable(), r.stencil && !this.useDepth && console.warn("A stencil buffer can only be used if also using depth. Since the framebuffer has no depth buffer, the stencil buffer will be ignored."), this.useStencil = this.useDepth && (void 0 === r.stencil || r.stencil), this.framebuffer = o.createFramebuffer(), !this.framebuffer) throw new Error("Unable to create a framebuffer");
+                        if (this.gl = o, r.width && r.height ? (n = e1._renderer._adjustDimensions(r.width, r.height), this.width = n.adjustedWidth, this.height = n.adjustedHeight, this._autoSized = !1) : (void 0 === r.width != (void 0 === r.height) && console.warn("Please supply both width and height for a framebuffer to give it a size. Only one was given, so the framebuffer will match the size of its canvas."), this.width = e1.width, this.height = e1.height, this._autoSized = !0), this._checkIfFormatsAvailable(), r.stencil && !this.useDepth && console.warn("A stencil buffer can only be used if also using depth. Since the framebuffer has no depth buffer, the stencil buffer will be ignored."), this.useStencil = this.useDepth && (void 0 === r.stencil || r.stencil), this.framebuffer = o.createFramebuffer(), !this.framebuffer) throw new Error("Unable to create a framebuffer");
                         if (this.antialias && (this.aaFramebuffer = o.createFramebuffer(), !this.aaFramebuffer)) throw new Error("Unable to create a framebuffer for antialiasing");
                         this._recreateTextures();
                         var n = this.target._renderer._curCamera;
@@ -29234,7 +29335,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "resize",
                             value: function(e1, t) {
-                                this.autoSized = !1;
+                                this._autoSized = !1;
                                 var r = this.target._renderer._adjustDimensions(e1, t);
                                 e1 = r.adjustedWidth, t = r.adjustedHeight, this.width = e1, this.height = t, this._handleResize();
                             }
@@ -29243,14 +29344,14 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "pixelDensity",
                             value: function(e1) {
                                 if (!e1) return this.density;
-                                this.autoSized = !1, this.density = e1, this._handleResize();
+                                this._autoSized = !1, this.density = e1, this._handleResize();
                             }
                         },
                         {
                             key: "autoSized",
                             value: function(e1) {
-                                if (void 0 === e1) return this.autoSized;
-                                this.autoSized = e1, this._handleResize();
+                                if (void 0 === e1) return this._autoSized;
+                                this._autoSized = e1, this._handleResize();
                             }
                         },
                         {
@@ -29283,10 +29384,10 @@ new (0, _p5Default.default)((sketch)=>{
                                     var s = this._glDepthFormat();
                                     e1.bindTexture(e1.TEXTURE_2D, o), e1.texImage2D(e1.TEXTURE_2D, 0, s.internalFormat, this.width * this.density, this.height * this.density, 0, s.format, s.type, null), e1.framebufferTexture2D(e1.FRAMEBUFFER, this.useStencil ? e1.DEPTH_STENCIL_ATTACHMENT : e1.DEPTH_ATTACHMENT, e1.TEXTURE_2D, o, 0), this.depthTexture = o;
                                 }
-                                this.antialias && (this.colorRenderbuffer = e1.createRenderbuffer(), e1.bindRenderbuffer(e1.RENDERBUFFER, this.colorRenderbuffer), e1.renderbufferStorageMultisample(e1.RENDERBUFFER, Math.max(0, Math.min(this.antialiasSamples, e1.getParameter(e1.MAX_SAMPLES))), n.internalFormat, this.width * this.density, this.height * this.density), this.useDepth && (s = this._glDepthFormat(), this.depthRenderbuffer = e1.createRenderbuffer(), e1.bindRenderbuffer(e1.RENDERBUFFER, this.depthRenderbuffer), e1.renderbufferStorageMultisample(e1.RENDERBUFFER, Math.max(0, Math.min(this.antialiasSamples, e1.getParameter(e1.MAX_SAMPLES))), s.internalFormat, this.width * this.density, this.height * this.density)), e1.bindFramebuffer(e1.FRAMEBUFFER, this.aaFramebuffer), e1.framebufferRenderbuffer(e1.FRAMEBUFFER, e1.COLOR_ATTACHMENT0, e1.RENDERBUFFER, this.colorRenderbuffer), this.useDepth && e1.framebufferRenderbuffer(e1.FRAMEBUFFER, this.useStencil ? e1.DEPTH_STENCIL_ATTACHMENT : e1.DEPTH_ATTACHMENT, e1.RENDERBUFFER, this.depthRenderbuffer)), this.useDepth && (this.depth = new _(this, "depthTexture"), o = e1.NEAREST, this.depthP5Texture = new f.default.Texture(this.target._renderer, this.depth, {
+                                this.antialias && (this.colorRenderbuffer = e1.createRenderbuffer(), e1.bindRenderbuffer(e1.RENDERBUFFER, this.colorRenderbuffer), e1.renderbufferStorageMultisample(e1.RENDERBUFFER, Math.max(0, Math.min(this.antialiasSamples, e1.getParameter(e1.MAX_SAMPLES))), n.internalFormat, this.width * this.density, this.height * this.density), this.useDepth && (s = this._glDepthFormat(), this.depthRenderbuffer = e1.createRenderbuffer(), e1.bindRenderbuffer(e1.RENDERBUFFER, this.depthRenderbuffer), e1.renderbufferStorageMultisample(e1.RENDERBUFFER, Math.max(0, Math.min(this.antialiasSamples, e1.getParameter(e1.MAX_SAMPLES))), s.internalFormat, this.width * this.density, this.height * this.density)), e1.bindFramebuffer(e1.FRAMEBUFFER, this.aaFramebuffer), e1.framebufferRenderbuffer(e1.FRAMEBUFFER, e1.COLOR_ATTACHMENT0, e1.RENDERBUFFER, this.colorRenderbuffer), this.useDepth && e1.framebufferRenderbuffer(e1.FRAMEBUFFER, this.useStencil ? e1.DEPTH_STENCIL_ATTACHMENT : e1.DEPTH_ATTACHMENT, e1.RENDERBUFFER, this.depthRenderbuffer)), this.useDepth && (this.depth = new j(this, "depthTexture"), o = e1.NEAREST, this.depthP5Texture = new f.default.Texture(this.target._renderer, this.depth, {
                                     minFilter: o,
                                     magFilter: o
-                                }), this.target._renderer.textures.set(this.depth, this.depthP5Texture)), this.color = new _(this, "colorTexture");
+                                }), this.target._renderer.textures.set(this.depth, this.depthP5Texture)), this.color = new j(this, "colorTexture");
                                 n = this.textureFiltering === a.LINEAR ? e1.LINEAR : e1.NEAREST;
                                 this.colorP5Texture = new f.default.Texture(this.target._renderer, this.color, {
                                     minFilter: n,
@@ -29319,13 +29420,13 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_updateSize",
                             value: function() {
-                                this.autoSized && (this.width = this.target.width, this.height = this.target.height, this.density = this.target.pixelDensity());
+                                this._autoSized && (this.width = this.target.width, this.height = this.target.height, this.density = this.target.pixelDensity());
                             }
                         },
                         {
                             key: "_canvasSizeChanged",
                             value: function() {
-                                this.autoSized && this._handleResize();
+                                this._autoSized && this._handleResize();
                             }
                         },
                         {
@@ -29358,7 +29459,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "begin",
                             value: function() {
-                                this.prevFramebuffer = this.target._renderer.activeFramebuffer(), this.prevFramebuffer && this.prevFramebuffer._beforeEnd(), this.target._renderer.activeFramebuffers.push(this), this._beforeBegin(), this.target.push(), this.target.setCamera(this.defaultCamera), this.target._renderer.uMVMatrix.set(this.target._renderer._curCamera.cameraMatrix);
+                                this.prevFramebuffer = this.target._renderer.activeFramebuffer(), this.prevFramebuffer && this.prevFramebuffer._beforeEnd(), this.target._renderer.activeFramebuffers.push(this), this._beforeBegin(), this.target.push(), this.target.setCamera(this.defaultCamera), this.target.resetMatrix(), this.target._renderer.uViewMatrix.set(this.target._renderer._curCamera.cameraMatrix), this.target._renderer.uModelMatrix.reset(), this.target._renderer._applyStencilTestIfClipping();
                             }
                         },
                         {
@@ -29443,59 +29544,59 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                         }
                     ]), s;
-                }()), e1 = f.default.Framebuffer = j;
+                }()), e1 = f.default.Framebuffer = _;
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.RendererGL": 337,
-                "./p5.Texture": 339,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.reflect.get": 190,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.float32-array": 216,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/es.typed-array.uint8-clamped-array": 240,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.RendererGL": 341,
+                "./p5.Texture": 343,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.reflect.get": 193,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.float32-array": 219,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/es.typed-array.uint8-clamped-array": 243,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        332: [
+        335: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -29512,12 +29613,12 @@ new (0, _p5Default.default)((sketch)=>{
                         return e1 && "function" == typeof Symbol && e1.constructor === Symbol && e1 !== Symbol.prototype ? "symbol" : o(e1);
                     })(e1);
                 }
-                e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.flat"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.unscopables.flat"), e1("core-js/modules/es.map"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.flat"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.unscopables.flat"), e1("core-js/modules/es.map"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
+                e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.flat"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.last-index-of"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.unscopables.flat"), e1("core-js/modules/es.array-buffer.constructor"), e1("core-js/modules/es.map"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.entries"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.flat"), e1("core-js/modules/es.array.for-each"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.last-index-of"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.unscopables.flat"), e1("core-js/modules/es.array-buffer.constructor"), e1("core-js/modules/es.map"), e1("core-js/modules/es.number.constructor"), e1("core-js/modules/es.object.entries"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.string.sub"), e1("core-js/modules/web.dom-collections.for-each"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var m = (s = e1("../core/main")) && s.__esModule ? s : {
+                var F = (s = e1("../core/main")) && s.__esModule ? s : {
                     default: s
-                }, y = function(e1) {
+                }, m = function(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
                         default: e1
@@ -29550,16 +29651,39 @@ new (0, _p5Default.default)((sketch)=>{
                         throw new TypeError("Invalid attempt to spread non-iterable instance");
                     }();
                 }
+                function U(e1, t) {
+                    return function(e1) {
+                        if (Array.isArray(e1)) return e1;
+                    }(e1) || function(e1, t) {
+                        if (Symbol.iterator in Object(e1) || "[object Arguments]" === Object.prototype.toString.call(e1)) {
+                            var r = [], o = !0, n = !1, s = void 0;
+                            try {
+                                for(var i, a = e1[Symbol.iterator](); !(o = (i = a.next()).done) && (r.push(i.value), !t || r.length !== t); o = !0);
+                            } catch (e1) {
+                                n = !0, s = e1;
+                            } finally{
+                                try {
+                                    o || null == a.return || a.return();
+                                } finally{
+                                    if (n) throw s;
+                                }
+                            }
+                            return r;
+                        }
+                    }(e1, t) || function() {
+                        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+                    }();
+                }
                 function n(e1, t) {
                     for(var r = 0; r < t.length; r++){
                         var o = t[r];
                         o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
                     }
                 }
-                m.default.Geometry = function() {
+                F.default.Geometry = function() {
                     function o(e1, t, r) {
                         if (!(this instanceof o)) throw new TypeError("Cannot call a class as a function");
-                        this.vertices = [], this.boundingBoxCache = null, this.lineVertices = new m.default.DataArray, this.lineTangentsIn = new m.default.DataArray, this.lineTangentsOut = new m.default.DataArray, this.lineSides = new m.default.DataArray, this.vertexNormals = [], this.faces = [], this.uvs = [], this.edges = [], this.vertexColors = [], this.vertexStrokeColors = [], this.lineVertexColors = new m.default.DataArray, this.detailX = void 0 !== e1 ? e1 : 1, this.detailY = void 0 !== t ? t : 1, this.dirtyFlags = {}, this._hasFillTransparency = void 0, this._hasStrokeTransparency = void 0, r instanceof Function && r.call(this);
+                        this.vertices = [], this.boundingBoxCache = null, this.lineVertices = new F.default.DataArray, this.lineTangentsIn = new F.default.DataArray, this.lineTangentsOut = new F.default.DataArray, this.lineSides = new F.default.DataArray, this.vertexNormals = [], this.faces = [], this.uvs = [], this.edges = [], this.vertexColors = [], this.vertexStrokeColors = [], this.lineVertexColors = new F.default.DataArray, this.detailX = void 0 !== e1 ? e1 : 1, this.detailY = void 0 !== t ? t : 1, this.dirtyFlags = {}, this._hasFillTransparency = void 0, this._hasStrokeTransparency = void 0, r instanceof Function && r.call(this);
                     }
                     var e1, t, r;
                     return e1 = o, t = [
@@ -29567,11 +29691,11 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "calculateBoundingBox",
                             value: function() {
                                 if (!this.boundingBoxCache) {
-                                    for(var e1 = new m.default.Vector(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE), t = new m.default.Vector(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE), r = 0; r < this.vertices.length; r++){
+                                    for(var e1 = new F.default.Vector(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE), t = new F.default.Vector(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE), r = 0; r < this.vertices.length; r++){
                                         var o = this.vertices[r];
                                         e1.x = Math.min(e1.x, o.x), e1.y = Math.min(e1.y, o.y), e1.z = Math.min(e1.z, o.z), t.x = Math.max(t.x, o.x), t.y = Math.max(t.y, o.y), t.z = Math.max(t.z, o.z);
                                     }
-                                    var n = new m.default.Vector(t.x - e1.x, t.y - e1.y, t.z - e1.z), s = new m.default.Vector((e1.x + t.x) / 2, (e1.y + t.y) / 2, (e1.z + t.z) / 2);
+                                    var n = new F.default.Vector(t.x - e1.x, t.y - e1.y, t.z - e1.z), s = new F.default.Vector((e1.x + t.x) / 2, (e1.y + t.y) / 2, (e1.z + t.z) / 2);
                                     this.boundingBoxCache = {
                                         min: e1,
                                         max: t,
@@ -29621,6 +29745,98 @@ new (0, _p5Default.default)((sketch)=>{
                             }
                         },
                         {
+                            key: "saveObj",
+                            value: function() {
+                                var r = this, e1 = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : "model.obj", o = "";
+                                if (this.vertices.forEach(function(e1) {
+                                    o += "v ".concat(e1.x, " ").concat(e1.y, " ").concat(e1.z, "\n");
+                                }), this.uvs && 0 < this.uvs.length) for(var t = 0; t < this.uvs.length; t += 2)o += "vt ".concat(this.uvs[t], " ").concat(this.uvs[t + 1], "\n");
+                                this.vertexNormals && 0 < this.vertexNormals.length && this.vertexNormals.forEach(function(e1) {
+                                    o += "vn ".concat(e1.x, " ").concat(e1.y, " ").concat(e1.z, "\n");
+                                }), this.faces.forEach(function(e1) {
+                                    var t = "f";
+                                    e1.forEach(function(e1) {
+                                        t = t + " " + (e1 + 1), (0 < r.vertexNormals.length || 0 < r.uvs.length) && (t += "/", 0 < r.uvs.length && (t += e1 + 1), t += "/", 0 < r.vertexNormals.length && (t += e1 + 1));
+                                    }), o += t + "\n";
+                                });
+                                var n = new Blob([
+                                    o
+                                ], {
+                                    type: "text/plain"
+                                });
+                                F.default.prototype.downloadFile(n, e1, "obj");
+                            }
+                        },
+                        {
+                            key: "saveStl",
+                            value: function() {
+                                var e1 = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : "model.stl", t = (1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {}).binary, t = void 0 !== t && t, r = e1.substring(0, e1.lastIndexOf(".")), o = [], n = !0, s = !1, i = void 0;
+                                try {
+                                    for(var a, l = this.faces[Symbol.iterator](); !(n = (a = l.next()).done); n = !0){
+                                        var u = a.value, c = F.default.Vector.sub(this.vertices[u[1]], this.vertices[u[0]]), d = F.default.Vector.sub(this.vertices[u[2]], this.vertices[u[0]]), h = c.y * d.z - c.z * d.y, f = c.z * d.x - c.x * d.z, p = c.x * d.y - c.y * d.x;
+                                        o.push(new F.default.Vector(h, f, p).normalize());
+                                    }
+                                } catch (e1) {
+                                    s = !0, i = e1;
+                                } finally{
+                                    try {
+                                        n || null == l.return || l.return();
+                                    } finally{
+                                        if (s) throw i;
+                                    }
+                                }
+                                if (t) {
+                                    var m, y = 80, s = 2 * this.faces.length + 3 * this.faces.length * 16 + 80 + 4, i = new ArrayBuffer(s);
+                                    (m = new DataView(i)).setUint32(y, this.faces.length, !0), y += 4;
+                                    for(var g = 0, v = Object.entries(this.faces); g < v.length; g++){
+                                        var b = U(v[g], 2), j = b[0], b = b[1], j = o[j], _ = (m.setFloat32(y, j.x, !0), y += 4, m.setFloat32(y, j.y, !0), y += 4, m.setFloat32(y, j.z, !0), y += 4, !0), j = !1, x = void 0;
+                                        try {
+                                            for(var w, S = b[Symbol.iterator](); !(_ = (w = S.next()).done); _ = !0){
+                                                var I = w.value, T = this.vertices[I];
+                                                m.setFloat32(y, T.x, !0), y += 4, m.setFloat32(y, T.y, !0), y += 4, m.setFloat32(y, T.z, !0), y += 4;
+                                            }
+                                        } catch (e1) {
+                                            j = !0, x = e1;
+                                        } finally{
+                                            try {
+                                                _ || null == S.return || S.return();
+                                            } finally{
+                                                if (j) throw x;
+                                            }
+                                        }
+                                        m.setUint16(y, 0, !0), y += 2;
+                                    }
+                                } else {
+                                    m = "solid " + r + "\n";
+                                    for(var E = 0, M = Object.entries(this.faces); E < M.length; E++){
+                                        var k = U(M[E], 2), O = k[0], k = k[1], O = o[O], C = (m = m + (" facet norm " + O.x + " " + O.y + " " + O.z + "\n") + "  outer loop\n", !0), O = !1, A = void 0;
+                                        try {
+                                            for(var P, L = k[Symbol.iterator](); !(C = (P = L.next()).done); C = !0){
+                                                var D = P.value, R = this.vertices[D];
+                                                m += "   vertex " + R.x + " " + R.y + " " + R.z + "\n";
+                                            }
+                                        } catch (e1) {
+                                            O = !0, A = e1;
+                                        } finally{
+                                            try {
+                                                C || null == L.return || L.return();
+                                            } finally{
+                                                if (O) throw A;
+                                            }
+                                        }
+                                        m = m + "  endloop\n" + " endfacet\n";
+                                    }
+                                    m += "endsolid " + r + "\n";
+                                }
+                                t = new Blob([
+                                    m
+                                ], {
+                                    type: "text/plain"
+                                });
+                                F.default.prototype.downloadFile(t, e1, "stl");
+                            }
+                        },
+                        {
                             key: "flipU",
                             value: function() {
                                 this.uvs = this.uvs.flat().map(function(e1, t) {
@@ -29655,15 +29871,15 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_getFaceNormal",
                             value: function(e1) {
-                                var e1 = this.faces[e1], t = this.vertices[e1[0]], r = this.vertices[e1[1]], e1 = this.vertices[e1[2]], r = m.default.Vector.sub(r, t), e1 = m.default.Vector.sub(e1, t), t = m.default.Vector.cross(r, e1), o = m.default.Vector.mag(t), r = o / (m.default.Vector.mag(r) * m.default.Vector.mag(e1));
+                                var e1 = this.faces[e1], t = this.vertices[e1[0]], r = this.vertices[e1[1]], e1 = this.vertices[e1[2]], r = F.default.Vector.sub(r, t), e1 = F.default.Vector.sub(e1, t), t = F.default.Vector.cross(r, e1), o = F.default.Vector.mag(t), r = o / (F.default.Vector.mag(r) * F.default.Vector.mag(e1));
                                 return 0 === r || isNaN(r) ? (console.warn("p5.Geometry.prototype._getFaceNormal:", "face has colinear sides or a repeated vertex"), t) : (1 < r && (r = 1), t.mult(Math.asin(r) / o));
                             }
                         },
                         {
                             key: "computeNormals",
                             value: function() {
-                                var e1, s = this, t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : y.FLAT, r = (1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {}).roundToPrecision, i = this.vertexNormals, o = this.vertices, n = this.faces;
-                                if (t === y.SMOOTH) {
+                                var e1, s = this, t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : m.FLAT, r = (1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {}).roundToPrecision, i = this.vertexNormals, o = this.vertices, n = this.faces;
+                                if (t === m.SMOOTH) {
                                     for(var a = {}, l = [], u = Math.pow(10, void 0 === r ? 3 : r), c = function(e1) {
                                         return Math.round(e1 * u) / u;
                                     }, d = function(e1) {
@@ -29684,7 +29900,7 @@ new (0, _p5Default.default)((sketch)=>{
                                         }
                                     }), this.vertices = o = l;
                                 }
-                                for(e1 = i.length = 0; e1 < o.length; ++e1)i.push(new m.default.Vector);
+                                for(e1 = i.length = 0; e1 < o.length; ++e1)i.push(new F.default.Vector);
                                 for(n.forEach(function(e1, t) {
                                     for(var r = s._getFaceNormal(t), o = 0; o < 3; ++o){
                                         var n = e1[o];
@@ -29698,7 +29914,7 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "averageNormals",
                             value: function() {
                                 for(var e1 = 0; e1 <= this.detailY; e1++){
-                                    var t = this.detailX + 1, r = m.default.Vector.add(this.vertexNormals[e1 * t], this.vertexNormals[e1 * t + this.detailX]), r = m.default.Vector.div(r, 2);
+                                    var t = this.detailX + 1, r = F.default.Vector.add(this.vertexNormals[e1 * t], this.vertexNormals[e1 * t + this.detailX]), r = F.default.Vector.div(r, 2);
                                     this.vertexNormals[e1 * t] = r, this.vertexNormals[e1 * t + this.detailX] = r;
                                 }
                                 return this;
@@ -29707,11 +29923,11 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "averagePoleNormals",
                             value: function() {
-                                for(var e1 = new m.default.Vector(0, 0, 0), t = 0; t < this.detailX; t++)e1.add(this.vertexNormals[t]);
-                                for(var e1 = m.default.Vector.div(e1, this.detailX), r = 0; r < this.detailX; r++)this.vertexNormals[r] = e1;
-                                e1 = new m.default.Vector(0, 0, 0);
+                                for(var e1 = new F.default.Vector(0, 0, 0), t = 0; t < this.detailX; t++)e1.add(this.vertexNormals[t]);
+                                for(var e1 = F.default.Vector.div(e1, this.detailX), r = 0; r < this.detailX; r++)this.vertexNormals[r] = e1;
+                                e1 = new F.default.Vector(0, 0, 0);
                                 for(var o = this.vertices.length - 1; o > this.vertices.length - 1 - this.detailX; o--)e1.add(this.vertexNormals[o]);
-                                e1 = m.default.Vector.div(e1, this.detailX);
+                                e1 = F.default.Vector.div(e1, this.detailX);
                                 for(var n = this.vertices.length - 1; n > this.vertices.length - 1 - this.detailX; n--)this.vertexNormals[n] = e1;
                                 return this;
                             }
@@ -29765,8 +29981,8 @@ new (0, _p5Default.default)((sketch)=>{
                                 var f = !0, p = !1, m = void 0;
                                 try {
                                     for(var y, g = t.values()[Symbol.iterator](); !(f = (y = g.next()).done); f = !0){
-                                        var v = y.value, b = v.point, _ = v.dir, j = v.color;
-                                        this._addCap(b, _, j);
+                                        var v = y.value, b = v.point, j = v.dir, _ = v.color;
+                                        this._addCap(b, j, _);
                                     }
                                 } catch (e1) {
                                     p = !0, m = e1;
@@ -29815,50 +30031,53 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function() {
                                 if (0 < this.vertices.length) {
                                     for(var e1 = this.vertices[0].copy(), t = this.vertices[0].copy(), r = 0; r < this.vertices.length; r++)e1.x = Math.max(e1.x, this.vertices[r].x), t.x = Math.min(t.x, this.vertices[r].x), e1.y = Math.max(e1.y, this.vertices[r].y), t.y = Math.min(t.y, this.vertices[r].y), e1.z = Math.max(e1.z, this.vertices[r].z), t.z = Math.min(t.z, this.vertices[r].z);
-                                    for(var o = m.default.Vector.lerp(e1, t, .5), n = m.default.Vector.sub(e1, t), s = 200 / Math.max(Math.max(n.x, n.y), n.z), i = 0; i < this.vertices.length; i++)this.vertices[i].sub(o), this.vertices[i].mult(s);
+                                    for(var o = F.default.Vector.lerp(e1, t, .5), n = F.default.Vector.sub(e1, t), s = 200 / Math.max(Math.max(n.x, n.y), n.z), i = 0; i < this.vertices.length; i++)this.vertices[i].sub(o), this.vertices[i].mult(s);
                                 }
                                 return this;
                             }
                         }
                     ], n(e1.prototype, t), r && n(e1, r), o;
                 }();
-                var s = m.default.Geometry;
+                var s = F.default.Geometry;
                 r.default = s;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.flat": 159,
-                "core-js/modules/es.array.for-each": 160,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.unscopables.flat": 172,
-                "core-js/modules/es.map": 174,
-                "core-js/modules/es.number.constructor": 178,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.set": 194,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.sub": 205,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.for-each": 242,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array-buffer.constructor": 152,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.flat": 160,
+                "core-js/modules/es.array.for-each": 161,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.last-index-of": 167,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.unscopables.flat": 173,
+                "core-js/modules/es.map": 175,
+                "core-js/modules/es.number.constructor": 179,
+                "core-js/modules/es.object.entries": 184,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.set": 197,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.sub": 208,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.for-each": 245,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        333: [
+        336: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), Object.defineProperty(r, "__esModule", {
                     value: !0
                 }), r.default = void 0;
-                var C = (e1 = e1("../core/main")) && e1.__esModule ? e1 : {
+                var O = (e1 = e1("../core/main")) && e1.__esModule ? e1 : {
                     default: e1
                 };
                 function n(e1, t) {
@@ -29867,14 +30086,14 @@ new (0, _p5Default.default)((sketch)=>{
                         o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
                     }
                 }
-                var s = Array, O = function(e1) {
+                var s = Array, C = function(e1) {
                     return Array.isArray(e1);
-                }, e1 = ("undefined" != typeof Float32Array && (s = Float32Array, O = function(e1) {
+                }, e1 = ("undefined" != typeof Float32Array && (s = Float32Array, C = function(e1) {
                     return Array.isArray(e1) || e1 instanceof Float32Array;
-                }), C.default.Matrix = function() {
+                }), O.default.Matrix = function() {
                     function r() {
                         var e1 = this, t = r;
-                        if (e1 instanceof t) return arguments.length && ((e1 = arguments.length - 1) < 0 || arguments.length <= e1 ? void 0 : arguments[e1]) instanceof C.default && (this.p5 = (t = arguments.length - 1) < 0 || arguments.length <= t ? void 0 : arguments[t]), "mat3" === (arguments.length <= 0 ? void 0 : arguments[0]) ? this.mat3 = Array.isArray(arguments.length <= 1 ? void 0 : arguments[1]) ? arguments.length <= 1 ? void 0 : arguments[1] : new s([
+                        if (e1 instanceof t) return arguments.length && ((e1 = arguments.length - 1) < 0 || arguments.length <= e1 ? void 0 : arguments[e1]) instanceof O.default && (this.p5 = (t = arguments.length - 1) < 0 || arguments.length <= t ? void 0 : arguments[t]), "mat3" === (arguments.length <= 0 ? void 0 : arguments[0]) ? this.mat3 = Array.isArray(arguments.length <= 1 ? void 0 : arguments[1]) ? arguments.length <= 1 ? void 0 : arguments[1] : new s([
                             1,
                             0,
                             0,
@@ -29909,15 +30128,48 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "identity",
                             value: function(e1) {
-                                return new C.default.Matrix(e1);
+                                return new O.default.Matrix(e1);
                             }
                         }
                     ], t = [
                         {
+                            key: "reset",
+                            value: function() {
+                                return this.mat3 ? this.mat3.set([
+                                    1,
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    0,
+                                    0,
+                                    0,
+                                    1
+                                ]) : this.mat4 && this.mat4.set([
+                                    1,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    1
+                                ]), this;
+                            }
+                        },
+                        {
                             key: "set",
                             value: function(e1) {
                                 var t = arguments;
-                                if (e1 instanceof C.default.Matrix ? t = e1.mat4 : O(e1) && (t = e1), 16 !== t.length) C.default._friendlyError("Expected 16 values but received ".concat(t.length, "."), "p5.Matrix.set");
+                                if (e1 instanceof O.default.Matrix ? t = e1.mat4 : C(e1) && (t = e1), 16 !== t.length) O.default._friendlyError("Expected 16 values but received ".concat(t.length, "."), "p5.Matrix.set");
                                 else for(var r = 0; r < 16; r++)this.mat4[r] = t[r];
                                 return this;
                             }
@@ -29925,29 +30177,29 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "get",
                             value: function() {
-                                return new C.default.Matrix(this.mat4, this.p5);
+                                return new O.default.Matrix(this.mat4, this.p5);
                             }
                         },
                         {
                             key: "copy",
                             value: function() {
                                 var e1;
-                                return void 0 !== this.mat3 ? ((e1 = new C.default.Matrix("mat3", this.p5)).mat3[0] = this.mat3[0], e1.mat3[1] = this.mat3[1], e1.mat3[2] = this.mat3[2], e1.mat3[3] = this.mat3[3], e1.mat3[4] = this.mat3[4], e1.mat3[5] = this.mat3[5], e1.mat3[6] = this.mat3[6], e1.mat3[7] = this.mat3[7], e1.mat3[8] = this.mat3[8]) : ((e1 = new C.default.Matrix(this.p5)).mat4[0] = this.mat4[0], e1.mat4[1] = this.mat4[1], e1.mat4[2] = this.mat4[2], e1.mat4[3] = this.mat4[3], e1.mat4[4] = this.mat4[4], e1.mat4[5] = this.mat4[5], e1.mat4[6] = this.mat4[6], e1.mat4[7] = this.mat4[7], e1.mat4[8] = this.mat4[8], e1.mat4[9] = this.mat4[9], e1.mat4[10] = this.mat4[10], e1.mat4[11] = this.mat4[11], e1.mat4[12] = this.mat4[12], e1.mat4[13] = this.mat4[13], e1.mat4[14] = this.mat4[14], e1.mat4[15] = this.mat4[15]), e1;
+                                return void 0 !== this.mat3 ? ((e1 = new O.default.Matrix("mat3", this.p5)).mat3[0] = this.mat3[0], e1.mat3[1] = this.mat3[1], e1.mat3[2] = this.mat3[2], e1.mat3[3] = this.mat3[3], e1.mat3[4] = this.mat3[4], e1.mat3[5] = this.mat3[5], e1.mat3[6] = this.mat3[6], e1.mat3[7] = this.mat3[7], e1.mat3[8] = this.mat3[8]) : ((e1 = new O.default.Matrix(this.p5)).mat4[0] = this.mat4[0], e1.mat4[1] = this.mat4[1], e1.mat4[2] = this.mat4[2], e1.mat4[3] = this.mat4[3], e1.mat4[4] = this.mat4[4], e1.mat4[5] = this.mat4[5], e1.mat4[6] = this.mat4[6], e1.mat4[7] = this.mat4[7], e1.mat4[8] = this.mat4[8], e1.mat4[9] = this.mat4[9], e1.mat4[10] = this.mat4[10], e1.mat4[11] = this.mat4[11], e1.mat4[12] = this.mat4[12], e1.mat4[13] = this.mat4[13], e1.mat4[14] = this.mat4[14], e1.mat4[15] = this.mat4[15]), e1;
                             }
                         },
                         {
                             key: "transpose",
                             value: function(e1) {
                                 var t, r, o, n, s, i;
-                                return e1 instanceof C.default.Matrix ? (t = e1.mat4[1], r = e1.mat4[2], o = e1.mat4[3], n = e1.mat4[6], s = e1.mat4[7], i = e1.mat4[11], this.mat4[0] = e1.mat4[0], this.mat4[1] = e1.mat4[4], this.mat4[2] = e1.mat4[8], this.mat4[3] = e1.mat4[12], this.mat4[4] = t, this.mat4[5] = e1.mat4[5], this.mat4[6] = e1.mat4[9], this.mat4[7] = e1.mat4[13], this.mat4[8] = r, this.mat4[9] = n, this.mat4[10] = e1.mat4[10], this.mat4[11] = e1.mat4[14], this.mat4[12] = o, this.mat4[13] = s, this.mat4[14] = i, this.mat4[15] = e1.mat4[15]) : O(e1) && (t = e1[1], r = e1[2], o = e1[3], n = e1[6], s = e1[7], i = e1[11], this.mat4[0] = e1[0], this.mat4[1] = e1[4], this.mat4[2] = e1[8], this.mat4[3] = e1[12], this.mat4[4] = t, this.mat4[5] = e1[5], this.mat4[6] = e1[9], this.mat4[7] = e1[13], this.mat4[8] = r, this.mat4[9] = n, this.mat4[10] = e1[10], this.mat4[11] = e1[14], this.mat4[12] = o, this.mat4[13] = s, this.mat4[14] = i, this.mat4[15] = e1[15]), this;
+                                return e1 instanceof O.default.Matrix ? (t = e1.mat4[1], r = e1.mat4[2], o = e1.mat4[3], n = e1.mat4[6], s = e1.mat4[7], i = e1.mat4[11], this.mat4[0] = e1.mat4[0], this.mat4[1] = e1.mat4[4], this.mat4[2] = e1.mat4[8], this.mat4[3] = e1.mat4[12], this.mat4[4] = t, this.mat4[5] = e1.mat4[5], this.mat4[6] = e1.mat4[9], this.mat4[7] = e1.mat4[13], this.mat4[8] = r, this.mat4[9] = n, this.mat4[10] = e1.mat4[10], this.mat4[11] = e1.mat4[14], this.mat4[12] = o, this.mat4[13] = s, this.mat4[14] = i, this.mat4[15] = e1.mat4[15]) : C(e1) && (t = e1[1], r = e1[2], o = e1[3], n = e1[6], s = e1[7], i = e1[11], this.mat4[0] = e1[0], this.mat4[1] = e1[4], this.mat4[2] = e1[8], this.mat4[3] = e1[12], this.mat4[4] = t, this.mat4[5] = e1[5], this.mat4[6] = e1[9], this.mat4[7] = e1[13], this.mat4[8] = r, this.mat4[9] = n, this.mat4[10] = e1[10], this.mat4[11] = e1[14], this.mat4[12] = o, this.mat4[13] = s, this.mat4[14] = i, this.mat4[15] = e1[15]), this;
                             }
                         },
                         {
                             key: "invert",
                             value: function(e1) {
-                                e1 instanceof C.default.Matrix ? (t = e1.mat4[0], r = e1.mat4[1], o = e1.mat4[2], n = e1.mat4[3], s = e1.mat4[4], i = e1.mat4[5], a = e1.mat4[6], l = e1.mat4[7], u = e1.mat4[8], c = e1.mat4[9], d = e1.mat4[10], h = e1.mat4[11], f = e1.mat4[12], p = e1.mat4[13], m = e1.mat4[14], y = e1.mat4[15]) : O(e1) && (t = e1[0], r = e1[1], o = e1[2], n = e1[3], s = e1[4], i = e1[5], a = e1[6], l = e1[7], u = e1[8], c = e1[9], d = e1[10], h = e1[11], f = e1[12], p = e1[13], m = e1[14], y = e1[15]);
-                                var t, r, o, n, s, i, a, l, u, c, d, h, f, p, m, y, e1 = t * i - r * s, g = t * a - o * s, v = t * l - n * s, b = r * a - o * i, _ = r * l - n * i, j = o * l - n * a, x = u * p - c * f, w = u * m - d * f, S = u * y - h * f, T = c * m - d * p, E = c * y - h * p, M = d * y - h * m, k = e1 * M - g * E + v * T + b * S - _ * w + j * x;
-                                return k ? (this.mat4[0] = (i * M - a * E + l * T) * (k = 1 / k), this.mat4[1] = (o * E - r * M - n * T) * k, this.mat4[2] = (p * j - m * _ + y * b) * k, this.mat4[3] = (d * _ - c * j - h * b) * k, this.mat4[4] = (a * S - s * M - l * w) * k, this.mat4[5] = (t * M - o * S + n * w) * k, this.mat4[6] = (m * v - f * j - y * g) * k, this.mat4[7] = (u * j - d * v + h * g) * k, this.mat4[8] = (s * E - i * S + l * x) * k, this.mat4[9] = (r * S - t * E - n * x) * k, this.mat4[10] = (f * _ - p * v + y * e1) * k, this.mat4[11] = (c * v - u * _ - h * e1) * k, this.mat4[12] = (i * w - s * T - a * x) * k, this.mat4[13] = (t * T - r * w + o * x) * k, this.mat4[14] = (p * g - f * b - m * e1) * k, this.mat4[15] = (u * b - c * g + d * e1) * k, this) : null;
+                                e1 instanceof O.default.Matrix ? (t = e1.mat4[0], r = e1.mat4[1], o = e1.mat4[2], n = e1.mat4[3], s = e1.mat4[4], i = e1.mat4[5], a = e1.mat4[6], l = e1.mat4[7], u = e1.mat4[8], c = e1.mat4[9], d = e1.mat4[10], h = e1.mat4[11], f = e1.mat4[12], p = e1.mat4[13], m = e1.mat4[14], y = e1.mat4[15]) : C(e1) && (t = e1[0], r = e1[1], o = e1[2], n = e1[3], s = e1[4], i = e1[5], a = e1[6], l = e1[7], u = e1[8], c = e1[9], d = e1[10], h = e1[11], f = e1[12], p = e1[13], m = e1[14], y = e1[15]);
+                                var t, r, o, n, s, i, a, l, u, c, d, h, f, p, m, y, e1 = t * i - r * s, g = t * a - o * s, v = t * l - n * s, b = r * a - o * i, j = r * l - n * i, _ = o * l - n * a, x = u * p - c * f, w = u * m - d * f, S = u * y - h * f, T = c * m - d * p, E = c * y - h * p, M = d * y - h * m, k = e1 * M - g * E + v * T + b * S - j * w + _ * x;
+                                return k ? (this.mat4[0] = (i * M - a * E + l * T) * (k = 1 / k), this.mat4[1] = (o * E - r * M - n * T) * k, this.mat4[2] = (p * _ - m * j + y * b) * k, this.mat4[3] = (d * j - c * _ - h * b) * k, this.mat4[4] = (a * S - s * M - l * w) * k, this.mat4[5] = (t * M - o * S + n * w) * k, this.mat4[6] = (m * v - f * _ - y * g) * k, this.mat4[7] = (u * _ - d * v + h * g) * k, this.mat4[8] = (s * E - i * S + l * x) * k, this.mat4[9] = (r * S - t * E - n * x) * k, this.mat4[10] = (f * j - p * v + y * e1) * k, this.mat4[11] = (c * v - u * j - h * e1) * k, this.mat4[12] = (i * w - s * T - a * x) * k, this.mat4[13] = (t * T - r * w + o * x) * k, this.mat4[14] = (p * g - f * b - m * e1) * k, this.mat4[15] = (u * b - c * g + d * e1) * k, this) : null;
                             }
                         },
                         {
@@ -29967,7 +30219,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "inverseTranspose",
                             value: function(e1) {
-                                e1 = e1.mat4, void 0 === this.mat3 ? C.default._friendlyError("sorry, this function only works with mat3") : (this.mat3[0] = e1[0], this.mat3[1] = e1[1], this.mat3[2] = e1[2], this.mat3[3] = e1[4], this.mat3[4] = e1[5], this.mat3[5] = e1[6], this.mat3[6] = e1[8], this.mat3[7] = e1[9], this.mat3[8] = e1[10]), e1 = this.invert3x3();
+                                e1 = e1.mat4, void 0 === this.mat3 ? O.default._friendlyError("sorry, this function only works with mat3") : (this.mat3[0] = e1[0], this.mat3[1] = e1[1], this.mat3[2] = e1[2], this.mat3[3] = e1[4], this.mat3[4] = e1[5], this.mat3[5] = e1[6], this.mat3[6] = e1[8], this.mat3[7] = e1[9], this.mat3[8] = e1[10]), e1 = this.invert3x3();
                                 if (e1) e1.transpose3x3(this.mat3);
                                 else for(var t = 0; t < 9; t++)this.mat3[t] = 0;
                                 return this;
@@ -29985,8 +30237,8 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function(e1) {
                                 var t;
                                 if (e1 === this || e1 === this.mat4) t = this.copy().mat4;
-                                else if (e1 instanceof C.default.Matrix) t = e1.mat4;
-                                else if (O(e1)) t = e1;
+                                else if (e1 instanceof O.default.Matrix) t = e1.mat4;
+                                else if (C(e1)) t = e1;
                                 else {
                                     if (16 !== arguments.length) return;
                                     t = arguments;
@@ -30000,8 +30252,8 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function(e1) {
                                 var t;
                                 if (e1 === this || e1 === this.mat4) t = this.copy().mat4;
-                                else if (e1 instanceof C.default.Matrix) t = e1.mat4;
-                                else if (O(e1)) t = e1;
+                                else if (e1 instanceof O.default.Matrix) t = e1.mat4;
+                                else if (C(e1)) t = e1;
                                 else {
                                     if (16 !== arguments.length) return;
                                     t = arguments;
@@ -30013,15 +30265,15 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "scale",
                             value: function(e1, t, r) {
-                                return e1 instanceof C.default.Vector ? (t = e1.y, r = e1.z, e1 = e1.x) : e1 instanceof Array && (t = e1[1], r = e1[2], e1 = e1[0]), this.mat4[0] *= e1, this.mat4[1] *= e1, this.mat4[2] *= e1, this.mat4[3] *= e1, this.mat4[4] *= t, this.mat4[5] *= t, this.mat4[6] *= t, this.mat4[7] *= t, this.mat4[8] *= r, this.mat4[9] *= r, this.mat4[10] *= r, this.mat4[11] *= r, this;
+                                return e1 instanceof O.default.Vector ? (t = e1.y, r = e1.z, e1 = e1.x) : e1 instanceof Array && (t = e1[1], r = e1[2], e1 = e1[0]), this.mat4[0] *= e1, this.mat4[1] *= e1, this.mat4[2] *= e1, this.mat4[3] *= e1, this.mat4[4] *= t, this.mat4[5] *= t, this.mat4[6] *= t, this.mat4[7] *= t, this.mat4[8] *= r, this.mat4[9] *= r, this.mat4[10] *= r, this.mat4[11] *= r, this;
                             }
                         },
                         {
                             key: "rotate",
                             value: function(e1, t, r, o) {
-                                t instanceof C.default.Vector ? (r = t.y, o = t.z, t = t.x) : t instanceof Array && (r = t[1], o = t[2], t = t[0]);
-                                var n = Math.sqrt(t * t + r * r + o * o), n = (t *= 1 / n, r *= 1 / n, o *= 1 / n, this.mat4[0]), s = this.mat4[1], i = this.mat4[2], a = this.mat4[3], l = this.mat4[4], u = this.mat4[5], c = this.mat4[6], d = this.mat4[7], h = this.mat4[8], f = this.mat4[9], p = this.mat4[10], m = this.mat4[11], y = Math.sin(e1), e1 = Math.cos(e1), g = 1 - e1, v = t * t * g + e1, b = r * t * g + o * y, _ = o * t * g - r * y, j = t * r * g - o * y, x = r * r * g + e1, w = o * r * g + t * y, S = t * o * g + r * y, r = r * o * g - t * y, t = o * o * g + e1;
-                                return this.mat4[0] = n * v + l * b + h * _, this.mat4[1] = s * v + u * b + f * _, this.mat4[2] = i * v + c * b + p * _, this.mat4[3] = a * v + d * b + m * _, this.mat4[4] = n * j + l * x + h * w, this.mat4[5] = s * j + u * x + f * w, this.mat4[6] = i * j + c * x + p * w, this.mat4[7] = a * j + d * x + m * w, this.mat4[8] = n * S + l * r + h * t, this.mat4[9] = s * S + u * r + f * t, this.mat4[10] = i * S + c * r + p * t, this.mat4[11] = a * S + d * r + m * t, this;
+                                t instanceof O.default.Vector ? (r = t.y, o = t.z, t = t.x) : t instanceof Array && (r = t[1], o = t[2], t = t[0]);
+                                var n = Math.sqrt(t * t + r * r + o * o), n = (t *= 1 / n, r *= 1 / n, o *= 1 / n, this.mat4[0]), s = this.mat4[1], i = this.mat4[2], a = this.mat4[3], l = this.mat4[4], u = this.mat4[5], c = this.mat4[6], d = this.mat4[7], h = this.mat4[8], f = this.mat4[9], p = this.mat4[10], m = this.mat4[11], y = Math.sin(e1), e1 = Math.cos(e1), g = 1 - e1, v = t * t * g + e1, b = r * t * g + o * y, j = o * t * g - r * y, _ = t * r * g - o * y, x = r * r * g + e1, w = o * r * g + t * y, S = t * o * g + r * y, r = r * o * g - t * y, t = o * o * g + e1;
+                                return this.mat4[0] = n * v + l * b + h * j, this.mat4[1] = s * v + u * b + f * j, this.mat4[2] = i * v + c * b + p * j, this.mat4[3] = a * v + d * b + m * j, this.mat4[4] = n * _ + l * x + h * w, this.mat4[5] = s * _ + u * x + f * w, this.mat4[6] = i * _ + c * x + p * w, this.mat4[7] = a * _ + d * x + m * w, this.mat4[8] = n * S + l * r + h * t, this.mat4[9] = s * S + u * r + f * t, this.mat4[10] = i * S + c * r + p * t, this.mat4[11] = a * S + d * r + m * t, this;
                             }
                         },
                         {
@@ -30074,21 +30326,21 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "multiplyPoint",
                             value: function(e1) {
                                 var t = e1.x, r = e1.y, e1 = e1.z, t = this.multiplyVec4(t, r, e1, 1);
-                                return new C.default.Vector(t[0], t[1], t[2]);
+                                return new O.default.Vector(t[0], t[1], t[2]);
                             }
                         },
                         {
                             key: "multiplyAndNormalizePoint",
                             value: function(e1) {
                                 var t = e1.x, r = e1.y, e1 = e1.z, t = this.multiplyVec4(t, r, e1, 1);
-                                return t[0] /= t[3], t[1] /= t[3], t[2] /= t[3], new C.default.Vector(t[0], t[1], t[2]);
+                                return t[0] /= t[3], t[1] /= t[3], t[2] /= t[3], new O.default.Vector(t[0], t[1], t[2]);
                             }
                         },
                         {
                             key: "multiplyDirection",
                             value: function(e1) {
                                 var t = e1.x, r = e1.y, e1 = e1.z, t = this.multiplyVec4(t, r, e1, 0);
-                                return new C.default.Vector(t[0], t[1], t[2]);
+                                return new O.default.Vector(t[0], t[1], t[2]);
                             }
                         },
                         {
@@ -30096,8 +30348,8 @@ new (0, _p5Default.default)((sketch)=>{
                             value: function(e1) {
                                 var t;
                                 if (e1 === this || e1 === this.mat3) t = this.copy().mat3;
-                                else if (e1 instanceof C.default.Matrix) t = e1.mat3;
-                                else if (O(e1)) t = e1;
+                                else if (e1 instanceof O.default.Matrix) t = e1.mat3;
+                                else if (C(e1)) t = e1;
                                 else {
                                     if (9 !== arguments.length) return;
                                     t = arguments;
@@ -30109,13 +30361,13 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "column",
                             value: function(e1) {
-                                return new C.default.Vector(this.mat3[3 * e1], this.mat3[3 * e1 + 1], this.mat3[3 * e1 + 2]);
+                                return new O.default.Vector(this.mat3[3 * e1], this.mat3[3 * e1 + 1], this.mat3[3 * e1 + 2]);
                             }
                         },
                         {
                             key: "row",
                             value: function(e1) {
-                                return new C.default.Vector(this.mat3[e1], this.mat3[e1 + 3], this.mat3[e1 + 6]);
+                                return new O.default.Vector(this.mat3[e1], this.mat3[e1 + 3], this.mat3[e1 + 6]);
                             }
                         },
                         {
@@ -30142,45 +30394,108 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "createSubMatrix3x3",
                             value: function() {
-                                var e1 = new C.default.Matrix("mat3");
+                                var e1 = new O.default.Matrix("mat3");
                                 return e1.mat3[0] = this.mat4[0], e1.mat3[1] = this.mat4[1], e1.mat3[2] = this.mat4[2], e1.mat3[3] = this.mat4[4], e1.mat3[4] = this.mat4[5], e1.mat3[5] = this.mat4[6], e1.mat3[6] = this.mat4[8], e1.mat3[7] = this.mat4[9], e1.mat3[8] = this.mat4[10], e1;
                             }
                         }
                     ], n(e1.prototype, t), o && n(e1, o), r;
-                }(), C.default.Matrix);
+                }(), O.default.Matrix);
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.float32-array": 216,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236
+                "../core/main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.float32-array": 219,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239
             }
         ],
-        334: [
+        337: [
+            function(e1, t, r) {
+                "use strict";
+                Object.defineProperty(r, "__esModule", {
+                    value: !0
+                }), r.default = void 0;
+                var s = (e1 = e1("../core/main")) && e1.__esModule ? e1 : {
+                    default: e1
+                };
+                function o(e1, t) {
+                    for(var r = 0; r < t.length; r++){
+                        var o = t[r];
+                        o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e1, o.key, o);
+                    }
+                }
+                s.default.Quat = function() {
+                    function n(e1, t, r, o) {
+                        if (!(this instanceof n)) throw new TypeError("Cannot call a class as a function");
+                        this.w = e1, this.vec = new s.default.Vector(t, r, o);
+                    }
+                    var e1, t, r;
+                    return e1 = n, r = [
+                        {
+                            key: "fromAxisAngle",
+                            value: function(e1, t, r, o) {
+                                var n = Math.cos(e1 / 2), t = new s.default.Vector(t, r, o).normalize().mult(Math.sin(e1 / 2));
+                                return new s.default.Quat(n, t.x, t.y, t.z);
+                            }
+                        }
+                    ], t = [
+                        {
+                            key: "conjugate",
+                            value: function() {
+                                return new s.default.Quat(this.w, -this.vec.x, -this.vec.y, -this.vec.z);
+                            }
+                        },
+                        {
+                            key: "multiply",
+                            value: function(e1) {
+                                return new s.default.Quat(this.w * e1.w - this.vec.x * e1.vec.x - this.vec.y * e1.vec.y - this.vec.z - e1.vec.z, this.w * e1.vec.x + this.vec.x * e1.w + this.vec.y * e1.vec.z - this.vec.z * e1.vec.y, this.w * e1.vec.y - this.vec.x * e1.vec.z + this.vec.y * e1.w + this.vec.z * e1.vec.x, this.w * e1.vec.z + this.vec.x * e1.vec.y - this.vec.y * e1.vec.x + this.vec.z * e1.w);
+                            }
+                        },
+                        {
+                            key: "rotateVector",
+                            value: function(e1) {
+                                return new s.default.Vector.mult(e1, this.w * this.w - this.vec.dot(this.vec)).add(s.default.Vector.mult(this.vec, 2 * e1.dot(this.vec))).add(s.default.Vector.mult(this.vec, 2 * this.w).cross(e1)).clampToZero();
+                            }
+                        },
+                        {
+                            key: "rotateBy",
+                            value: function(e1) {
+                                return e1.multiply(this).multiply(e1.conjugate()).vec.clampToZero();
+                            }
+                        }
+                    ], o(e1.prototype, t), r && o(e1, r), n;
+                }();
+                e1 = s.default.Quat;
+                r.default = e1;
+            },
+            {
+                "../core/main": 283
+            }
+        ],
+        338: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.map"), Object.defineProperty(r, "__esModule", {
@@ -30215,11 +30530,11 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.map": 167
+                "../core/main": 283,
+                "core-js/modules/es.array.map": 168
             }
         ],
-        335: [
+        339: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -30463,29 +30778,29 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = n;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.RenderBuffer": 334,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.find-index": 157,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.map": 174,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.RenderBuffer": 338,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.find-index": 158,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.map": 175,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        336: [
+        340: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -30594,11 +30909,11 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     return this.geometryBuilder && this.geometryBuilder.addRetained(r), this;
                 }, a.default.RendererGL.prototype.drawBuffersScaled = function(e1, t, r, o) {
-                    var n = this.uMVMatrix.copy();
+                    var n = this.uModelMatrix.copy();
                     try {
-                        this.uMVMatrix.scale(t, r, o), this.drawBuffers(e1);
+                        this.uModelMatrix.scale(t, r, o), this.drawBuffers(e1);
                     } finally{
-                        this.uMVMatrix = n;
+                        this.uModelMatrix = n;
                     }
                 }, a.default.RendererGL.prototype._drawArrays = function(e1, t) {
                     return this.GL.drawArrays(e1, 0, this.retainedMode.geometry[t].lineVertexCount), this;
@@ -30616,51 +30931,51 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = s;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.RenderBuffer": 334,
-                "./p5.RendererGL": 337,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.some": 169,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.float32-array": 216,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint16-array": 237,
-                "core-js/modules/es.typed-array.uint32-array": 238,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.RenderBuffer": 338,
+                "./p5.RendererGL": 341,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.some": 170,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.float32-array": 219,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint16-array": 240,
+                "core-js/modules/es.typed-array.uint32-array": 241,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        337: [
+        341: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -30679,7 +30994,7 @@ new (0, _p5Default.default)((sketch)=>{
                 }
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.copy-within"), e1("core-js/modules/es.array.every"), e1("core-js/modules/es.array.fill"), e1("core-js/modules/es.array.flat"), e1("core-js/modules/es.array.flat-map"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.array.unscopables.flat"), e1("core-js/modules/es.array.unscopables.flat-map"), e1("core-js/modules/es.map"), e1("core-js/modules/es.object.assign"), e1("core-js/modules/es.object.get-own-property-descriptor"), e1("core-js/modules/es.object.get-prototype-of"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.reflect.construct"), e1("core-js/modules/es.reflect.get"), e1("core-js/modules/es.regexp.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.float64-array"), e1("core-js/modules/es.typed-array.int16-array"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint16-array"), e1("core-js/modules/es.typed-array.uint32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/es.weak-map"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.concat"), e1("core-js/modules/es.array.copy-within"), e1("core-js/modules/es.array.every"), e1("core-js/modules/es.array.fill"), e1("core-js/modules/es.array.flat"), e1("core-js/modules/es.array.flat-map"), e1("core-js/modules/es.array.from"), e1("core-js/modules/es.array.includes"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.map"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.array.unscopables.flat"), e1("core-js/modules/es.array.unscopables.flat-map"), e1("core-js/modules/es.map"), e1("core-js/modules/es.object.assign"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.set"), e1("core-js/modules/es.string.includes"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/es.typed-array.float32-array"), e1("core-js/modules/es.typed-array.float64-array"), e1("core-js/modules/es.typed-array.int16-array"), e1("core-js/modules/es.typed-array.uint8-array"), e1("core-js/modules/es.typed-array.uint16-array"), e1("core-js/modules/es.typed-array.uint32-array"), e1("core-js/modules/es.typed-array.copy-within"), e1("core-js/modules/es.typed-array.every"), e1("core-js/modules/es.typed-array.fill"), e1("core-js/modules/es.typed-array.filter"), e1("core-js/modules/es.typed-array.find"), e1("core-js/modules/es.typed-array.find-index"), e1("core-js/modules/es.typed-array.for-each"), e1("core-js/modules/es.typed-array.includes"), e1("core-js/modules/es.typed-array.index-of"), e1("core-js/modules/es.typed-array.iterator"), e1("core-js/modules/es.typed-array.join"), e1("core-js/modules/es.typed-array.last-index-of"), e1("core-js/modules/es.typed-array.map"), e1("core-js/modules/es.typed-array.reduce"), e1("core-js/modules/es.typed-array.reduce-right"), e1("core-js/modules/es.typed-array.reverse"), e1("core-js/modules/es.typed-array.set"), e1("core-js/modules/es.typed-array.slice"), e1("core-js/modules/es.typed-array.some"), e1("core-js/modules/es.typed-array.sort"), e1("core-js/modules/es.typed-array.subarray"), e1("core-js/modules/es.typed-array.to-locale-string"), e1("core-js/modules/es.typed-array.to-string"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
                     value: !0
-                }), r.readPixelsWebGL = C, r.readPixelWebGL = O, r.default = void 0;
+                }), r.readPixelsWebGL = O, r.readPixelWebGL = C, r.default = void 0;
                 var g = n(e1("../core/main")), l = function(e1) {
                     if (e1 && e1.__esModule) return e1;
                     if (null === e1 || "object" !== i(e1) && "function" != typeof e1) return {
@@ -30760,7 +31075,7 @@ new (0, _p5Default.default)((sketch)=>{
                         return e1.__proto__ || Object.getPrototypeOf(e1);
                     })(e1);
                 }
-                function _(e1, t, r) {
+                function j(e1, t, r) {
                     t in e1 ? Object.defineProperty(e1, t, {
                         value: r,
                         enumerable: !0,
@@ -30771,10 +31086,10 @@ new (0, _p5Default.default)((sketch)=>{
                 function s(e1, t) {
                     T += "#define STROKE_CAP_".concat(e1, " ").concat(t, "\n"), w[l[e1]] = t;
                 }
-                function j(e1, t) {
+                function _(e1, t) {
                     T += "#define STROKE_JOIN_".concat(e1, " ").concat(t, "\n"), S[l[e1]] = t;
                 }
-                var x, w = {}, S = {}, T = "", e1 = (s("ROUND", 0), s("PROJECT", 1), s("SQUARE", 2), j("ROUND", 0), j("MITER", 1), j("BEVEL", 2), '#define PI 3.141592\n\nprecision highp float;\nprecision highp int;\n\nuniform mat4 uViewMatrix;\n\nuniform bool uUseLighting;\n\nuniform int uAmbientLightCount;\nuniform vec3 uAmbientColor[5];\nuniform mat3 uCameraRotation;\nuniform int uDirectionalLightCount;\nuniform vec3 uLightingDirection[5];\nuniform vec3 uDirectionalDiffuseColors[5];\nuniform vec3 uDirectionalSpecularColors[5];\n\nuniform int uPointLightCount;\nuniform vec3 uPointLightLocation[5];\nuniform vec3 uPointLightDiffuseColors[5];	\nuniform vec3 uPointLightSpecularColors[5];\n\nuniform int uSpotLightCount;\nuniform float uSpotLightAngle[5];\nuniform float uSpotLightConc[5];\nuniform vec3 uSpotLightDiffuseColors[5];\nuniform vec3 uSpotLightSpecularColors[5];\nuniform vec3 uSpotLightLocation[5];\nuniform vec3 uSpotLightDirection[5];\n\nuniform bool uSpecular;\nuniform float uShininess;\nuniform float metallic;\n\nuniform float uConstantAttenuation;\nuniform float uLinearAttenuation;\nuniform float uQuadraticAttenuation;\n\n// setting from  _setImageLightUniforms()\n// boolean to initiate the calculateImageDiffuse and calculateImageSpecular\nuniform bool uUseImageLight;\n// texture for use in calculateImageDiffuse\nuniform sampler2D environmentMapDiffused;\n// texture for use in calculateImageSpecular\nuniform sampler2D environmentMapSpecular;\n// roughness for use in calculateImageSpecular\nuniform float levelOfDetail;\n\nconst float specularFactor = 2.0;\nconst float diffuseFactor = 0.73;\n\nstruct LightResult {\n  float specular;\n  float diffuse;\n};\n\nfloat _phongSpecular(\n  vec3 lightDirection,\n  vec3 viewDirection,\n  vec3 surfaceNormal,\n  float shininess) {\n\n  vec3 R = reflect(lightDirection, surfaceNormal);\n  return pow(max(0.0, dot(R, viewDirection)), shininess);\n}\n\nfloat _lambertDiffuse(vec3 lightDirection, vec3 surfaceNormal) {\n  return max(0.0, dot(-lightDirection, surfaceNormal));\n}\n\nLightResult _light(vec3 viewDirection, vec3 normal, vec3 lightVector) {\n\n  vec3 lightDir = normalize(lightVector);\n\n  //compute our diffuse & specular terms\n  LightResult lr;\n  float specularIntensity = mix(1.0, 0.4, metallic);\n  float diffuseIntensity = mix(1.0, 0.1, metallic);\n  if (uSpecular)\n    lr.specular = (_phongSpecular(lightDir, viewDirection, normal, uShininess)) * specularIntensity;\n    lr.diffuse = _lambertDiffuse(lightDir, normal) * diffuseIntensity;\n  return lr;\n}\n\n// converts the range of "value" from [min1 to max1] to [min2 to max2]\nfloat map(float value, float min1, float max1, float min2, float max2) {\n  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);\n}\n\nvec2 mapTextureToNormal( vec3 v ){\n  // x = r sin(phi) cos(theta)   \n  // y = r cos(phi)  \n  // z = r sin(phi) sin(theta)\n  float phi = acos( v.y );\n  // if phi is 0, then there are no x, z components\n  float theta = 0.0;\n  // else \n  theta = acos(v.x / sin(phi));\n  float sinTheta = v.z / sin(phi);\n  if (sinTheta < 0.0) {\n    // Turn it into -theta, but in the 0-2PI range\n    theta = 2.0 * PI - theta;\n  }\n  theta = theta / (2.0 * 3.14159);\n  phi = phi / 3.14159 ;\n  \n  vec2 angles = vec2( fract(theta + 0.25), 1.0 - phi );\n  return angles;\n}\n\n\nvec3 calculateImageDiffuse( vec3 vNormal, vec3 vViewPosition ){\n  // make 2 seperate builds \n  vec3 worldCameraPosition =  vec3(0.0, 0.0, 0.0);  // hardcoded world camera position\n  vec3 worldNormal = normalize(vNormal * uCameraRotation);\n  vec2 newTexCoor = mapTextureToNormal( worldNormal );\n  vec4 texture = TEXTURE( environmentMapDiffused, newTexCoor );\n  // this is to make the darker sections more dark\n  // png and jpg usually flatten the brightness so it is to reverse that\n  return mix(smoothstep(vec3(0.0), vec3(1.0), texture.xyz), vec3(0.0), metallic);\n}\n\nvec3 calculateImageSpecular( vec3 vNormal, vec3 vViewPosition ){\n  vec3 worldCameraPosition =  vec3(0.0, 0.0, 0.0);\n  vec3 worldNormal = normalize(vNormal);\n  vec3 lightDirection = normalize( vViewPosition - worldCameraPosition );\n  vec3 R = reflect(lightDirection, worldNormal) * uCameraRotation;\n  vec2 newTexCoor = mapTextureToNormal( R );\n#ifdef WEBGL2\n  vec4 outColor = textureLod(environmentMapSpecular, newTexCoor, levelOfDetail);\n#else\n  vec4 outColor = TEXTURE(environmentMapSpecular, newTexCoor);\n#endif\n  // this is to make the darker sections more dark\n  // png and jpg usually flatten the brightness so it is to reverse that\n  return mix(\n    pow(outColor.xyz, vec3(10)),\n    pow(outColor.xyz, vec3(1.2)),\n    metallic \n  );\n}\n\nvoid totalLight(\n  vec3 modelPosition,\n  vec3 normal,\n  out vec3 totalDiffuse,\n  out vec3 totalSpecular\n) {\n\n  totalSpecular = vec3(0.0);\n\n  if (!uUseLighting) {\n    totalDiffuse = vec3(1.0);\n    return;\n  }\n\n  totalDiffuse = vec3(0.0);\n\n  vec3 viewDirection = normalize(-modelPosition);\n\n  for (int j = 0; j < 5; j++) {\n    if (j < uDirectionalLightCount) {\n      vec3 lightVector = (uViewMatrix * vec4(uLightingDirection[j], 0.0)).xyz;\n      vec3 lightColor = uDirectionalDiffuseColors[j];\n      vec3 specularColor = uDirectionalSpecularColors[j];\n      LightResult result = _light(viewDirection, normal, lightVector);\n      totalDiffuse += result.diffuse * lightColor;\n      totalSpecular += result.specular * lightColor * specularColor;\n    }\n\n    if (j < uPointLightCount) {\n      vec3 lightPosition = (uViewMatrix * vec4(uPointLightLocation[j], 1.0)).xyz;\n      vec3 lightVector = modelPosition - lightPosition;\n      //calculate attenuation\n      float lightDistance = length(lightVector);\n      float lightFalloff = 1.0 / (uConstantAttenuation + lightDistance * uLinearAttenuation + (lightDistance * lightDistance) * uQuadraticAttenuation);\n      vec3 lightColor = lightFalloff * uPointLightDiffuseColors[j];\n      vec3 specularColor = lightFalloff * uPointLightSpecularColors[j];\n\n      LightResult result = _light(viewDirection, normal, lightVector);\n      totalDiffuse += result.diffuse * lightColor;\n      totalSpecular += result.specular * lightColor * specularColor;\n    }\n\n    if(j < uSpotLightCount) {\n      vec3 lightPosition = (uViewMatrix * vec4(uSpotLightLocation[j], 1.0)).xyz;\n      vec3 lightVector = modelPosition - lightPosition;\n    \n      float lightDistance = length(lightVector);\n      float lightFalloff = 1.0 / (uConstantAttenuation + lightDistance * uLinearAttenuation + (lightDistance * lightDistance) * uQuadraticAttenuation);\n\n      vec3 lightDirection = (uViewMatrix * vec4(uSpotLightDirection[j], 0.0)).xyz;\n      float spotDot = dot(normalize(lightVector), normalize(lightDirection));\n      float spotFalloff;\n      if(spotDot < uSpotLightAngle[j]) {\n        spotFalloff = 0.0;\n      }\n      else {\n        spotFalloff = pow(spotDot, uSpotLightConc[j]);\n      }\n      lightFalloff *= spotFalloff;\n\n      vec3 lightColor = uSpotLightDiffuseColors[j];\n      vec3 specularColor = uSpotLightSpecularColors[j];\n     \n      LightResult result = _light(viewDirection, normal, lightVector);\n      \n      totalDiffuse += result.diffuse * lightColor * lightFalloff;\n      totalSpecular += result.specular * lightColor * specularColor * lightFalloff;\n    }\n  }\n\n  if( uUseImageLight ){\n    totalDiffuse += calculateImageDiffuse(normal, modelPosition);\n    totalSpecular += calculateImageSpecular(normal, modelPosition);\n  }\n\n  totalDiffuse *= diffuseFactor;\n  totalSpecular *= specularFactor;\n}\n'), E = {
+                var x, w = {}, S = {}, T = "", e1 = (s("ROUND", 0), s("PROJECT", 1), s("SQUARE", 2), _("ROUND", 0), _("MITER", 1), _("BEVEL", 2), '#define PI 3.141592\n\nprecision highp float;\nprecision highp int;\n\nuniform mat4 uViewMatrix;\n\nuniform bool uUseLighting;\n\nuniform int uAmbientLightCount;\nuniform vec3 uAmbientColor[5];\nuniform mat3 uCameraRotation;\nuniform int uDirectionalLightCount;\nuniform vec3 uLightingDirection[5];\nuniform vec3 uDirectionalDiffuseColors[5];\nuniform vec3 uDirectionalSpecularColors[5];\n\nuniform int uPointLightCount;\nuniform vec3 uPointLightLocation[5];\nuniform vec3 uPointLightDiffuseColors[5];	\nuniform vec3 uPointLightSpecularColors[5];\n\nuniform int uSpotLightCount;\nuniform float uSpotLightAngle[5];\nuniform float uSpotLightConc[5];\nuniform vec3 uSpotLightDiffuseColors[5];\nuniform vec3 uSpotLightSpecularColors[5];\nuniform vec3 uSpotLightLocation[5];\nuniform vec3 uSpotLightDirection[5];\n\nuniform bool uSpecular;\nuniform float uShininess;\nuniform float metallic;\n\nuniform float uConstantAttenuation;\nuniform float uLinearAttenuation;\nuniform float uQuadraticAttenuation;\n\n// setting from  _setImageLightUniforms()\n// boolean to initiate the calculateImageDiffuse and calculateImageSpecular\nuniform bool uUseImageLight;\n// texture for use in calculateImageDiffuse\nuniform sampler2D environmentMapDiffused;\n// texture for use in calculateImageSpecular\nuniform sampler2D environmentMapSpecular;\n// roughness for use in calculateImageSpecular\nuniform float levelOfDetail;\n\nconst float specularFactor = 2.0;\nconst float diffuseFactor = 0.73;\n\nstruct LightResult {\n  float specular;\n  float diffuse;\n};\n\nfloat _phongSpecular(\n  vec3 lightDirection,\n  vec3 viewDirection,\n  vec3 surfaceNormal,\n  float shininess) {\n\n  vec3 R = reflect(lightDirection, surfaceNormal);\n  return pow(max(0.0, dot(R, viewDirection)), shininess);\n}\n\nfloat _lambertDiffuse(vec3 lightDirection, vec3 surfaceNormal) {\n  return max(0.0, dot(-lightDirection, surfaceNormal));\n}\n\nLightResult _light(vec3 viewDirection, vec3 normal, vec3 lightVector) {\n\n  vec3 lightDir = normalize(lightVector);\n\n  //compute our diffuse & specular terms\n  LightResult lr;\n  float specularIntensity = mix(1.0, 0.4, metallic);\n  float diffuseIntensity = mix(1.0, 0.1, metallic);\n  if (uSpecular)\n    lr.specular = (_phongSpecular(lightDir, viewDirection, normal, uShininess)) * specularIntensity;\n    lr.diffuse = _lambertDiffuse(lightDir, normal) * diffuseIntensity;\n  return lr;\n}\n\n// converts the range of "value" from [min1 to max1] to [min2 to max2]\nfloat map(float value, float min1, float max1, float min2, float max2) {\n  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);\n}\n\nvec2 mapTextureToNormal( vec3 v ){\n  // x = r sin(phi) cos(theta)   \n  // y = r cos(phi)  \n  // z = r sin(phi) sin(theta)\n  float phi = acos( v.y );\n  // if phi is 0, then there are no x, z components\n  float theta = 0.0;\n  // else \n  theta = acos(v.x / sin(phi));\n  float sinTheta = v.z / sin(phi);\n  if (sinTheta < 0.0) {\n    // Turn it into -theta, but in the 0-2PI range\n    theta = 2.0 * PI - theta;\n  }\n  theta = theta / (2.0 * 3.14159);\n  phi = phi / 3.14159 ;\n  \n  vec2 angles = vec2( fract(theta + 0.25), 1.0 - phi );\n  return angles;\n}\n\n\nvec3 calculateImageDiffuse( vec3 vNormal, vec3 vViewPosition ){\n  // make 2 seperate builds \n  vec3 worldCameraPosition =  vec3(0.0, 0.0, 0.0);  // hardcoded world camera position\n  vec3 worldNormal = normalize(vNormal * uCameraRotation);\n  vec2 newTexCoor = mapTextureToNormal( worldNormal );\n  vec4 texture = TEXTURE( environmentMapDiffused, newTexCoor );\n  // this is to make the darker sections more dark\n  // png and jpg usually flatten the brightness so it is to reverse that\n  return mix(smoothstep(vec3(0.0), vec3(1.0), texture.xyz), vec3(0.0), metallic);\n}\n\nvec3 calculateImageSpecular( vec3 vNormal, vec3 vViewPosition ){\n  vec3 worldCameraPosition =  vec3(0.0, 0.0, 0.0);\n  vec3 worldNormal = normalize(vNormal);\n  vec3 lightDirection = normalize( vViewPosition - worldCameraPosition );\n  vec3 R = reflect(lightDirection, worldNormal) * uCameraRotation;\n  vec2 newTexCoor = mapTextureToNormal( R );\n#ifdef WEBGL2\n  vec4 outColor = textureLod(environmentMapSpecular, newTexCoor, levelOfDetail);\n#else\n  vec4 outColor = TEXTURE(environmentMapSpecular, newTexCoor);\n#endif\n  // this is to make the darker sections more dark\n  // png and jpg usually flatten the brightness so it is to reverse that\n  return mix(\n    pow(outColor.xyz, vec3(10)),\n    pow(outColor.xyz, vec3(1.2)),\n    metallic \n  );\n}\n\nvoid totalLight(\n  vec3 modelPosition,\n  vec3 normal,\n  out vec3 totalDiffuse,\n  out vec3 totalSpecular\n) {\n\n  totalSpecular = vec3(0.0);\n\n  if (!uUseLighting) {\n    totalDiffuse = vec3(1.0);\n    return;\n  }\n\n  totalDiffuse = vec3(0.0);\n\n  vec3 viewDirection = normalize(-modelPosition);\n\n  for (int j = 0; j < 5; j++) {\n    if (j < uDirectionalLightCount) {\n      vec3 lightVector = (uViewMatrix * vec4(uLightingDirection[j], 0.0)).xyz;\n      vec3 lightColor = uDirectionalDiffuseColors[j];\n      vec3 specularColor = uDirectionalSpecularColors[j];\n      LightResult result = _light(viewDirection, normal, lightVector);\n      totalDiffuse += result.diffuse * lightColor;\n      totalSpecular += result.specular * lightColor * specularColor;\n    }\n\n    if (j < uPointLightCount) {\n      vec3 lightPosition = (uViewMatrix * vec4(uPointLightLocation[j], 1.0)).xyz;\n      vec3 lightVector = modelPosition - lightPosition;\n      //calculate attenuation\n      float lightDistance = length(lightVector);\n      float lightFalloff = 1.0 / (uConstantAttenuation + lightDistance * uLinearAttenuation + (lightDistance * lightDistance) * uQuadraticAttenuation);\n      vec3 lightColor = lightFalloff * uPointLightDiffuseColors[j];\n      vec3 specularColor = lightFalloff * uPointLightSpecularColors[j];\n\n      LightResult result = _light(viewDirection, normal, lightVector);\n      totalDiffuse += result.diffuse * lightColor;\n      totalSpecular += result.specular * lightColor * specularColor;\n    }\n\n    if(j < uSpotLightCount) {\n      vec3 lightPosition = (uViewMatrix * vec4(uSpotLightLocation[j], 1.0)).xyz;\n      vec3 lightVector = modelPosition - lightPosition;\n    \n      float lightDistance = length(lightVector);\n      float lightFalloff = 1.0 / (uConstantAttenuation + lightDistance * uLinearAttenuation + (lightDistance * lightDistance) * uQuadraticAttenuation);\n\n      vec3 lightDirection = (uViewMatrix * vec4(uSpotLightDirection[j], 0.0)).xyz;\n      float spotDot = dot(normalize(lightVector), normalize(lightDirection));\n      float spotFalloff;\n      if(spotDot < uSpotLightAngle[j]) {\n        spotFalloff = 0.0;\n      }\n      else {\n        spotFalloff = pow(spotDot, uSpotLightConc[j]);\n      }\n      lightFalloff *= spotFalloff;\n\n      vec3 lightColor = uSpotLightDiffuseColors[j];\n      vec3 specularColor = uSpotLightSpecularColors[j];\n     \n      LightResult result = _light(viewDirection, normal, lightVector);\n      \n      totalDiffuse += result.diffuse * lightColor * lightFalloff;\n      totalSpecular += result.specular * lightColor * specularColor * lightFalloff;\n    }\n  }\n\n  if( uUseImageLight ){\n    totalDiffuse += calculateImageDiffuse(normal, modelPosition);\n    totalSpecular += calculateImageSpecular(normal, modelPosition);\n  }\n\n  totalDiffuse *= diffuseFactor;\n  totalSpecular *= specularFactor;\n}\n'), E = {
                     sphereMappingFrag: "#define PI 3.141592\n\nprecision highp float;\n  \nuniform sampler2D uSampler;\nuniform mat3 uNewNormalMatrix;\nuniform float uFovY;\nuniform float uAspect;\n\nvarying vec2 vTexCoord;\n  \nvoid main() {\n    float uFovX = uFovY * uAspect; \n    vec4 newTexColor = texture2D(uSampler, vTexCoord);\n    float angleY = mix(uFovY/2.0,  -uFovY/2.0, vTexCoord.y);\n    float angleX = mix(uFovX/2.0, -uFovX/2.0, vTexCoord.x);\n    vec3 rotatedNormal = vec3( angleX, angleY, 1.0 );\n    rotatedNormal = uNewNormalMatrix * normalize(rotatedNormal);\n    vec2 suv;\n    suv.y = 0.5 + 0.5 * (-rotatedNormal.y);\n    suv.x = atan(rotatedNormal.z, rotatedNormal.x) / (2.0 * PI) + 0.5;\n    newTexColor = texture2D(uSampler, suv.xy);\n    gl_FragColor = newTexColor;\n}\n",
                     immediateVert: "IN vec3 aPosition;\nIN vec4 aVertexColor;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform float uResolution;\nuniform float uPointSize;\n\nOUT vec4 vColor;\nvoid main(void) {\n  vec4 positionVec4 = vec4(aPosition, 1.0);\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n  vColor = aVertexColor;\n  gl_PointSize = uPointSize;\n}\n",
                     vertexColorVert: "IN vec3 aPosition;\nIN vec4 aVertexColor;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\n\nOUT vec4 vColor;\n\nvoid main(void) {\n  vec4 positionVec4 = vec4(aPosition, 1.0);\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n  vColor = aVertexColor;\n}\n",
@@ -30788,7 +31103,7 @@ new (0, _p5Default.default)((sketch)=>{
                     phongFrag: e1 + "// include lighting.glsl\nprecision highp int;\n\nuniform bool uHasSetAmbient;\nuniform vec4 uSpecularMatColor;\nuniform vec4 uAmbientMatColor;\nuniform vec4 uEmissiveMatColor;\n\nuniform vec4 uTint;\nuniform sampler2D uSampler;\nuniform bool isTexture;\n\nIN vec3 vNormal;\nIN vec2 vTexCoord;\nIN vec3 vViewPosition;\nIN vec3 vAmbientColor;\nIN vec4 vColor;\n\nvoid main(void) {\n\n  vec3 diffuse;\n  vec3 specular;\n  totalLight(vViewPosition, normalize(vNormal), diffuse, specular);\n\n  // Calculating final color as result of all lights (plus emissive term).\n\n  vec4 baseColor = isTexture\n    // Textures come in with premultiplied alpha. To apply tint and still have\n    // premultiplied alpha output, we need to multiply the RGB channels by the\n    // tint RGB, and all channels by the tint alpha.\n    ? TEXTURE(uSampler, vTexCoord) * vec4(uTint.rgb/255., 1.) * (uTint.a/255.)\n    // Colors come in with unmultiplied alpha, so we need to multiply the RGB\n    // channels by alpha to convert it to premultiplied alpha.\n    : vec4(vColor.rgb * vColor.a, vColor.a);\n  OUT_COLOR = vec4(diffuse * baseColor.rgb + \n                    vAmbientColor * (\n                      uHasSetAmbient ? uAmbientMatColor.rgb : baseColor.rgb\n                    ) + \n                    specular * uSpecularMatColor.rgb + \n                    uEmissiveMatColor.rgb, baseColor.a);\n}\n",
                     fontVert: "IN vec3 aPosition;\nIN vec2 aTexCoord;\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\n\nuniform vec4 uGlyphRect;\nuniform float uGlyphOffset;\n\nOUT vec2 vTexCoord;\nOUT float w;\n\nvoid main() {\n  vec4 positionVec4 = vec4(aPosition, 1.0);\n\n  // scale by the size of the glyph's rectangle\n  positionVec4.xy *= uGlyphRect.zw - uGlyphRect.xy;\n\n  // Expand glyph bounding boxes by 1px on each side to give a bit of room\n  // for antialiasing\n  vec3 newOrigin = (uModelViewMatrix * vec4(0., 0., 0., 1.)).xyz;\n  vec3 newDX = (uModelViewMatrix * vec4(1., 0., 0., 1.)).xyz;\n  vec3 newDY = (uModelViewMatrix * vec4(0., 1., 0., 1.)).xyz;\n  vec2 pixelScale = vec2(\n    1. / length(newOrigin - newDX),\n    1. / length(newOrigin - newDY)\n  );\n  vec2 offset = pixelScale * normalize(aTexCoord - vec2(0.5, 0.5)) * vec2(1., -1.);\n  vec2 textureOffset = offset * (1. / vec2(\n    uGlyphRect.z - uGlyphRect.x,\n    uGlyphRect.w - uGlyphRect.y\n  ));\n\n  // move to the corner of the glyph\n  positionVec4.xy += uGlyphRect.xy;\n\n  // move to the letter's line offset\n  positionVec4.x += uGlyphOffset;\n\n  positionVec4.xy += offset;\n  \n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n  vTexCoord = aTexCoord + textureOffset;\n  w = gl_Position.w;\n}\n",
                     fontFrag: "#ifndef WEBGL2\n#extension GL_OES_standard_derivatives : enable\n#endif\n\n#if 0\n  // simulate integer math using floats\n	#define int float\n	#define ivec2 vec2\n	#define INT(x) float(x)\n\n	int ifloor(float v) { return floor(v); }\n	ivec2 ifloor(vec2 v) { return floor(v); }\n\n#else\n  // use native integer math\n	precision highp int;\n	#define INT(x) x\n\n	int ifloor(float v) { return int(v); }\n	int ifloor(int v) { return v; }\n	ivec2 ifloor(vec2 v) { return ivec2(v); }\n\n#endif\n\nuniform sampler2D uSamplerStrokes;\nuniform sampler2D uSamplerRowStrokes;\nuniform sampler2D uSamplerRows;\nuniform sampler2D uSamplerColStrokes;\nuniform sampler2D uSamplerCols;\n\nuniform ivec2 uStrokeImageSize;\nuniform ivec2 uCellsImageSize;\nuniform ivec2 uGridImageSize;\n\nuniform ivec2 uGridOffset;\nuniform ivec2 uGridSize;\nuniform vec4 uMaterialColor;\n\nIN vec2 vTexCoord;\n\n// some helper functions\nint ROUND(float v) { return ifloor(v + 0.5); }\nivec2 ROUND(vec2 v) { return ifloor(v + 0.5); }\nfloat saturate(float v) { return clamp(v, 0.0, 1.0); }\nvec2 saturate(vec2 v) { return clamp(v, 0.0, 1.0); }\n\nint mul(float v1, int v2) {\n  return ifloor(v1 * float(v2));\n}\n\nivec2 mul(vec2 v1, ivec2 v2) {\n  return ifloor(v1 * vec2(v2) + 0.5);\n}\n\n// unpack a 16-bit integer from a float vec2\nint getInt16(vec2 v) {\n  ivec2 iv = ROUND(v * 255.0);\n  return iv.x * INT(128) + iv.y;\n}\n\nvec2 pixelScale;\nvec2 coverage = vec2(0.0);\nvec2 weight = vec2(0.5);\nconst float minDistance = 1.0/8192.0;\nconst float hardness = 1.05; // amount of antialias\n\n// the maximum number of curves in a glyph\nconst int N = INT(250);\n\n// retrieves an indexed pixel from a sampler\nvec4 getTexel(sampler2D sampler, int pos, ivec2 size) {\n  int width = size.x;\n  int y = ifloor(pos / width);\n  int x = pos - y * width;  // pos % width\n\n  return TEXTURE(sampler, (vec2(x, y) + 0.5) / vec2(size));\n}\n\nvoid calulateCrossings(vec2 p0, vec2 p1, vec2 p2, out vec2 C1, out vec2 C2) {\n\n  // get the coefficients of the quadratic in t\n  vec2 a = p0 - p1 * 2.0 + p2;\n  vec2 b = p0 - p1;\n  vec2 c = p0 - vTexCoord;\n\n  // found out which values of 't' it crosses the axes\n  vec2 surd = sqrt(max(vec2(0.0), b * b - a * c));\n  vec2 t1 = ((b - surd) / a).yx;\n  vec2 t2 = ((b + surd) / a).yx;\n\n  // approximate straight lines to avoid rounding errors\n  if (abs(a.y) < 0.001)\n    t1.x = t2.x = c.y / (2.0 * b.y);\n\n  if (abs(a.x) < 0.001)\n    t1.y = t2.y = c.x / (2.0 * b.x);\n\n  // plug into quadratic formula to find the corrdinates of the crossings\n  C1 = ((a * t1 - b * 2.0) * t1 + c) * pixelScale;\n  C2 = ((a * t2 - b * 2.0) * t2 + c) * pixelScale;\n}\n\nvoid coverageX(vec2 p0, vec2 p1, vec2 p2) {\n\n  vec2 C1, C2;\n  calulateCrossings(p0, p1, p2, C1, C2);\n\n  // determine on which side of the x-axis the points lie\n  bool y0 = p0.y > vTexCoord.y;\n  bool y1 = p1.y > vTexCoord.y;\n  bool y2 = p2.y > vTexCoord.y;\n\n  // could web be under the curve (after t1)?\n  if (y1 ? !y2 : y0) {\n    // add the coverage for t1\n    coverage.x += saturate(C1.x + 0.5);\n    // calculate the anti-aliasing for t1\n    weight.x = min(weight.x, abs(C1.x));\n  }\n\n  // are we outside the curve (after t2)?\n  if (y1 ? !y0 : y2) {\n    // subtract the coverage for t2\n    coverage.x -= saturate(C2.x + 0.5);\n    // calculate the anti-aliasing for t2\n    weight.x = min(weight.x, abs(C2.x));\n  }\n}\n\n// this is essentially the same as coverageX, but with the axes swapped\nvoid coverageY(vec2 p0, vec2 p1, vec2 p2) {\n\n  vec2 C1, C2;\n  calulateCrossings(p0, p1, p2, C1, C2);\n\n  bool x0 = p0.x > vTexCoord.x;\n  bool x1 = p1.x > vTexCoord.x;\n  bool x2 = p2.x > vTexCoord.x;\n\n  if (x1 ? !x2 : x0) {\n    coverage.y -= saturate(C1.y + 0.5);\n    weight.y = min(weight.y, abs(C1.y));\n  }\n\n  if (x1 ? !x0 : x2) {\n    coverage.y += saturate(C2.y + 0.5);\n    weight.y = min(weight.y, abs(C2.y));\n  }\n}\n\nvoid main() {\n\n  // calculate the pixel scale based on screen-coordinates\n  pixelScale = hardness / fwidth(vTexCoord);\n\n  // which grid cell is this pixel in?\n  ivec2 gridCoord = ifloor(vTexCoord * vec2(uGridSize));\n\n  // intersect curves in this row\n  {\n    // the index into the row info bitmap\n    int rowIndex = gridCoord.y + uGridOffset.y;\n    // fetch the info texel\n    vec4 rowInfo = getTexel(uSamplerRows, rowIndex, uGridImageSize);\n    // unpack the rowInfo\n    int rowStrokeIndex = getInt16(rowInfo.xy);\n    int rowStrokeCount = getInt16(rowInfo.zw);\n\n    for (int iRowStroke = INT(0); iRowStroke < N; iRowStroke++) {\n      if (iRowStroke >= rowStrokeCount)\n        break;\n\n      // each stroke is made up of 3 points: the start and control point\n      // and the start of the next curve.\n      // fetch the indices of this pair of strokes:\n      vec4 strokeIndices = getTexel(uSamplerRowStrokes, rowStrokeIndex++, uCellsImageSize);\n\n      // unpack the stroke index\n      int strokePos = getInt16(strokeIndices.xy);\n\n      // fetch the two strokes\n      vec4 stroke0 = getTexel(uSamplerStrokes, strokePos + INT(0), uStrokeImageSize);\n      vec4 stroke1 = getTexel(uSamplerStrokes, strokePos + INT(1), uStrokeImageSize);\n\n      // calculate the coverage\n      coverageX(stroke0.xy, stroke0.zw, stroke1.xy);\n    }\n  }\n\n  // intersect curves in this column\n  {\n    int colIndex = gridCoord.x + uGridOffset.x;\n    vec4 colInfo = getTexel(uSamplerCols, colIndex, uGridImageSize);\n    int colStrokeIndex = getInt16(colInfo.xy);\n    int colStrokeCount = getInt16(colInfo.zw);\n    \n    for (int iColStroke = INT(0); iColStroke < N; iColStroke++) {\n      if (iColStroke >= colStrokeCount)\n        break;\n\n      vec4 strokeIndices = getTexel(uSamplerColStrokes, colStrokeIndex++, uCellsImageSize);\n\n      int strokePos = getInt16(strokeIndices.xy);\n      vec4 stroke0 = getTexel(uSamplerStrokes, strokePos + INT(0), uStrokeImageSize);\n      vec4 stroke1 = getTexel(uSamplerStrokes, strokePos + INT(1), uStrokeImageSize);\n      coverageY(stroke0.xy, stroke0.zw, stroke1.xy);\n    }\n  }\n\n  weight = saturate(1.0 - weight * 2.0);\n  float distance = max(weight.x + weight.y, minDistance); // manhattan approx.\n  float antialias = abs(dot(coverage, weight) / distance);\n  float cover = min(abs(coverage.x), abs(coverage.y));\n  OUT_COLOR = vec4(uMaterialColor.rgb, 1.) * uMaterialColor.a;\n  OUT_COLOR *= saturate(max(antialias, cover));\n}\n",
-                    lineVert: T + "/*\n  Part of the Processing project - http://processing.org\n  Copyright (c) 2012-15 The Processing Foundation\n  Copyright (c) 2004-12 Ben Fry and Casey Reas\n  Copyright (c) 2001-04 Massachusetts Institute of Technology\n  This library is free software; you can redistribute it and/or\n  modify it under the terms of the GNU Lesser General Public\n  License as published by the Free Software Foundation, version 2.1.\n  This library is distributed in the hope that it will be useful,\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n  Lesser General Public License for more details.\n  You should have received a copy of the GNU Lesser General\n  Public License along with this library; if not, write to the\n  Free Software Foundation, Inc., 59 Temple Place, Suite 330,\n  Boston, MA  02111-1307  USA\n*/\n\n#define PROCESSING_LINE_SHADER\n\nprecision mediump int;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform float uStrokeWeight;\n\nuniform bool uUseLineColor;\nuniform vec4 uMaterialColor;\n\nuniform vec4 uViewport;\nuniform int uPerspective;\nuniform int uStrokeJoin;\n\nIN vec4 aPosition;\nIN vec3 aTangentIn;\nIN vec3 aTangentOut;\nIN float aSide;\nIN vec4 aVertexColor;\n\nOUT vec4 vColor;\nOUT vec2 vTangent;\nOUT vec2 vCenter;\nOUT vec2 vPosition;\nOUT float vMaxDist;\nOUT float vCap;\nOUT float vJoin;\n\nvec2 lineIntersection(vec2 aPoint, vec2 aDir, vec2 bPoint, vec2 bDir) {\n  // Rotate and translate so a starts at the origin and goes out to the right\n  bPoint -= aPoint;\n  vec2 rotatedBFrom = vec2(\n    bPoint.x*aDir.x + bPoint.y*aDir.y,\n    bPoint.y*aDir.x - bPoint.x*aDir.y\n  );\n  vec2 bTo = bPoint + bDir;\n  vec2 rotatedBTo = vec2(\n    bTo.x*aDir.x + bTo.y*aDir.y,\n    bTo.y*aDir.x - bTo.x*aDir.y\n  );\n  float intersectionDistance =\n    rotatedBTo.x + (rotatedBFrom.x - rotatedBTo.x) * rotatedBTo.y /\n    (rotatedBTo.y - rotatedBFrom.y);\n  return aPoint + aDir * intersectionDistance;\n}\n\nvoid main() {\n  // Caps have one of either the in or out tangent set to 0\n  vCap = (aTangentIn == vec3(0.)) != (aTangentOut == (vec3(0.)))\n    ? 1. : 0.;\n\n  // Joins have two unique, defined tangents\n  vJoin = (\n    aTangentIn != vec3(0.) &&\n    aTangentOut != vec3(0.) &&\n    aTangentIn != aTangentOut\n  ) ? 1. : 0.;\n\n  vec4 posp = uModelViewMatrix * aPosition;\n  vec4 posqIn = uModelViewMatrix * (aPosition + vec4(aTangentIn, 0));\n  vec4 posqOut = uModelViewMatrix * (aPosition + vec4(aTangentOut, 0));\n\n  float facingCamera = pow(\n    // The word space tangent's z value is 0 if it's facing the camera\n    abs(normalize(posqIn-posp).z),\n\n    // Using pow() here to ramp `facingCamera` up from 0 to 1 really quickly\n    // so most lines get scaled and don't get clipped\n    0.25\n  );\n\n  // using a scale <1 moves the lines towards the camera\n  // in order to prevent popping effects due to half of\n  // the line disappearing behind the geometry faces.\n  float scale = mix(1., 0.995, facingCamera);\n\n  // Moving vertices slightly toward the camera\n  // to avoid depth-fighting with the fill triangles.\n  // Discussed here:\n  // http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=252848  \n  posp.xyz = posp.xyz * scale;\n  posqIn.xyz = posqIn.xyz * scale;\n  posqOut.xyz = posqOut.xyz * scale;\n\n  vec4 p = uProjectionMatrix * posp;\n  vec4 qIn = uProjectionMatrix * posqIn;\n  vec4 qOut = uProjectionMatrix * posqOut;\n  vCenter = p.xy;\n\n  // formula to convert from clip space (range -1..1) to screen space (range 0..[width or height])\n  // screen_p = (p.xy/p.w + <1,1>) * 0.5 * uViewport.zw\n\n  // prevent division by W by transforming the tangent formula (div by 0 causes\n  // the line to disappear, see https://github.com/processing/processing/issues/5183)\n  // t = screen_q - screen_p\n  //\n  // tangent is normalized and we don't care which aDirection it points to (+-)\n  // t = +- normalize( screen_q - screen_p )\n  // t = +- normalize( (q.xy/q.w+<1,1>)*0.5*uViewport.zw - (p.xy/p.w+<1,1>)*0.5*uViewport.zw )\n  //\n  // extract common factor, <1,1> - <1,1> cancels out\n  // t = +- normalize( (q.xy/q.w - p.xy/p.w) * 0.5 * uViewport.zw )\n  //\n  // convert to common divisor\n  // t = +- normalize( ((q.xy*p.w - p.xy*q.w) / (p.w*q.w)) * 0.5 * uViewport.zw )\n  //\n  // remove the common scalar divisor/factor, not needed due to normalize and +-\n  // (keep uViewport - can't remove because it has different components for x and y\n  //  and corrects for aspect ratio, see https://github.com/processing/processing/issues/5181)\n  // t = +- normalize( (q.xy*p.w - p.xy*q.w) * uViewport.zw )\n\n  vec2 tangentIn = normalize((qIn.xy*p.w - p.xy*qIn.w) * uViewport.zw);\n  vec2 tangentOut = normalize((qOut.xy*p.w - p.xy*qOut.w) * uViewport.zw);\n\n  vec2 curPerspScale;\n  if(uPerspective == 1) {\n    // Perspective ---\n    // convert from world to clip by multiplying with projection scaling factor\n    // to get the right thickness (see https://github.com/processing/processing/issues/5182)\n\n    // The y value of the projection matrix may be flipped if rendering to a Framebuffer.\n    // Multiplying again by its sign here negates the flip to get just the scale.\n    curPerspScale = (uProjectionMatrix * vec4(1, sign(uProjectionMatrix[1][1]), 0, 0)).xy;\n  } else {\n    // No Perspective ---\n    // multiply by W (to cancel out division by W later in the pipeline) and\n    // convert from screen to clip (derived from clip to screen above)\n    curPerspScale = p.w / (0.5 * uViewport.zw);\n  }\n\n  vec2 offset;\n  if (vJoin == 1.) {\n    vTangent = normalize(tangentIn + tangentOut);\n    vec2 normalIn = vec2(-tangentIn.y, tangentIn.x);\n    vec2 normalOut = vec2(-tangentOut.y, tangentOut.x);\n    float side = sign(aSide);\n    float sideEnum = abs(aSide);\n\n    // We generate vertices for joins on either side of the centerline, but\n    // the \"elbow\" side is the only one needing a join. By not setting the\n    // offset for the other side, all its vertices will end up in the same\n    // spot and not render, effectively discarding it.\n    if (sign(dot(tangentOut, vec2(-tangentIn.y, tangentIn.x))) != side) {\n      // Side enums:\n      //   1: the side going into the join\n      //   2: the middle of the join\n      //   3: the side going out of the join\n      if (sideEnum == 2.) {\n        // Calculate the position + tangent on either side of the join, and\n        // find where the lines intersect to find the elbow of the join\n        vec2 c = (posp.xy/posp.w + vec2(1.,1.)) * 0.5 * uViewport.zw;\n        vec2 intersection = lineIntersection(\n          c + (side * normalIn * uStrokeWeight / 2.),\n          tangentIn,\n          c + (side * normalOut * uStrokeWeight / 2.),\n          tangentOut\n        );\n        offset = (intersection - c);\n\n        // When lines are thick and the angle of the join approaches 180, the\n        // elbow might be really far from the center. We'll apply a limit to\n        // the magnitude to avoid lines going across the whole screen when this\n        // happens.\n        float mag = length(offset);\n        float maxMag = 3. * uStrokeWeight;\n        if (mag > maxMag) {\n          offset *= maxMag / mag;\n        }\n      } else if (sideEnum == 1.) {\n        offset = side * normalIn * uStrokeWeight / 2.;\n      } else if (sideEnum == 3.) {\n        offset = side * normalOut * uStrokeWeight / 2.;\n      }\n    }\n    if (uStrokeJoin == STROKE_JOIN_BEVEL) {\n      vec2 avgNormal = vec2(-vTangent.y, vTangent.x);\n      vMaxDist = abs(dot(avgNormal, normalIn * uStrokeWeight / 2.));\n    } else {\n      vMaxDist = uStrokeWeight / 2.;\n    }\n  } else {\n    vec2 tangent = aTangentIn == vec3(0.) ? tangentOut : tangentIn;\n    vTangent = tangent;\n    vec2 normal = vec2(-tangent.y, tangent.x);\n\n    float normalOffset = sign(aSide);\n    // Caps will have side values of -2 or 2 on the edge of the cap that\n    // extends out from the line\n    float tangentOffset = abs(aSide) - 1.;\n    offset = (normal * normalOffset + tangent * tangentOffset) *\n      uStrokeWeight * 0.5;\n    vMaxDist = uStrokeWeight / 2.;\n  }\n  vPosition = vCenter + offset;\n\n  gl_Position.xy = p.xy + offset.xy * curPerspScale;\n  gl_Position.zw = p.zw;\n  \n  vColor = (uUseLineColor ? aVertexColor : uMaterialColor);\n}\n",
+                    lineVert: T + "/*\n  Part of the Processing project - http://processing.org\n  Copyright (c) 2012-15 The Processing Foundation\n  Copyright (c) 2004-12 Ben Fry and Casey Reas\n  Copyright (c) 2001-04 Massachusetts Institute of Technology\n  This library is free software; you can redistribute it and/or\n  modify it under the terms of the GNU Lesser General Public\n  License as published by the Free Software Foundation, version 2.1.\n  This library is distributed in the hope that it will be useful,\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n  Lesser General Public License for more details.\n  You should have received a copy of the GNU Lesser General\n  Public License along with this library; if not, write to the\n  Free Software Foundation, Inc., 59 Temple Place, Suite 330,\n  Boston, MA  02111-1307  USA\n*/\n\n#define PROCESSING_LINE_SHADER\n\nprecision mediump int;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform float uStrokeWeight;\n\nuniform bool uUseLineColor;\nuniform vec4 uMaterialColor;\n\nuniform vec4 uViewport;\nuniform int uPerspective;\nuniform int uStrokeJoin;\n\nIN vec4 aPosition;\nIN vec3 aTangentIn;\nIN vec3 aTangentOut;\nIN float aSide;\nIN vec4 aVertexColor;\n\nOUT vec4 vColor;\nOUT vec2 vTangent;\nOUT vec2 vCenter;\nOUT vec2 vPosition;\nOUT float vMaxDist;\nOUT float vCap;\nOUT float vJoin;\n\nvec2 lineIntersection(vec2 aPoint, vec2 aDir, vec2 bPoint, vec2 bDir) {\n  // Rotate and translate so a starts at the origin and goes out to the right\n  bPoint -= aPoint;\n  vec2 rotatedBFrom = vec2(\n    bPoint.x*aDir.x + bPoint.y*aDir.y,\n    bPoint.y*aDir.x - bPoint.x*aDir.y\n  );\n  vec2 bTo = bPoint + bDir;\n  vec2 rotatedBTo = vec2(\n    bTo.x*aDir.x + bTo.y*aDir.y,\n    bTo.y*aDir.x - bTo.x*aDir.y\n  );\n  float intersectionDistance =\n    rotatedBTo.x + (rotatedBFrom.x - rotatedBTo.x) * rotatedBTo.y /\n    (rotatedBTo.y - rotatedBFrom.y);\n  return aPoint + aDir * intersectionDistance;\n}\n\nvoid main() {\n  // Caps have one of either the in or out tangent set to 0\n  vCap = (aTangentIn == vec3(0.)) != (aTangentOut == (vec3(0.)))\n    ? 1. : 0.;\n\n  // Joins have two unique, defined tangents\n  vJoin = (\n    aTangentIn != vec3(0.) &&\n    aTangentOut != vec3(0.) &&\n    aTangentIn != aTangentOut\n  ) ? 1. : 0.;\n\n  vec4 posp = uModelViewMatrix * aPosition;\n  vec4 posqIn = uModelViewMatrix * (aPosition + vec4(aTangentIn, 0));\n  vec4 posqOut = uModelViewMatrix * (aPosition + vec4(aTangentOut, 0));\n\n  float facingCamera = pow(\n    // The word space tangent's z value is 0 if it's facing the camera\n    abs(normalize(posqIn-posp).z),\n\n    // Using pow() here to ramp `facingCamera` up from 0 to 1 really quickly\n    // so most lines get scaled and don't get clipped\n    0.25\n  );\n\n  // Moving vertices slightly toward the camera\n  // to avoid depth-fighting with the fill triangles.\n  // This prevents popping effects due to half of\n  // the line disappearing behind the geometry faces.\n  \n  float zOffset = mix(-0.00045, -1., facingCamera);\n  posp.z -= zOffset;\n  posqIn.z -= zOffset;\n  posqOut.z -= zOffset;\n  \n  vec4 p = uProjectionMatrix * posp;\n  vec4 qIn = uProjectionMatrix * posqIn;\n  vec4 qOut = uProjectionMatrix * posqOut;\n  vCenter = p.xy;\n\n  // formula to convert from clip space (range -1..1) to screen space (range 0..[width or height])\n  // screen_p = (p.xy/p.w + <1,1>) * 0.5 * uViewport.zw\n\n  // prevent division by W by transforming the tangent formula (div by 0 causes\n  // the line to disappear, see https://github.com/processing/processing/issues/5183)\n  // t = screen_q - screen_p\n  //\n  // tangent is normalized and we don't care which aDirection it points to (+-)\n  // t = +- normalize( screen_q - screen_p )\n  // t = +- normalize( (q.xy/q.w+<1,1>)*0.5*uViewport.zw - (p.xy/p.w+<1,1>)*0.5*uViewport.zw )\n  //\n  // extract common factor, <1,1> - <1,1> cancels out\n  // t = +- normalize( (q.xy/q.w - p.xy/p.w) * 0.5 * uViewport.zw )\n  //\n  // convert to common divisor\n  // t = +- normalize( ((q.xy*p.w - p.xy*q.w) / (p.w*q.w)) * 0.5 * uViewport.zw )\n  //\n  // remove the common scalar divisor/factor, not needed due to normalize and +-\n  // (keep uViewport - can't remove because it has different components for x and y\n  //  and corrects for aspect ratio, see https://github.com/processing/processing/issues/5181)\n  // t = +- normalize( (q.xy*p.w - p.xy*q.w) * uViewport.zw )\n\n  vec2 tangentIn = normalize((qIn.xy*p.w - p.xy*qIn.w) * uViewport.zw);\n  vec2 tangentOut = normalize((qOut.xy*p.w - p.xy*qOut.w) * uViewport.zw);\n\n  vec2 curPerspScale;\n  if(uPerspective == 1) {\n    // Perspective ---\n    // convert from world to clip by multiplying with projection scaling factor\n    // to get the right thickness (see https://github.com/processing/processing/issues/5182)\n\n    // The y value of the projection matrix may be flipped if rendering to a Framebuffer.\n    // Multiplying again by its sign here negates the flip to get just the scale.\n    curPerspScale = (uProjectionMatrix * vec4(1, sign(uProjectionMatrix[1][1]), 0, 0)).xy;\n  } else {\n    // No Perspective ---\n    // multiply by W (to cancel out division by W later in the pipeline) and\n    // convert from screen to clip (derived from clip to screen above)\n    curPerspScale = p.w / (0.5 * uViewport.zw);\n  }\n\n  vec2 offset;\n  if (vJoin == 1.) {\n    vTangent = normalize(tangentIn + tangentOut);\n    vec2 normalIn = vec2(-tangentIn.y, tangentIn.x);\n    vec2 normalOut = vec2(-tangentOut.y, tangentOut.x);\n    float side = sign(aSide);\n    float sideEnum = abs(aSide);\n\n    // We generate vertices for joins on either side of the centerline, but\n    // the \"elbow\" side is the only one needing a join. By not setting the\n    // offset for the other side, all its vertices will end up in the same\n    // spot and not render, effectively discarding it.\n    if (sign(dot(tangentOut, vec2(-tangentIn.y, tangentIn.x))) != side) {\n      // Side enums:\n      //   1: the side going into the join\n      //   2: the middle of the join\n      //   3: the side going out of the join\n      if (sideEnum == 2.) {\n        // Calculate the position + tangent on either side of the join, and\n        // find where the lines intersect to find the elbow of the join\n        vec2 c = (posp.xy/posp.w + vec2(1.,1.)) * 0.5 * uViewport.zw;\n        vec2 intersection = lineIntersection(\n          c + (side * normalIn * uStrokeWeight / 2.),\n          tangentIn,\n          c + (side * normalOut * uStrokeWeight / 2.),\n          tangentOut\n        );\n        offset = (intersection - c);\n\n        // When lines are thick and the angle of the join approaches 180, the\n        // elbow might be really far from the center. We'll apply a limit to\n        // the magnitude to avoid lines going across the whole screen when this\n        // happens.\n        float mag = length(offset);\n        float maxMag = 3. * uStrokeWeight;\n        if (mag > maxMag) {\n          offset *= maxMag / mag;\n        }\n      } else if (sideEnum == 1.) {\n        offset = side * normalIn * uStrokeWeight / 2.;\n      } else if (sideEnum == 3.) {\n        offset = side * normalOut * uStrokeWeight / 2.;\n      }\n    }\n    if (uStrokeJoin == STROKE_JOIN_BEVEL) {\n      vec2 avgNormal = vec2(-vTangent.y, vTangent.x);\n      vMaxDist = abs(dot(avgNormal, normalIn * uStrokeWeight / 2.));\n    } else {\n      vMaxDist = uStrokeWeight / 2.;\n    }\n  } else {\n    vec2 tangent = aTangentIn == vec3(0.) ? tangentOut : tangentIn;\n    vTangent = tangent;\n    vec2 normal = vec2(-tangent.y, tangent.x);\n\n    float normalOffset = sign(aSide);\n    // Caps will have side values of -2 or 2 on the edge of the cap that\n    // extends out from the line\n    float tangentOffset = abs(aSide) - 1.;\n    offset = (normal * normalOffset + tangent * tangentOffset) *\n      uStrokeWeight * 0.5;\n    vMaxDist = uStrokeWeight / 2.;\n  }\n  vPosition = vCenter + offset;\n\n  gl_Position.xy = p.xy + offset.xy * curPerspScale;\n  gl_Position.zw = p.zw;\n  \n  vColor = (uUseLineColor ? aVertexColor : uMaterialColor);\n}\n",
                     lineFrag: T + "precision mediump int;\n\nuniform vec4 uMaterialColor;\nuniform int uStrokeCap;\nuniform int uStrokeJoin;\nuniform float uStrokeWeight;\n\nIN vec4 vColor;\nIN vec2 vTangent;\nIN vec2 vCenter;\nIN vec2 vPosition;\nIN float vMaxDist;\nIN float vCap;\nIN float vJoin;\n\nfloat distSquared(vec2 a, vec2 b) {\n  vec2 aToB = b - a;\n  return dot(aToB, aToB);\n}\n\nvoid main() {\n  if (vCap > 0.) {\n    if (\n      uStrokeCap == STROKE_CAP_ROUND &&\n      distSquared(vPosition, vCenter) > uStrokeWeight * uStrokeWeight * 0.25\n    ) {\n      discard;\n    } else if (\n      uStrokeCap == STROKE_CAP_SQUARE &&\n      dot(vPosition - vCenter, vTangent) > 0.\n    ) {\n      discard;\n    }\n    // Use full area for PROJECT\n  } else if (vJoin > 0.) {\n    if (\n      uStrokeJoin == STROKE_JOIN_ROUND &&\n      distSquared(vPosition, vCenter) > uStrokeWeight * uStrokeWeight * 0.25\n    ) {\n      discard;\n    } else if (uStrokeJoin == STROKE_JOIN_BEVEL) {\n      vec2 normal = vec2(-vTangent.y, vTangent.x);\n      if (abs(dot(vPosition - vCenter, normal)) > vMaxDist) {\n        discard;\n      }\n    }\n    // Use full area for MITER\n  }\n  OUT_COLOR = vec4(vColor.rgb, 1.) * vColor.a;\n}\n",
                     pointVert: "IN vec3 aPosition;\nuniform float uPointSize;\nOUT float vStrokeWeight;\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nvoid main() {\n	vec4 positionVec4 =  vec4(aPosition, 1.0);\n	gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n	gl_PointSize = uPointSize;\n	vStrokeWeight = uPointSize;\n}\n",
                     pointFrag: "precision mediump int;\nuniform vec4 uMaterialColor;\nIN float vStrokeWeight;\n\nvoid main(){\n  float mask = 0.0;\n\n  // make a circular mask using the gl_PointCoord (goes from 0 - 1 on a point)\n  // might be able to get a nicer edge on big strokeweights with smoothstep but slightly less performant\n\n  mask = step(0.98, length(gl_PointCoord * 2.0 - 1.0));\n\n  // if strokeWeight is 1 or less lets just draw a square\n  // this prevents weird artifacting from carving circles when our points are really small\n  // if strokeWeight is larger than 1, we just use it as is\n\n  mask = mix(0.0, mask, clamp(floor(vStrokeWeight - 0.5),0.0,1.0));\n\n  // throw away the borders of the mask\n  // otherwise we get weird alpha blending issues\n\n  if(mask > 0.98){\n    discard;\n  }\n\n  OUT_COLOR = vec4(uMaterialColor.rgb, 1.) * uMaterialColor.a;\n}\n",
@@ -30797,9 +31112,9 @@ new (0, _p5Default.default)((sketch)=>{
                     imageLightSpecularFrag: "precision highp float;\r\nvarying vec3 localPos;\r\nvarying vec2 vTexCoord;\r\n\r\n// our texture\r\nuniform sampler2D environmentMap;\r\nuniform float roughness;\r\n\r\nconst float PI = 3.14159265359;\r\n\r\nfloat VanDerCorput(int bits);\r\nvec2 HammersleyNoBitOps(int i, int N);\r\nvec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness);\r\n\r\n\r\nvec2 nTOE( vec3 v ){\r\n  // x = r sin(phi) cos(theta)   \r\n  // y = r cos(phi)  \r\n  // z = r sin(phi) sin(theta)\r\n  float phi = acos( v.y );\r\n  // if phi is 0, then there are no x, z components\r\n  float theta = 0.0;\r\n  // else \r\n  theta = acos(v.x / sin(phi));\r\n  float sinTheta = v.z / sin(phi);\r\n  if (sinTheta < 0.0) {\r\n    // Turn it into -theta, but in the 0-2PI range\r\n    theta = 2.0 * PI - theta;\r\n  }\r\n  theta = theta / (2.0 * 3.14159);\r\n  phi = phi / 3.14159 ;\r\n  \r\n  vec2 angles = vec2( phi, theta );\r\n  return angles;\r\n}\r\n\r\n\r\nvoid main(){\r\n  const int SAMPLE_COUNT = 400; // 4096\r\n  int lowRoughnessLimit = int(pow(2.0,(roughness+0.1)*20.0));\r\n  float totalWeight = 0.0;\r\n  vec3 prefilteredColor = vec3(0.0);\r\n  float phi = vTexCoord.x * 2.0 * PI;\r\n  float theta = vTexCoord.y * PI;\r\n  float x = sin(theta) * cos(phi);\r\n  float y = sin(theta) * sin(phi);\r\n  float z = cos(theta);\r\n  vec3 N = vec3(x,y,z);\r\n  vec3 V = N;\r\n  for (int i = 0; i < SAMPLE_COUNT; ++i)\r\n  {\r\n    // break at smaller sample numbers for low roughness levels\r\n    if(i == lowRoughnessLimit)\r\n    {\r\n      break;\r\n    }\r\n    vec2 Xi = HammersleyNoBitOps(i, SAMPLE_COUNT);\r\n    vec3 H = ImportanceSampleGGX(Xi, N, roughness);\r\n    vec3 L = normalize(2.0 * dot(V, H) * H - V);\r\n\r\n    float NdotL = max(dot(N, L), 0.0);\r\n    if (NdotL > 0.0)\r\n    {\r\n      prefilteredColor += texture2D(environmentMap, nTOE(L)).xyz * NdotL;\r\n      totalWeight += NdotL;\r\n    }\r\n  }\r\n  prefilteredColor = prefilteredColor / totalWeight;\r\n\r\n  gl_FragColor = vec4(prefilteredColor, 1.0);\r\n}\r\n\r\nvec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness){\r\n  float a = roughness * roughness;\r\n\r\n  float phi = 2.0 * PI * Xi.x;\r\n  float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a * a - 1.0) * Xi.y));\r\n  float sinTheta = sqrt(1.0 - cosTheta * cosTheta);\r\n  // from spherical coordinates to cartesian coordinates\r\n  vec3 H;\r\n  H.x = cos(phi) * sinTheta;\r\n  H.y = sin(phi) * sinTheta;\r\n  H.z = cosTheta;\r\n\r\n  // from tangent-space vector to world-space sample vector\r\n  vec3 up = abs(N.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);\r\n  vec3 tangent = normalize(cross(up, N));\r\n  vec3 bitangent = cross(N, tangent);\r\n\r\n  vec3 sampleVec = tangent * H.x + bitangent * H.y + N * H.z;\r\n  return normalize(sampleVec);\r\n}\r\n\r\n\r\nfloat VanDerCorput(int n, int base)\r\n{\r\n#ifdef WEBGL2\r\n\r\n    uint bits = uint(n);\r\n    bits = (bits << 16u) | (bits >> 16u);\r\n    bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);\r\n    bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);\r\n    bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);\r\n    bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);\r\n    return float(bits) * 2.3283064365386963e-10; // / 0x100000000\r\n\r\n#else\r\n\r\n  float invBase = 1.0 / float(base);\r\n  float denom = 1.0;\r\n  float result = 0.0;\r\n\r\n\r\n  for (int i = 0; i < 32; ++i)\r\n  {\r\n        if (n > 0)\r\n        {\r\n        denom = mod(float(n), 2.0);\r\n        result += denom * invBase;\r\n        invBase = invBase / 2.0;\r\n        n = int(float(n) / 2.0);\r\n        }\r\n  }\r\n\r\n\r\n  return result;\r\n\r\n#endif\r\n}\r\n\r\nvec2 HammersleyNoBitOps(int i, int N)\r\n{\r\n  return vec2(float(i) / float(N), VanDerCorput(i, 2));\r\n}\r\n"
                 }, M = E.sphereMappingFrag;
                 for(x in E)E[x] = "#ifdef WEBGL2\n\n#define IN in\n#define OUT out\n\n#ifdef FRAGMENT_SHADER\nout vec4 outColor;\n#define OUT_COLOR outColor\n#endif\n#define TEXTURE texture\n\n#else\n\n#ifdef FRAGMENT_SHADER\n#define IN varying\n#else\n#define IN attribute\n#endif\n#define OUT varying\n#define TEXTURE texture2D\n\n#ifdef FRAGMENT_SHADER\n#define OUT_COLOR gl_FragColor\n#endif\n\n#endif\n" + E[x];
-                _(e1 = {}, l.GRAY, "precision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  return dot(color, vec3(0.2126, 0.7152, 0.0722));\n}\n\nvoid main() {\n  vec4 tex = texture2D(tex0, vTexCoord);\n  float gray = luma(tex.rgb);\n  gl_FragColor = vec4(gray, gray, gray, tex.a);\n}\n"), _(e1, l.ERODE, "// Reduces the bright areas in an image\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform vec2 texelSize;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  // weights 77, 151, 28 taken from src/image/filters.js\n  return dot(color, vec3(0.300781, 0.589844, 0.109375));\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  float lum = luma(color.rgb);\n\n  // set current color as the darkest neighbor color\n\n  vec4 neighbors[4];\n  neighbors[0] = texture2D(tex0, vTexCoord + vec2( texelSize.x, 0.0));\n  neighbors[1] = texture2D(tex0, vTexCoord + vec2(-texelSize.x, 0.0));\n  neighbors[2] = texture2D(tex0, vTexCoord + vec2(0.0,  texelSize.y));\n  neighbors[3] = texture2D(tex0, vTexCoord + vec2(0.0, -texelSize.y));\n\n  for (int i = 0; i < 4; i++) {\n    vec4 neighborColor = neighbors[i];\n    float neighborLum = luma(neighborColor.rgb);\n\n    if (neighborLum < lum) {\n      color = neighborColor;\n      lum = neighborLum;\n    }\n  }\n\n  gl_FragColor = color;\n}\n"), _(e1, l.DILATE, "// Increase the bright areas in an image\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform vec2 texelSize;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  // weights 77, 151, 28 taken from src/image/filters.js\n  return dot(color, vec3(0.300781, 0.589844, 0.109375));\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  float lum = luma(color.rgb);\n\n  // set current color as the brightest neighbor color\n\n  vec4 neighbors[4];\n  neighbors[0] = texture2D(tex0, vTexCoord + vec2( texelSize.x, 0.0));\n  neighbors[1] = texture2D(tex0, vTexCoord + vec2(-texelSize.x, 0.0));\n  neighbors[2] = texture2D(tex0, vTexCoord + vec2(0.0,  texelSize.y));\n  neighbors[3] = texture2D(tex0, vTexCoord + vec2(0.0, -texelSize.y));\n\n  for (int i = 0; i < 4; i++) {\n    vec4 neighborColor = neighbors[i];\n    float neighborLum = luma(neighborColor.rgb);\n\n    if (neighborLum > lum) {\n      color = neighborColor;\n      lum = neighborLum;\n    }\n  }\n\n  gl_FragColor = color;\n}\n"), _(e1, l.BLUR, "precision highp float;\n\n// Two-pass blur filter, unweighted kernel.\n// See also a similar blur at Adam Ferriss' repo of shader examples:\n// https://github.com/aferriss/p5jsShaderExamples/blob/gh-pages/4_image-effects/4-9_single-pass-blur/effect.frag\n\n\nuniform sampler2D tex0;\nvarying vec2 vTexCoord;\nuniform vec2 direction;\nuniform vec2 canvasSize;\nuniform float radius;\n\nfloat random(vec2 p) {\n  vec3 p3  = fract(vec3(p.xyx) * .1031);\n  p3 += dot(p3, p3.yzx + 33.33);\n  return fract((p3.x + p3.y) * p3.z);\n}\n\n// This isn't a real Gaussian weight, it's a quadratic weight. It's what the\n// CPU mode's blur uses though, so we also use it here to match.\nfloat quadWeight(float x, float e) {\n  return pow(e-abs(x), 2.);\n}\n\nvoid main(){\n  vec2 uv = vTexCoord;\n\n  // A reasonable maximum number of samples\n  const float maxSamples = 64.0;\n\n  float numSamples = floor(7. * radius);\n  if (fract(numSamples / 2.) == 0.) {\n    numSamples++;\n  }\n  vec4 avg = vec4(0.0);\n  float total = 0.0;\n\n  // Calculate the spacing to avoid skewing if numSamples > maxSamples\n  float spacing = 1.0;\n  if (numSamples > maxSamples) {\n    spacing = numSamples / maxSamples;\n    numSamples = maxSamples;\n  }\n\n  float randomOffset = (spacing - 1.0) * mix(-0.5, 0.5, random(gl_FragCoord.xy));\n  for (float i = 0.0; i < maxSamples; i++) {\n    if (i >= numSamples) break;\n\n    float sample = i * spacing - (numSamples - 1.0) * 0.5 * spacing + randomOffset;\n    vec2 sampleCoord = uv + vec2(sample, sample) / canvasSize * direction;\n    float weight = quadWeight(sample, (numSamples - 1.0) * 0.5 * spacing);\n\n    avg += weight * texture2D(tex0, sampleCoord);\n    total += weight;\n  }\n\n  avg /= total;\n  gl_FragColor = avg;\n}\n"), _(e1, l.POSTERIZE, "// Limit color space for a stylized cartoon / poster effect\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform float filterParameter;\n\nvec3 quantize(vec3 color, float n) {\n  // restrict values to N options/bins\n  // and floor each channel to nearest value\n  //\n  // eg. when N = 5, values = 0.0, 0.25, 0.50, 0.75, 1.0\n  // then quantize (0.1, 0.7, 0.9) -> (0.0, 0.5, 1.0)\n\n  color = color * n;\n  color = floor(color);\n  color = color / (n - 1.0);\n  return color;\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n\n  vec3 restrictedColor = quantize(color.rgb / color.a, filterParameter);\n\n  gl_FragColor = vec4(restrictedColor.rgb * color.a, color.a);\n}\n"), _(e1, l.OPAQUE, "// Set alpha channel to entirely opaque\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  gl_FragColor = vec4(color.rgb / color.a, 1.0);\n}\n"), _(e1, l.INVERT, "// Set each pixel to inverse value\n// Note that original INVERT does not change the opacity, so this follows suit\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\n\nvoid main() {\nvec4 color = texture2D(tex0, vTexCoord);\nvec3 origColor = color.rgb / color.a;\nvec3 invertedColor = vec3(1.0) - origColor;\ngl_FragColor = vec4(invertedColor * color.a, color.a);\n}\n"), _(e1, l.THRESHOLD, "// Convert pixels to either white or black, \n// depending on if their luma is above or below filterParameter\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform float filterParameter;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  return dot(color, vec3(0.2126, 0.7152, 0.0722));\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  float gray = luma(color.rgb / color.a);\n  // floor() used to match src/image/filters.js\n  float threshold = floor(filterParameter * 255.0) / 255.0;\n  float blackOrWhite = step(threshold, gray);\n  gl_FragColor = vec4(vec3(blackOrWhite) * color.a, color.a);\n}\n");
+                j(e1 = {}, l.GRAY, "precision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  return dot(color, vec3(0.2126, 0.7152, 0.0722));\n}\n\nvoid main() {\n  vec4 tex = texture2D(tex0, vTexCoord);\n  float gray = luma(tex.rgb);\n  gl_FragColor = vec4(gray, gray, gray, tex.a);\n}\n"), j(e1, l.ERODE, "// Reduces the bright areas in an image\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform vec2 texelSize;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  // weights 77, 151, 28 taken from src/image/filters.js\n  return dot(color, vec3(0.300781, 0.589844, 0.109375));\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  float lum = luma(color.rgb);\n\n  // set current color as the darkest neighbor color\n\n  vec4 neighbors[4];\n  neighbors[0] = texture2D(tex0, vTexCoord + vec2( texelSize.x, 0.0));\n  neighbors[1] = texture2D(tex0, vTexCoord + vec2(-texelSize.x, 0.0));\n  neighbors[2] = texture2D(tex0, vTexCoord + vec2(0.0,  texelSize.y));\n  neighbors[3] = texture2D(tex0, vTexCoord + vec2(0.0, -texelSize.y));\n\n  for (int i = 0; i < 4; i++) {\n    vec4 neighborColor = neighbors[i];\n    float neighborLum = luma(neighborColor.rgb);\n\n    if (neighborLum < lum) {\n      color = neighborColor;\n      lum = neighborLum;\n    }\n  }\n\n  gl_FragColor = color;\n}\n"), j(e1, l.DILATE, "// Increase the bright areas in an image\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform vec2 texelSize;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  // weights 77, 151, 28 taken from src/image/filters.js\n  return dot(color, vec3(0.300781, 0.589844, 0.109375));\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  float lum = luma(color.rgb);\n\n  // set current color as the brightest neighbor color\n\n  vec4 neighbors[4];\n  neighbors[0] = texture2D(tex0, vTexCoord + vec2( texelSize.x, 0.0));\n  neighbors[1] = texture2D(tex0, vTexCoord + vec2(-texelSize.x, 0.0));\n  neighbors[2] = texture2D(tex0, vTexCoord + vec2(0.0,  texelSize.y));\n  neighbors[3] = texture2D(tex0, vTexCoord + vec2(0.0, -texelSize.y));\n\n  for (int i = 0; i < 4; i++) {\n    vec4 neighborColor = neighbors[i];\n    float neighborLum = luma(neighborColor.rgb);\n\n    if (neighborLum > lum) {\n      color = neighborColor;\n      lum = neighborLum;\n    }\n  }\n\n  gl_FragColor = color;\n}\n"), j(e1, l.BLUR, "precision highp float;\n\n// Two-pass blur filter, unweighted kernel.\n// See also a similar blur at Adam Ferriss' repo of shader examples:\n// https://github.com/aferriss/p5jsShaderExamples/blob/gh-pages/4_image-effects/4-9_single-pass-blur/effect.frag\n\n\nuniform sampler2D tex0;\nvarying vec2 vTexCoord;\nuniform vec2 direction;\nuniform vec2 canvasSize;\nuniform float radius;\n\nfloat random(vec2 p) {\n  vec3 p3  = fract(vec3(p.xyx) * .1031);\n  p3 += dot(p3, p3.yzx + 33.33);\n  return fract((p3.x + p3.y) * p3.z);\n}\n\n// This isn't a real Gaussian weight, it's a quadratic weight. It's what the\n// CPU mode's blur uses though, so we also use it here to match.\nfloat quadWeight(float x, float e) {\n  return pow(e-abs(x), 2.);\n}\n\nvoid main(){\n  vec2 uv = vTexCoord;\n\n  // A reasonable maximum number of samples\n  const float maxSamples = 64.0;\n\n  float numSamples = floor(7. * radius);\n  if (fract(numSamples / 2.) == 0.) {\n    numSamples++;\n  }\n  vec4 avg = vec4(0.0);\n  float total = 0.0;\n\n  // Calculate the spacing to avoid skewing if numSamples > maxSamples\n  float spacing = 1.0;\n  if (numSamples > maxSamples) {\n    spacing = numSamples / maxSamples;\n    numSamples = maxSamples;\n  }\n\n  float randomOffset = (spacing - 1.0) * mix(-0.5, 0.5, random(gl_FragCoord.xy));\n  for (float i = 0.0; i < maxSamples; i++) {\n    if (i >= numSamples) break;\n\n    float sample = i * spacing - (numSamples - 1.0) * 0.5 * spacing + randomOffset;\n    vec2 sampleCoord = uv + vec2(sample, sample) / canvasSize * direction;\n    float weight = quadWeight(sample, (numSamples - 1.0) * 0.5 * spacing);\n\n    avg += weight * texture2D(tex0, sampleCoord);\n    total += weight;\n  }\n\n  avg /= total;\n  gl_FragColor = avg;\n}\n"), j(e1, l.POSTERIZE, "// Limit color space for a stylized cartoon / poster effect\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform float filterParameter;\n\nvec3 quantize(vec3 color, float n) {\n  // restrict values to N options/bins\n  // and floor each channel to nearest value\n  //\n  // eg. when N = 5, values = 0.0, 0.25, 0.50, 0.75, 1.0\n  // then quantize (0.1, 0.7, 0.9) -> (0.0, 0.5, 1.0)\n\n  color = color * n;\n  color = floor(color);\n  color = color / (n - 1.0);\n  return color;\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n\n  vec3 restrictedColor = quantize(color.rgb / color.a, filterParameter);\n\n  gl_FragColor = vec4(restrictedColor.rgb * color.a, color.a);\n}\n"), j(e1, l.OPAQUE, "// Set alpha channel to entirely opaque\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  gl_FragColor = vec4(color.rgb / color.a, 1.0);\n}\n"), j(e1, l.INVERT, "// Set each pixel to inverse value\n// Note that original INVERT does not change the opacity, so this follows suit\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\n\nvoid main() {\nvec4 color = texture2D(tex0, vTexCoord);\nvec3 origColor = color.rgb / color.a;\nvec3 invertedColor = vec3(1.0) - origColor;\ngl_FragColor = vec4(invertedColor * color.a, color.a);\n}\n"), j(e1, l.THRESHOLD, "// Convert pixels to either white or black, \n// depending on if their luma is above or below filterParameter\n\nprecision highp float;\n\nvarying vec2 vTexCoord;\n\nuniform sampler2D tex0;\nuniform float filterParameter;\n\nfloat luma(vec3 color) {\n  // weighted grayscale with luminance values\n  return dot(color, vec3(0.2126, 0.7152, 0.0722));\n}\n\nvoid main() {\n  vec4 color = texture2D(tex0, vTexCoord);\n  float gray = luma(color.rgb / color.a);\n  // floor() used to match src/image/filters.js\n  float threshold = floor(filterParameter * 255.0) / 255.0;\n  float blackOrWhite = step(threshold, gray);\n  gl_FragColor = vec4(vec3(blackOrWhite) * color.a, color.a);\n}\n");
                 var k = e1;
-                function C(e1, t, r, o, n, s, i, a, l, u) {
+                function O(e1, t, r, o, n, s, i, a, l, u) {
                     var c = t.getParameter(t.FRAMEBUFFER_BINDING), r = (t.bindFramebuffer(t.FRAMEBUFFER, r), a === t.RGBA ? 4 : 3), d = s * i * r, h = l === t.UNSIGNED_BYTE ? Uint8Array : Float32Array;
                     if (e1 instanceof h && e1.length === d || (e1 = new h(d)), t.readPixels(o, u ? u - n - i : n, s, i, a, l, e1), t.bindFramebuffer(t.FRAMEBUFFER, c), u) for(var f = Math.floor(i / 2), p = new h(s * r), m = 0; m < f; m++){
                         var y = m * s * 4, g = (i - m - 1) * s * 4;
@@ -30807,7 +31122,7 @@ new (0, _p5Default.default)((sketch)=>{
                     }
                     return e1;
                 }
-                function O(e1, t, r, o, n, s, i) {
+                function C(e1, t, r, o, n, s, i) {
                     var a = e1.getParameter(e1.FRAMEBUFFER_BINDING), t = (e1.bindFramebuffer(e1.FRAMEBUFFER, t), n === e1.RGBA ? 4 : 3), t = new (s === e1.UNSIGNED_BYTE ? Uint8Array : Float32Array)(t);
                     return e1.readPixels(r, i ? i - o - 1 : o, 1, 1, n, s, t), e1.bindFramebuffer(e1.FRAMEBUFFER, a), Array.from(t);
                 }
@@ -30868,7 +31183,7 @@ new (0, _p5Default.default)((sketch)=>{
                             255,
                             255,
                             255
-                        ], e1.constantAttenuation = 1, e1.linearAttenuation = 0, e1.quadraticAttenuation = 0, e1.uMVMatrix = new g.default.Matrix, e1.uPMatrix = new g.default.Matrix, e1.uNMatrix = new g.default.Matrix("mat3"), e1.curMatrix = new g.default.Matrix("mat3"), e1._currentNormal = new g.default.Vector(0, 0, 1), e1._curCamera = new g.default.Camera(v(e1)), e1._curCamera._computeCameraDefaultSettings(), e1._curCamera._setDefaultCamera(), e1.filterCamera = new g.default.Camera(v(e1)), e1.filterCamera._computeCameraDefaultSettings(), e1.filterCamera._setDefaultCamera(), e1.prevTouches = [], e1.zoomVelocity = 0, e1.rotateVelocity = new g.default.Vector(0, 0), e1.moveVelocity = new g.default.Vector(0, 0), e1.executeZoom = !1, e1.executeRotateAndMove = !1, e1.specularShader = void 0, e1.sphereMapping = void 0, e1.diffusedShader = void 0, e1._defaultLightShader = void 0, e1._defaultImmediateModeShader = void 0, e1._defaultNormalShader = void 0, e1._defaultColorShader = void 0, e1._defaultPointShader = void 0, e1.userFillShader = void 0, e1.userStrokeShader = void 0, e1.userPointShader = void 0, e1.retainedMode = {
+                        ], e1.constantAttenuation = 1, e1.linearAttenuation = 0, e1.quadraticAttenuation = 0, e1.uModelMatrix = new g.default.Matrix, e1.uViewMatrix = new g.default.Matrix, e1.uMVMatrix = new g.default.Matrix, e1.uPMatrix = new g.default.Matrix, e1.uNMatrix = new g.default.Matrix("mat3"), e1.curMatrix = new g.default.Matrix("mat3"), e1._currentNormal = new g.default.Vector(0, 0, 1), e1._curCamera = new g.default.Camera(v(e1)), e1._curCamera._computeCameraDefaultSettings(), e1._curCamera._setDefaultCamera(), e1.filterCamera = new g.default.Camera(v(e1)), e1.filterCamera._computeCameraDefaultSettings(), e1.filterCamera._setDefaultCamera(), e1.prevTouches = [], e1.zoomVelocity = 0, e1.rotateVelocity = new g.default.Vector(0, 0), e1.moveVelocity = new g.default.Vector(0, 0), e1.executeZoom = !1, e1.executeRotateAndMove = !1, e1.specularShader = void 0, e1.sphereMapping = void 0, e1.diffusedShader = void 0, e1._defaultLightShader = void 0, e1._defaultImmediateModeShader = void 0, e1._defaultNormalShader = void 0, e1._defaultColorShader = void 0, e1._defaultPointShader = void 0, e1.userFillShader = void 0, e1.userStrokeShader = void 0, e1.userPointShader = void 0, e1.retainedMode = {
                             geometry: {},
                             buffers: {
                                 stroke: [
@@ -30993,7 +31308,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_update",
                             value: function() {
-                                this.uMVMatrix.set(this._curCamera.cameraMatrix), this.ambientLightColors.length = 0, this.specularColors = [
+                                this.uModelMatrix.reset(), this.uViewMatrix.set(this._curCamera.cameraMatrix), this.ambientLightColors.length = 0, this.specularColors = [
                                     1,
                                     1,
                                     1
@@ -31059,7 +31374,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "filter",
                             value: function() {
-                                var e1, t, r = this, o = this.getFilterLayer(), n = void 0, s = void 0, i = ("string" == typeof (arguments.length <= 0 ? void 0 : arguments[0]) ? (s = arguments.length <= 0 ? void 0 : arguments[0], _(e1 = {}, l.BLUR, 3), _(e1, l.POSTERIZE, 4), _(e1, l.THRESHOLD, .5), n = s in e1 && void 0 === (arguments.length <= 1 ? void 0 : arguments[1]) ? e1[s] : arguments.length <= 1 ? void 0 : arguments[1], s in this.defaultFilterShaders || (this.defaultFilterShaders[s] = new g.default.Shader(o._renderer, "uniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\n\nattribute vec3 aPosition;\n// texcoords only come from p5 to vertex shader\n// so pass texcoords on to the fragment shader in a varying variable\nattribute vec2 aTexCoord;\nvarying vec2 vTexCoord;\n\nvoid main() {\n  // transferring texcoords for the frag shader\n  vTexCoord = aTexCoord;\n\n  // copy position with a fourth coordinate for projection (1.0 is normal)\n  vec4 positionVec4 = vec4(aPosition, 1.0);\n\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n}\n", k[s])), this.filterShader = this.defaultFilterShaders[s]) : this.filterShader = arguments.length <= 0 ? void 0 : arguments[0], this.activeFramebuffer() || this), a = (this.matchSize(o, i), o.draw(function() {
+                                var e1, t, r = this, o = this.getFilterLayer(), n = void 0, s = void 0, i = ("string" == typeof (arguments.length <= 0 ? void 0 : arguments[0]) ? (s = arguments.length <= 0 ? void 0 : arguments[0], j(e1 = {}, l.BLUR, 3), j(e1, l.POSTERIZE, 4), j(e1, l.THRESHOLD, .5), n = s in e1 && void 0 === (arguments.length <= 1 ? void 0 : arguments[1]) ? e1[s] : arguments.length <= 1 ? void 0 : arguments[1], s in this.defaultFilterShaders || (this.defaultFilterShaders[s] = new g.default.Shader(o._renderer, "uniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\n\nattribute vec3 aPosition;\n// texcoords only come from p5 to vertex shader\n// so pass texcoords on to the fragment shader in a varying variable\nattribute vec2 aTexCoord;\nvarying vec2 vTexCoord;\n\nvoid main() {\n  // transferring texcoords for the frag shader\n  vTexCoord = aTexCoord;\n\n  // copy position with a fourth coordinate for projection (1.0 is normal)\n  vec4 positionVec4 = vec4(aPosition, 1.0);\n\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n}\n", k[s])), this.filterShader = this.defaultFilterShaders[s]) : this.filterShader = arguments.length <= 0 ? void 0 : arguments[0], this.activeFramebuffer() || this), a = (this.matchSize(o, i), o.draw(function() {
                                     return r._pInst.clear();
                                 }), [
                                     1 / (i.width * i.pixelDensity()),
@@ -31157,14 +31472,14 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "_getPixel",
                             value: function(e1, t) {
                                 var r = this.GL;
-                                return O(r, null, e1, t, r.RGBA, r.UNSIGNED_BYTE, this._pInst.height * this._pInst.pixelDensity());
+                                return C(r, null, e1, t, r.RGBA, r.UNSIGNED_BYTE, this._pInst.height * this._pInst.pixelDensity());
                             }
                         },
                         {
                             key: "loadPixels",
                             value: function() {
                                 var e1, t, r = this._pixelsState;
-                                !0 !== this._pInst._glAttributes.preserveDrawingBuffer ? console.log("loadPixels only works in WebGL when preserveDrawingBuffer is true.") : (e1 = this._pInst._pixelDensity, t = this.GL, r._setProperty("pixels", C(r.pixels, t, null, 0, 0, this.width * e1, this.height * e1, t.RGBA, t.UNSIGNED_BYTE, this.height * e1)));
+                                !0 !== this._pInst._glAttributes.preserveDrawingBuffer ? console.log("loadPixels only works in WebGL when preserveDrawingBuffer is true.") : (e1 = this._pInst._pixelDensity, t = this.GL, r._setProperty("pixels", O(r.pixels, t, null, 0, 0, this.width * e1, this.height * e1, t.RGBA, t.UNSIGNED_BYTE, this.height * e1)));
                             }
                         },
                         {
@@ -31239,7 +31554,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "applyMatrix",
                             value: function(e1, t, r, o, n, s) {
-                                16 === arguments.length ? g.default.Matrix.prototype.apply.apply(this.uMVMatrix, arguments) : this.uMVMatrix.apply([
+                                16 === arguments.length ? g.default.Matrix.prototype.apply.apply(this.uModelMatrix, arguments) : this.uModelMatrix.apply([
                                     e1,
                                     t,
                                     0,
@@ -31262,7 +31577,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "translate",
                             value: function(e1, t, r) {
-                                return e1 instanceof g.default.Vector && (r = e1.z, t = e1.y, e1 = e1.x), this.uMVMatrix.translate([
+                                return e1 instanceof g.default.Vector && (r = e1.z, t = e1.y, e1 = e1.x), this.uModelMatrix.translate([
                                     e1,
                                     t,
                                     r
@@ -31272,13 +31587,13 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "scale",
                             value: function(e1, t, r) {
-                                return this.uMVMatrix.scale(e1, t, r), this;
+                                return this.uModelMatrix.scale(e1, t, r), this;
                             }
                         },
                         {
                             key: "rotate",
                             value: function(e1, t) {
-                                return void 0 === t ? this.rotateZ(e1) : (g.default.Matrix.prototype.rotate.apply(this.uMVMatrix, arguments), this);
+                                return void 0 === t ? this.rotateZ(e1) : (g.default.Matrix.prototype.rotate.apply(this.uModelMatrix, arguments), this);
                             }
                         },
                         {
@@ -31303,7 +31618,7 @@ new (0, _p5Default.default)((sketch)=>{
                             key: "push",
                             value: function() {
                                 var e1 = g.default.Renderer.prototype.push.apply(this), t = e1.properties;
-                                return t.uMVMatrix = this.uMVMatrix.copy(), t.uPMatrix = this.uPMatrix.copy(), t._curCamera = this._curCamera, this._curCamera = this._curCamera.copy(), t.ambientLightColors = this.ambientLightColors.slice(), t.specularColors = this.specularColors.slice(), t.directionalLightDirections = this.directionalLightDirections.slice(), t.directionalLightDiffuseColors = this.directionalLightDiffuseColors.slice(), t.directionalLightSpecularColors = this.directionalLightSpecularColors.slice(), t.pointLightPositions = this.pointLightPositions.slice(), t.pointLightDiffuseColors = this.pointLightDiffuseColors.slice(), t.pointLightSpecularColors = this.pointLightSpecularColors.slice(), t.spotLightPositions = this.spotLightPositions.slice(), t.spotLightDirections = this.spotLightDirections.slice(), t.spotLightDiffuseColors = this.spotLightDiffuseColors.slice(), t.spotLightSpecularColors = this.spotLightSpecularColors.slice(), t.spotLightAngle = this.spotLightAngle.slice(), t.spotLightConc = this.spotLightConc.slice(), t.userFillShader = this.userFillShader, t.userStrokeShader = this.userStrokeShader, t.userPointShader = this.userPointShader, t.pointSize = this.pointSize, t.curStrokeWeight = this.curStrokeWeight, t.curStrokeColor = this.curStrokeColor, t.curFillColor = this.curFillColor, t.curAmbientColor = this.curAmbientColor, t.curSpecularColor = this.curSpecularColor, t.curEmissiveColor = this.curEmissiveColor, t._hasSetAmbient = this._hasSetAmbient, t._useSpecularMaterial = this._useSpecularMaterial, t._useEmissiveMaterial = this._useEmissiveMaterial, t._useShininess = this._useShininess, t._useMetalness = this._useMetalness, t.constantAttenuation = this.constantAttenuation, t.linearAttenuation = this.linearAttenuation, t.quadraticAttenuation = this.quadraticAttenuation, t._enableLighting = this._enableLighting, t._useNormalMaterial = this._useNormalMaterial, t._tex = this._tex, t.drawMode = this.drawMode, t._currentNormal = this._currentNormal, t.curBlendMode = this.curBlendMode, t.activeImageLight = this.activeImageLight, e1;
+                                return t.uModelMatrix = this.uModelMatrix.copy(), t.uViewMatrix = this.uViewMatrix.copy(), t.uPMatrix = this.uPMatrix.copy(), t._curCamera = this._curCamera, this._curCamera = this._curCamera.copy(), t.ambientLightColors = this.ambientLightColors.slice(), t.specularColors = this.specularColors.slice(), t.directionalLightDirections = this.directionalLightDirections.slice(), t.directionalLightDiffuseColors = this.directionalLightDiffuseColors.slice(), t.directionalLightSpecularColors = this.directionalLightSpecularColors.slice(), t.pointLightPositions = this.pointLightPositions.slice(), t.pointLightDiffuseColors = this.pointLightDiffuseColors.slice(), t.pointLightSpecularColors = this.pointLightSpecularColors.slice(), t.spotLightPositions = this.spotLightPositions.slice(), t.spotLightDirections = this.spotLightDirections.slice(), t.spotLightDiffuseColors = this.spotLightDiffuseColors.slice(), t.spotLightSpecularColors = this.spotLightSpecularColors.slice(), t.spotLightAngle = this.spotLightAngle.slice(), t.spotLightConc = this.spotLightConc.slice(), t.userFillShader = this.userFillShader, t.userStrokeShader = this.userStrokeShader, t.userPointShader = this.userPointShader, t.pointSize = this.pointSize, t.curStrokeWeight = this.curStrokeWeight, t.curStrokeColor = this.curStrokeColor, t.curFillColor = this.curFillColor, t.curAmbientColor = this.curAmbientColor, t.curSpecularColor = this.curSpecularColor, t.curEmissiveColor = this.curEmissiveColor, t._hasSetAmbient = this._hasSetAmbient, t._useSpecularMaterial = this._useSpecularMaterial, t._useEmissiveMaterial = this._useEmissiveMaterial, t._useShininess = this._useShininess, t._useMetalness = this._useMetalness, t.constantAttenuation = this.constantAttenuation, t.linearAttenuation = this.linearAttenuation, t.quadraticAttenuation = this.quadraticAttenuation, t._enableLighting = this._enableLighting, t._useNormalMaterial = this._useNormalMaterial, t._tex = this._tex, t.drawMode = this.drawMode, t._currentNormal = this._currentNormal, t.curBlendMode = this.curBlendMode, t.activeImageLight = this.activeImageLight, e1;
                             }
                         },
                         {
@@ -31327,7 +31642,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "resetMatrix",
                             value: function() {
-                                return this.uMVMatrix.set(this._curCamera.cameraMatrix), this;
+                                return this.uModelMatrix.reset(), this.uViewMatrix.set(this._curCamera.cameraMatrix), this;
                             }
                         },
                         {
@@ -31346,7 +31661,7 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_getSphereMapping",
                             value: function(e1) {
-                                return this.sphereMapping || (this.sphereMapping = this._pInst.createFilterShader(M)), this.uNMatrix.inverseTranspose(this.uMVMatrix), this.uNMatrix.invert3x3(this.uNMatrix), this.sphereMapping.setUniform("uFovY", this._curCamera.cameraFOV), this.sphereMapping.setUniform("uAspect", this._curCamera.aspectRatio), this.sphereMapping.setUniform("uNewNormalMatrix", this.uNMatrix.mat3), this.sphereMapping.setUniform("uSampler", e1), this.sphereMapping;
+                                return this.sphereMapping || (this.sphereMapping = this._pInst.createFilterShader(M)), this.uNMatrix.inverseTranspose(this.uViewMatrix), this.uNMatrix.invert3x3(this.uNMatrix), this.sphereMapping.setUniform("uFovY", this._curCamera.cameraFOV), this.sphereMapping.setUniform("uAspect", this._curCamera.aspectRatio), this.sphereMapping.setUniform("uNewNormalMatrix", this.uNMatrix.mat3), this.sphereMapping.setUniform("uSampler", e1), this.sphereMapping;
                             }
                         },
                         {
@@ -31687,79 +32002,79 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "../core/p5.Renderer": 283,
-                "./GeometryBuilder": 324,
-                "./p5.Camera": 329,
-                "./p5.Framebuffer": 331,
-                "./p5.Matrix": 333,
-                "./p5.Shader": 338,
-                "./p5.Texture": 339,
-                "core-js/modules/es.array.concat": 152,
-                "core-js/modules/es.array.copy-within": 153,
-                "core-js/modules/es.array.every": 154,
-                "core-js/modules/es.array.fill": 155,
-                "core-js/modules/es.array.flat": 159,
-                "core-js/modules/es.array.flat-map": 158,
-                "core-js/modules/es.array.from": 161,
-                "core-js/modules/es.array.includes": 162,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.map": 167,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.some": 169,
-                "core-js/modules/es.array.unscopables.flat": 172,
-                "core-js/modules/es.array.unscopables.flat-map": 171,
-                "core-js/modules/es.map": 174,
-                "core-js/modules/es.object.assign": 181,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.reflect.get": 190,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.set": 194,
-                "core-js/modules/es.string.includes": 196,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.float32-array": 216,
-                "core-js/modules/es.typed-array.float64-array": 217,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.int16-array": 221,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint16-array": 237,
-                "core-js/modules/es.typed-array.uint32-array": 238,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243,
-                libtess: 252,
-                path: 255
+                "../core/constants": 272,
+                "../core/main": 283,
+                "../core/p5.Renderer": 286,
+                "./GeometryBuilder": 327,
+                "./p5.Camera": 332,
+                "./p5.Framebuffer": 334,
+                "./p5.Matrix": 336,
+                "./p5.Shader": 342,
+                "./p5.Texture": 343,
+                "core-js/modules/es.array.concat": 153,
+                "core-js/modules/es.array.copy-within": 154,
+                "core-js/modules/es.array.every": 155,
+                "core-js/modules/es.array.fill": 156,
+                "core-js/modules/es.array.flat": 160,
+                "core-js/modules/es.array.flat-map": 159,
+                "core-js/modules/es.array.from": 162,
+                "core-js/modules/es.array.includes": 163,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.map": 168,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.some": 170,
+                "core-js/modules/es.array.unscopables.flat": 173,
+                "core-js/modules/es.array.unscopables.flat-map": 172,
+                "core-js/modules/es.map": 175,
+                "core-js/modules/es.object.assign": 183,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.reflect.get": 193,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.set": 197,
+                "core-js/modules/es.string.includes": 199,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.float32-array": 219,
+                "core-js/modules/es.typed-array.float64-array": 220,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.int16-array": 224,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint16-array": 240,
+                "core-js/modules/es.typed-array.uint32-array": 241,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246,
+                libtess: 255,
+                path: 258
             }
         ],
-        338: [
+        342: [
             function(e1, t, r) {
                 "use strict";
                 e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.function.name"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), e1("core-js/modules/es.symbol"), e1("core-js/modules/es.symbol.description"), e1("core-js/modules/es.symbol.iterator"), e1("core-js/modules/es.array.index-of"), e1("core-js/modules/es.array.iterator"), e1("core-js/modules/es.array.slice"), e1("core-js/modules/es.array.some"), e1("core-js/modules/es.function.name"), e1("core-js/modules/es.object.keys"), e1("core-js/modules/es.object.to-string"), e1("core-js/modules/es.string.iterator"), e1("core-js/modules/web.dom-collections.iterator"), Object.defineProperty(r, "__esModule", {
@@ -31911,8 +32226,8 @@ new (0, _p5Default.default)((sketch)=>{
                         {
                             key: "_setMatrixUniforms",
                             value: function() {
-                                var e1 = this._renderer._curCamera.cameraMatrix, t = this._renderer.uPMatrix, r = this._renderer.uMVMatrix, o = r.copy();
-                                o.mult(t), this.isStrokeShader() && this.setUniform("uPerspective", this._renderer._curCamera.useLinePerspective ? 1 : 0), this.setUniform("uViewMatrix", e1.mat4), this.setUniform("uProjectionMatrix", t.mat4), this.setUniform("uModelViewMatrix", r.mat4), this.setUniform("uModelViewProjectionMatrix", o.mat4), this.uniforms.uNormalMatrix && (this._renderer.uNMatrix.inverseTranspose(this._renderer.uMVMatrix), this.setUniform("uNormalMatrix", this._renderer.uNMatrix.mat3)), this.uniforms.uCameraRotation && (this._renderer.curMatrix.inverseTranspose(this._renderer._curCamera.cameraMatrix), this.setUniform("uCameraRotation", this._renderer.curMatrix.mat3));
+                                var e1 = this._renderer.uModelMatrix, t = this._renderer.uViewMatrix, r = this._renderer.uPMatrix, o = e1.copy().mult(t), n = (this._renderer.uMVMatrix = o).copy();
+                                n.mult(r), this.isStrokeShader() && this.setUniform("uPerspective", this._renderer._curCamera.useLinePerspective ? 1 : 0), this.setUniform("uViewMatrix", t.mat4), this.setUniform("uProjectionMatrix", r.mat4), this.setUniform("uModelMatrix", e1.mat4), this.setUniform("uModelViewMatrix", o.mat4), this.setUniform("uModelViewProjectionMatrix", n.mat4), this.uniforms.uNormalMatrix && (this._renderer.uNMatrix.inverseTranspose(this._renderer.uMVMatrix), this.setUniform("uNormalMatrix", this._renderer.uNMatrix.mat3)), this.uniforms.uCameraRotation && (this._renderer.curMatrix.inverseTranspose(this._renderer.uViewMatrix), this.setUniform("uCameraRotation", this._renderer.curMatrix.mat3));
                             }
                         },
                         {
@@ -32064,22 +32379,22 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/main": 280,
-                "core-js/modules/es.array.index-of": 163,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.array.slice": 168,
-                "core-js/modules/es.array.some": 169,
-                "core-js/modules/es.function.name": 173,
-                "core-js/modules/es.object.keys": 186,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/main": 283,
+                "core-js/modules/es.array.index-of": 164,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.array.slice": 169,
+                "core-js/modules/es.array.some": 170,
+                "core-js/modules/es.function.name": 174,
+                "core-js/modules/es.object.keys": 189,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        339: [
+        343: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -32296,47 +32611,47 @@ new (0, _p5Default.default)((sketch)=>{
                 r.default = e1;
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.get-prototype-of": 185,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.reflect.construct": 189,
-                "core-js/modules/es.regexp.to-string": 193,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.typed-array.copy-within": 210,
-                "core-js/modules/es.typed-array.every": 211,
-                "core-js/modules/es.typed-array.fill": 212,
-                "core-js/modules/es.typed-array.filter": 213,
-                "core-js/modules/es.typed-array.find": 215,
-                "core-js/modules/es.typed-array.find-index": 214,
-                "core-js/modules/es.typed-array.for-each": 218,
-                "core-js/modules/es.typed-array.includes": 219,
-                "core-js/modules/es.typed-array.index-of": 220,
-                "core-js/modules/es.typed-array.iterator": 223,
-                "core-js/modules/es.typed-array.join": 224,
-                "core-js/modules/es.typed-array.last-index-of": 225,
-                "core-js/modules/es.typed-array.map": 226,
-                "core-js/modules/es.typed-array.reduce": 228,
-                "core-js/modules/es.typed-array.reduce-right": 227,
-                "core-js/modules/es.typed-array.reverse": 229,
-                "core-js/modules/es.typed-array.set": 230,
-                "core-js/modules/es.typed-array.slice": 231,
-                "core-js/modules/es.typed-array.some": 232,
-                "core-js/modules/es.typed-array.sort": 233,
-                "core-js/modules/es.typed-array.subarray": 234,
-                "core-js/modules/es.typed-array.to-locale-string": 235,
-                "core-js/modules/es.typed-array.to-string": 236,
-                "core-js/modules/es.typed-array.uint8-array": 239,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.get-prototype-of": 188,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.reflect.construct": 192,
+                "core-js/modules/es.regexp.to-string": 196,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.typed-array.copy-within": 213,
+                "core-js/modules/es.typed-array.every": 214,
+                "core-js/modules/es.typed-array.fill": 215,
+                "core-js/modules/es.typed-array.filter": 216,
+                "core-js/modules/es.typed-array.find": 218,
+                "core-js/modules/es.typed-array.find-index": 217,
+                "core-js/modules/es.typed-array.for-each": 221,
+                "core-js/modules/es.typed-array.includes": 222,
+                "core-js/modules/es.typed-array.index-of": 223,
+                "core-js/modules/es.typed-array.iterator": 226,
+                "core-js/modules/es.typed-array.join": 227,
+                "core-js/modules/es.typed-array.last-index-of": 228,
+                "core-js/modules/es.typed-array.map": 229,
+                "core-js/modules/es.typed-array.reduce": 231,
+                "core-js/modules/es.typed-array.reduce-right": 230,
+                "core-js/modules/es.typed-array.reverse": 232,
+                "core-js/modules/es.typed-array.set": 233,
+                "core-js/modules/es.typed-array.slice": 234,
+                "core-js/modules/es.typed-array.some": 235,
+                "core-js/modules/es.typed-array.sort": 236,
+                "core-js/modules/es.typed-array.subarray": 237,
+                "core-js/modules/es.typed-array.to-locale-string": 238,
+                "core-js/modules/es.typed-array.to-string": 239,
+                "core-js/modules/es.typed-array.uint8-array": 242,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ],
-        340: [
+        344: [
             function(e1, t, r) {
                 "use strict";
                 function o(e1) {
@@ -32489,10 +32804,10 @@ new (0, _p5Default.default)((sketch)=>{
                                         ]), n;
                                     }(), y = !0, g = !1, v = void 0;
                                     try {
-                                        for(var b, _ = a[Symbol.iterator](); !(y = (b = _.next()).done); y = !0){
-                                            var j = b.value, x = (j.x - o) / s, w = (j.y - n) / i;
+                                        for(var b, j = a[Symbol.iterator](); !(y = (b = j.next()).done); y = !0){
+                                            var _ = b.value, x = (_.x - o) / s, w = (_.y - n) / i;
                                             if (!U(h, f, x, w)) {
-                                                switch(j.type){
+                                                switch(_.type){
                                                     case "M":
                                                         p = x, m = w;
                                                         break;
@@ -32500,7 +32815,7 @@ new (0, _p5Default.default)((sketch)=>{
                                                         I(h, f, x, w);
                                                         break;
                                                     case "Q":
-                                                        var S = (j.x1 - o) / s, T = (j.y1 - n) / i;
+                                                        var S = (_.x1 - o) / s, T = (_.y1 - n) / i;
                                                         L([
                                                             h,
                                                             x,
@@ -32546,7 +32861,7 @@ new (0, _p5Default.default)((sketch)=>{
                                                                 }
                                                             }
                                                             return l;
-                                                        }(h, f, (j.x1 - o) / s, (j.y1 - n) / i, (j.x2 - o) / s, (j.y2 - n) / i, x, w), M = 0; M < E.length; M++){
+                                                        }(h, f, (_.x1 - o) / s, (_.y1 - n) / i, (_.x2 - o) / s, (_.y2 - n) / i, x, w), M = 0; M < E.length; M++){
                                                             var k = E[M].toQuadratic();
                                                             L([
                                                                 k.x,
@@ -32560,7 +32875,7 @@ new (0, _p5Default.default)((sketch)=>{
                                                         }
                                                         break;
                                                     default:
-                                                        throw new Error("unknown command type: ".concat(j.type));
+                                                        throw new Error("unknown command type: ".concat(_.type));
                                                 }
                                                 h = x, f = w;
                                             }
@@ -32569,14 +32884,14 @@ new (0, _p5Default.default)((sketch)=>{
                                         g = !0, v = e1;
                                     } finally{
                                         try {
-                                            y || null == _.return || _.return();
+                                            y || null == j.return || j.return();
                                         } finally{
                                             if (g) throw v;
                                         }
                                     }
-                                    for(var C = u.length, O = this.strokeImageInfos.findImage(C), F = O.index, A = 0; A < C; ++A){
+                                    for(var O = u.length, C = this.strokeImageInfos.findImage(O), F = C.index, A = 0; A < O; ++A){
                                         var P = u[A];
-                                        z(O, R(P.x), R(P.y), R(P.cx), R(P.cy));
+                                        z(C, R(P.x), R(P.y), R(P.cx), R(P.cy));
                                     }
                                     (t = this.glyphInfos[e1.index] = {
                                         glyph: e1,
@@ -32586,7 +32901,7 @@ new (0, _p5Default.default)((sketch)=>{
                                             r.x2,
                                             -r.y2
                                         ],
-                                        strokeImageInfo: O,
+                                        strokeImageInfo: C,
                                         strokes: u,
                                         colInfo: N(d, this.colDimImageInfos, this.colCellImageInfos),
                                         rowInfo: N(c, this.rowDimImageInfos, this.rowCellImageInfos)
@@ -32688,15 +33003,15 @@ new (0, _p5Default.default)((sketch)=>{
                                 try {
                                     var p = 0, m = null, y = i.stringToGlyphs(t), g = !0, v = !1, b = void 0;
                                     try {
-                                        for(var _, j = y[Symbol.iterator](); !(g = (_ = j.next()).done); g = !0){
-                                            var x, w, S = _.value, T = (m && (p += i.getKerningValue(m, S)), a.getGlyphInfo(S));
+                                        for(var j, _ = y[Symbol.iterator](); !(g = (j = _.next()).done); g = !0){
+                                            var x, w, S = j.value, T = (m && (p += i.getKerningValue(m, S)), a.getGlyphInfo(S));
                                             T.uGlyphRect && (x = T.rowInfo, w = T.colInfo, u.setUniform("uSamplerStrokes", T.strokeImageInfo.imageData), u.setUniform("uSamplerRowStrokes", x.cellImageInfo.imageData), u.setUniform("uSamplerRows", x.dimImageInfo.imageData), u.setUniform("uSamplerColStrokes", w.cellImageInfo.imageData), u.setUniform("uSamplerCols", w.dimImageInfo.imageData), u.setUniform("uGridOffset", T.uGridOffset), u.setUniform("uGlyphRect", T.uGlyphRect), u.setUniform("uGlyphOffset", p), u.bindTextures(), l.drawElements(l.TRIANGLES, 6, this.GL.UNSIGNED_SHORT, 0)), p += S.advanceWidth, m = S;
                                         }
                                     } catch (e1) {
                                         v = !0, b = e1;
                                     } finally{
                                         try {
-                                            g || null == j.return || j.return();
+                                            g || null == _.return || _.return();
                                         } finally{
                                             if (v) throw b;
                                         }
@@ -32711,58 +33026,28 @@ new (0, _p5Default.default)((sketch)=>{
                 };
             },
             {
-                "../core/constants": 269,
-                "../core/main": 280,
-                "./p5.RendererGL.Retained": 336,
-                "./p5.Shader": 338,
-                "core-js/modules/es.array.iterator": 164,
-                "core-js/modules/es.object.get-own-property-descriptor": 183,
-                "core-js/modules/es.object.to-string": 187,
-                "core-js/modules/es.regexp.exec": 192,
-                "core-js/modules/es.string.iterator": 197,
-                "core-js/modules/es.string.split": 203,
-                "core-js/modules/es.string.sub": 205,
-                "core-js/modules/es.symbol": 209,
-                "core-js/modules/es.symbol.description": 207,
-                "core-js/modules/es.symbol.iterator": 208,
-                "core-js/modules/es.weak-map": 241,
-                "core-js/modules/web.dom-collections.iterator": 243
+                "../core/constants": 272,
+                "../core/main": 283,
+                "./p5.RendererGL.Retained": 340,
+                "./p5.Shader": 342,
+                "core-js/modules/es.array.iterator": 165,
+                "core-js/modules/es.object.get-own-property-descriptor": 186,
+                "core-js/modules/es.object.to-string": 190,
+                "core-js/modules/es.regexp.exec": 195,
+                "core-js/modules/es.string.iterator": 200,
+                "core-js/modules/es.string.split": 206,
+                "core-js/modules/es.string.sub": 208,
+                "core-js/modules/es.symbol": 212,
+                "core-js/modules/es.symbol.description": 210,
+                "core-js/modules/es.symbol.iterator": 211,
+                "core-js/modules/es.weak-map": 244,
+                "core-js/modules/web.dom-collections.iterator": 246
             }
         ]
     }, {}, [
-        264
-    ])(264);
+        267
+    ])(267);
 });
-
-},{}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
 
 },{}],"gxcUo":[function(require,module,exports) {
 module.exports = require("ea71eb9ab5ba8ebd").getBundleURL("9up4p") + "BlackSla.4dbfafdd.otf" + "?" + Date.now();
@@ -32801,6 +33086,36 @@ function getOrigin(url) {
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
+
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}]},["h9Rts","fFaKF"], "fFaKF", "parcelRequire94c2")
 
