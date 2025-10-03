@@ -1,5 +1,14 @@
 import p5 from "p5";
 import typeface from "../assets/fonts/BlackSla.otf";
+import {
+  initSettings,
+  setMessageChangeCallback,
+  setFontSizeChangeCallback,
+  setColsChangeCallback,
+  getCurrentMessage,
+  getCurrentFontSize,
+  getCurrentCols,
+} from "./settings.js";
 
 new p5((sk) => {
   let draggedHandle = null;
@@ -8,10 +17,12 @@ new p5((sk) => {
   let textures = [];
   let gridVertices = [];
 
-  const cols = 4;
-  const letters = ["D", "E", "F", "O", "R", "M", "T", "Y", "P", "E"];
-  const rows = Math.ceil(letters.length / cols);
-  const fontSize = 360;
+  let cols = getCurrentCols();
+  let letters = getCurrentMessage()
+    .split("")
+    .filter((char) => char !== " ");
+  let rows = Math.ceil(letters.length / cols);
+  let fontSize = getCurrentFontSize();
   const handleSize = 24;
 
   sk.preload = () => {
@@ -48,6 +59,26 @@ new p5((sk) => {
 
   sk.setup = () => {
     sk.createCanvas(sk.windowWidth, sk.windowHeight, sk.WEBGL);
+    initSettings();
+    setMessageChangeCallback((newMessage) => {
+      letters = newMessage.split("").filter((char) => char !== " ");
+      rows = Math.ceil(letters.length / cols);
+      textures = [];
+      letters.forEach((char) => textures.push(createTexture(char)));
+      setupGrid();
+    });
+    setFontSizeChangeCallback((newFontSize) => {
+      fontSize = newFontSize;
+      textures = [];
+      letters.forEach((char) => textures.push(createTexture(char)));
+    });
+    setColsChangeCallback((newCols) => {
+      cols = newCols;
+      rows = Math.ceil(letters.length / cols);
+      textures = [];
+      letters.forEach((char) => textures.push(createTexture(char)));
+      setupGrid();
+    });
     letters.forEach((char) => textures.push(createTexture(char)));
     setupGrid();
   };
@@ -83,7 +114,7 @@ new p5((sk) => {
 
     // Draw handles
     sk.fill(0);
-    const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 24);
+    const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 18);
     for (let col = 1; col < cols; col++) {
       for (let row = 1; row < rows; row++) {
         const vertex = gridVertices[col][row];
