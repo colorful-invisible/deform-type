@@ -207,11 +207,11 @@
       });
     }
   }
-})({"6P02v":[function(require,module,exports,__globalThis) {
+})({"4vEJg":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 3000;
+var HMR_SERVER_PORT = 56667;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -721,26 +721,25 @@ var _blackSlaOtf = require("../assets/fonts/BlackSla.otf");
 var _blackSlaOtfDefault = parcelHelpers.interopDefault(_blackSlaOtf);
 new (0, _p5Default.default)((sketch)=>{
     let dragging = null;
+    let handleHovered = null;
     let type;
     let textures = [];
     let quads = [];
     let cols = 4;
     let letters = [
-        "A",
-        "B",
         "C",
+        "O",
         "D",
         "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L"
+        "P",
+        "O",
+        "E",
+        "T",
+        "R",
+        "Y"
     ];
     let rows = Math.ceil(letters.length / cols);
-    let fontSize = 380;
+    let fontSize = 360;
     let vertices = [];
     sketch.preload = ()=>{
         type = sketch.loadFont((0, _blackSlaOtfDefault.default));
@@ -797,7 +796,6 @@ new (0, _p5Default.default)((sketch)=>{
         sketch.background(36);
         // Create textures for each character
         letters.forEach((char)=>textures.push(createTexture(char)));
-        console.log(textures);
         setupQuads();
     };
     sketch.draw = ()=>{
@@ -819,38 +817,35 @@ new (0, _p5Default.default)((sketch)=>{
         let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 12, 24);
         // Draw handles at internal vertices (shared by 4 quads)
         for(let i = 1; i < cols; i++)for(let j = 1; j < rows; j++)sketch.ellipse(vertices[i][j].x, vertices[i][j].y, pulse, pulse);
-        let nearHandle = false;
+        // Track handle hover state for cursor and drag
+        handleHovered = null;
+        let mouseXWebGL = sketch.mouseX - sketch.width / 2;
+        let mouseYWebGL = sketch.mouseY - sketch.height / 2;
         for(let i = 1; i < cols; i++){
-            for(let j = 1; j < rows; j++){
-                let screenX = sketch.width / 2 + vertices[i][j].x;
-                let screenY = sketch.height / 2 + vertices[i][j].y;
-                if (sketch.dist(sketch.mouseX, sketch.mouseY, screenX, screenY) < 18) {
-                    nearHandle = true;
-                    break;
-                }
-            }
-            if (nearHandle) break;
-        }
-        sketch.cursor(nearHandle ? sketch.HAND : sketch.ARROW);
-    };
-    sketch.mousePressed = ()=>{
-        for(let i = 1; i < cols; i++)for(let j = 1; j < rows; j++){
-            let screenX = sketch.width / 2 + vertices[i][j].x;
-            let screenY = sketch.height / 2 + vertices[i][j].y;
-            if (sketch.dist(sketch.mouseX, sketch.mouseY, screenX, screenY) < 18) {
-                dragging = {
+            for(let j = 1; j < rows; j++)if (sketch.dist(mouseXWebGL, mouseYWebGL, vertices[i][j].x, vertices[i][j].y) < 50) {
+                handleHovered = {
                     i,
                     j
                 };
-                return;
+                break;
             }
+            if (handleHovered) break;
         }
+        // Update cursor - use grab/grabbing for better UX
+        if (dragging !== null) document.body.style.cursor = "grabbing";
+        else if (handleHovered) document.body.style.cursor = "grab";
+        else document.body.style.cursor = "default";
+    };
+    sketch.mousePressed = ()=>{
+        if (handleHovered) dragging = {
+            i: handleHovered.i,
+            j: handleHovered.j
+        };
     };
     sketch.mouseDragged = ()=>{
         if (dragging !== null) {
             let deltaX = sketch.mouseX - sketch.pmouseX;
             let deltaY = sketch.mouseY - sketch.pmouseY;
-            // Move the shared vertex - this automatically deforms all 4 connected quads
             vertices[dragging.i][dragging.j].x += deltaX;
             vertices[dragging.i][dragging.j].y += deltaY;
         }
@@ -33474,6 +33469,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["6P02v","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
+},{}]},["4vEJg","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
 
 //# sourceMappingURL=deform-type.c6396971.js.map

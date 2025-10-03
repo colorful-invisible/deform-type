@@ -3,13 +3,14 @@ import typeface from "../assets/fonts/BlackSla.otf";
 
 new p5((sketch) => {
   let dragging = null;
+  let handleHovered = null;
   let type;
   let textures = [];
   let quads = [];
   let cols = 4;
-  let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+  let letters = ["C", "O", "D", "E", "P", "O", "E", "T", "R", "Y"];
   let rows = Math.ceil(letters.length / cols);
-  let fontSize = 380;
+  let fontSize = 360;
   let vertices = [];
 
   sketch.preload = () => {
@@ -71,8 +72,6 @@ new p5((sketch) => {
     // Create textures for each character
     letters.forEach((char) => textures.push(createTexture(char)));
 
-    console.log(textures);
-
     setupQuads();
   };
 
@@ -105,31 +104,40 @@ new p5((sketch) => {
       }
     }
 
-    let nearHandle = false;
+    // Track handle hover state for cursor and drag
+    handleHovered = null;
+    let mouseXWebGL = sketch.mouseX - sketch.width / 2;
+    let mouseYWebGL = sketch.mouseY - sketch.height / 2;
     for (let i = 1; i < cols; i++) {
       for (let j = 1; j < rows; j++) {
-        let screenX = sketch.width / 2 + vertices[i][j].x;
-        let screenY = sketch.height / 2 + vertices[i][j].y;
-        if (sketch.dist(sketch.mouseX, sketch.mouseY, screenX, screenY) < 18) {
-          nearHandle = true;
+        if (
+          sketch.dist(
+            mouseXWebGL,
+            mouseYWebGL,
+            vertices[i][j].x,
+            vertices[i][j].y
+          ) < 50
+        ) {
+          handleHovered = { i, j };
           break;
         }
       }
-      if (nearHandle) break;
+      if (handleHovered) break;
     }
-    sketch.cursor(nearHandle ? sketch.HAND : sketch.ARROW);
+
+    // Update cursor - use grab/grabbing for better UX
+    if (dragging !== null) {
+      document.body.style.cursor = "grabbing";
+    } else if (handleHovered) {
+      document.body.style.cursor = "grab";
+    } else {
+      document.body.style.cursor = "default";
+    }
   };
 
   sketch.mousePressed = () => {
-    for (let i = 1; i < cols; i++) {
-      for (let j = 1; j < rows; j++) {
-        let screenX = sketch.width / 2 + vertices[i][j].x;
-        let screenY = sketch.height / 2 + vertices[i][j].y;
-        if (sketch.dist(sketch.mouseX, sketch.mouseY, screenX, screenY) < 18) {
-          dragging = { i, j };
-          return;
-        }
-      }
+    if (handleHovered) {
+      dragging = { i: handleHovered.i, j: handleHovered.j };
     }
   };
 
@@ -137,7 +145,6 @@ new p5((sketch) => {
     if (dragging !== null) {
       let deltaX = sketch.mouseX - sketch.pmouseX;
       let deltaY = sketch.mouseY - sketch.pmouseY;
-      // Move the shared vertex - this automatically deforms all 4 connected quads
       vertices[dragging.i][dragging.j].x += deltaX;
       vertices[dragging.i][dragging.j].y += deltaY;
     }
