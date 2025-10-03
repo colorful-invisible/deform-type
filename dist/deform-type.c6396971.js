@@ -207,11 +207,11 @@
       });
     }
   }
-})({"4vEJg":[function(require,module,exports,__globalThis) {
+})({"3tBQL":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 56667;
+var HMR_SERVER_PORT = 56497;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -719,143 +719,124 @@ var _p5 = require("p5");
 var _p5Default = parcelHelpers.interopDefault(_p5);
 var _blackSlaOtf = require("../assets/fonts/BlackSla.otf");
 var _blackSlaOtfDefault = parcelHelpers.interopDefault(_blackSlaOtf);
-new (0, _p5Default.default)((sketch)=>{
-    let dragging = null;
-    let handleHovered = null;
-    let type;
+new (0, _p5Default.default)((sk)=>{
+    let draggedHandle = null;
+    let hoveredHandle = null;
+    let font;
     let textures = [];
-    let quads = [];
-    let cols = 4;
-    let letters = [
-        "C",
-        "O",
+    let gridVertices = [];
+    const cols = 4;
+    const letters = [
         "D",
         "E",
-        "P",
+        "F",
         "O",
-        "E",
-        "T",
         "R",
-        "Y"
+        "M",
+        "T",
+        "Y",
+        "P",
+        "E"
     ];
-    let rows = Math.ceil(letters.length / cols);
-    let fontSize = 360;
-    let vertices = [];
-    sketch.preload = ()=>{
-        type = sketch.loadFont((0, _blackSlaOtfDefault.default));
+    const rows = Math.ceil(letters.length / cols);
+    const fontSize = 360;
+    const handleSize = 24;
+    sk.preload = ()=>{
+        font = sk.loadFont((0, _blackSlaOtfDefault.default));
     };
     const createTexture = (char)=>{
-        let graphics = sketch.createGraphics(sketch.width / cols, sketch.height / rows);
+        const graphics = sk.createGraphics(sk.width / cols, sk.height / rows);
         graphics.fill(180);
-        graphics.textFont(type);
+        graphics.textFont(font);
         graphics.textAlign(graphics.CENTER, graphics.CENTER);
         graphics.textSize(fontSize);
         graphics.text(char, graphics.width / 2, graphics.height / 2);
         return graphics;
     };
-    const setupQuads = ()=>{
-        let w = sketch.width / 2;
-        let h = sketch.height / 2;
-        let stepX = sketch.width / cols;
-        let stepY = sketch.height / rows;
-        // Initialize shared vertex grid
-        vertices = [];
-        for(let i = 0; i <= cols; i++){
-            vertices[i] = [];
-            for(let j = 0; j <= rows; j++)vertices[i][j] = {
-                x: i * stepX - w,
-                y: j * stepY - h
+    const setupGrid = ()=>{
+        const stepX = sk.width / cols;
+        const stepY = sk.height / rows;
+        const offsetX = sk.width / 2;
+        const offsetY = sk.height / 2;
+        gridVertices = [];
+        for(let col = 0; col <= cols; col++){
+            gridVertices[col] = [];
+            for(let row = 0; row <= rows; row++)gridVertices[col][row] = {
+                x: col * stepX - offsetX,
+                y: row * stepY - offsetY
             };
         }
-        // Create quads with vertex indices
-        quads = [];
-        for(let j = 0; j < rows; j++)for(let i = 0; i < cols; i++)quads.push({
-            // Store indices to vertices
-            v: [
-                [
-                    i,
-                    j
-                ],
-                [
-                    i + 1,
-                    j
-                ],
-                [
-                    i + 1,
-                    j + 1
-                ],
-                [
-                    i,
-                    j + 1
-                ]
-            ]
-        });
     };
-    sketch.setup = ()=>{
-        sketch.createCanvas(sketch.windowWidth, sketch.windowHeight, sketch.WEBGL);
-        sketch.background(36);
-        // Create textures for each character
+    sk.setup = ()=>{
+        sk.createCanvas(sk.windowWidth, sk.windowHeight, sk.WEBGL);
         letters.forEach((char)=>textures.push(createTexture(char)));
-        setupQuads();
+        setupGrid();
     };
-    sketch.draw = ()=>{
-        sketch.background(36);
-        sketch.push();
-        sketch.noStroke();
-        quads.forEach((quad, index)=>{
-            if (index < textures.length) sketch.texture(textures[index]);
-            else sketch.noFill();
-            // Get current vertex positions from the grid
-            let v0 = vertices[quad.v[0][0]][quad.v[0][1]];
-            let v1 = vertices[quad.v[1][0]][quad.v[1][1]];
-            let v2 = vertices[quad.v[2][0]][quad.v[2][1]];
-            let v3 = vertices[quad.v[3][0]][quad.v[3][1]];
-            sketch.quad(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
-        });
-        sketch.pop();
-        sketch.fill(0);
-        let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 12, 24);
-        // Draw handles at internal vertices (shared by 4 quads)
-        for(let i = 1; i < cols; i++)for(let j = 1; j < rows; j++)sketch.ellipse(vertices[i][j].x, vertices[i][j].y, pulse, pulse);
-        // Track handle hover state for cursor and drag
-        handleHovered = null;
-        let mouseXWebGL = sketch.mouseX - sketch.width / 2;
-        let mouseYWebGL = sketch.mouseY - sketch.height / 2;
-        for(let i = 1; i < cols; i++){
-            for(let j = 1; j < rows; j++)if (sketch.dist(mouseXWebGL, mouseYWebGL, vertices[i][j].x, vertices[i][j].y) < 50) {
-                handleHovered = {
-                    i,
-                    j
-                };
-                break;
+    sk.draw = ()=>{
+        sk.background(36);
+        // Draw textured quads
+        sk.noStroke();
+        let textureIndex = 0;
+        for(let row = 0; row < rows; row++)for(let col = 0; col < cols; col++){
+            if (textureIndex < textures.length) {
+                sk.texture(textures[textureIndex]);
+                const topLeft = gridVertices[col][row];
+                const topRight = gridVertices[col + 1][row];
+                const bottomRight = gridVertices[col + 1][row + 1];
+                const bottomLeft = gridVertices[col][row + 1];
+                sk.quad(topLeft.x, topLeft.y, topRight.x, topRight.y, bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y);
             }
-            if (handleHovered) break;
+            textureIndex++;
         }
-        // Update cursor - use grab/grabbing for better UX
-        if (dragging !== null) document.body.style.cursor = "grabbing";
-        else if (handleHovered) document.body.style.cursor = "grab";
+        // Draw handles
+        sk.fill(0);
+        const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 24);
+        for(let col = 1; col < cols; col++)for(let row = 1; row < rows; row++){
+            const vertex = gridVertices[col][row];
+            sk.ellipse(vertex.x, vertex.y, pulse, pulse);
+        }
+        // Update hovered handle
+        hoveredHandle = null;
+        const mouseX = sk.mouseX - sk.width / 2;
+        const mouseY = sk.mouseY - sk.height / 2;
+        for(let col = 1; col < cols; col++){
+            for(let row = 1; row < rows; row++){
+                const vertex = gridVertices[col][row];
+                if (sk.dist(mouseX, mouseY, vertex.x, vertex.y) < handleSize) {
+                    hoveredHandle = {
+                        col,
+                        row
+                    };
+                    break;
+                }
+            }
+            if (hoveredHandle) break;
+        }
+        // Update cursor
+        if (draggedHandle) document.body.style.cursor = "grabbing";
+        else if (hoveredHandle) document.body.style.cursor = "grab";
         else document.body.style.cursor = "default";
     };
-    sketch.mousePressed = ()=>{
-        if (handleHovered) dragging = {
-            i: handleHovered.i,
-            j: handleHovered.j
+    sk.mousePressed = ()=>{
+        if (hoveredHandle) draggedHandle = {
+            col: hoveredHandle.col,
+            row: hoveredHandle.row
         };
     };
-    sketch.mouseDragged = ()=>{
-        if (dragging !== null) {
-            let deltaX = sketch.mouseX - sketch.pmouseX;
-            let deltaY = sketch.mouseY - sketch.pmouseY;
-            vertices[dragging.i][dragging.j].x += deltaX;
-            vertices[dragging.i][dragging.j].y += deltaY;
+    sk.mouseDragged = ()=>{
+        if (draggedHandle) {
+            const deltaX = sk.mouseX - sk.pmouseX;
+            const deltaY = sk.mouseY - sk.pmouseY;
+            gridVertices[draggedHandle.col][draggedHandle.row].x += deltaX;
+            gridVertices[draggedHandle.col][draggedHandle.row].y += deltaY;
         }
     };
-    sketch.mouseReleased = ()=>{
-        dragging = null;
+    sk.mouseReleased = ()=>{
+        draggedHandle = null;
     };
-    sketch.windowResized = ()=>{
-        sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
-        setupQuads();
+    sk.windowResized = ()=>{
+        sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
+        setupGrid();
     };
 });
 
@@ -33469,6 +33450,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["4vEJg","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
+},{}]},["3tBQL","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
 
 //# sourceMappingURL=deform-type.c6396971.js.map
