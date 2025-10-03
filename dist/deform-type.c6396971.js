@@ -719,147 +719,124 @@ var _p5 = require("p5");
 var _p5Default = parcelHelpers.interopDefault(_p5);
 var _blackSlaOtf = require("../assets/fonts/BlackSla.otf");
 var _blackSlaOtfDefault = parcelHelpers.interopDefault(_blackSlaOtf);
-new (0, _p5Default.default)((sketch)=>{
-    let dragging = false;
-    let type;
+new (0, _p5Default.default)((sk)=>{
+    let draggedHandle = null;
+    let hoveredHandle = null;
+    let font;
     let textures = [];
-    let quads = [];
-    sketch.preload = ()=>{
-        type = sketch.loadFont((0, _blackSlaOtfDefault.default));
+    let gridVertices = [];
+    const cols = 4;
+    const letters = [
+        "D",
+        "E",
+        "F",
+        "O",
+        "R",
+        "M",
+        "T",
+        "Y",
+        "P",
+        "E"
+    ];
+    const rows = Math.ceil(letters.length / cols);
+    const fontSize = 360;
+    const handleSize = 24;
+    sk.preload = ()=>{
+        font = sk.loadFont((0, _blackSlaOtfDefault.default));
     };
     const createTexture = (char)=>{
-        let graphics = sketch.createGraphics(sketch.width / 2, sketch.height);
-        graphics.fill(0, 106, 219);
-        graphics.textFont(type);
+        const graphics = sk.createGraphics(sk.width / cols, sk.height / rows);
+        graphics.fill(180);
+        graphics.textFont(font);
         graphics.textAlign(graphics.CENTER, graphics.CENTER);
-        let fontSize = Math.min(graphics.width, graphics.height);
-        graphics.textSize(fontSize * 1.25);
+        graphics.textSize(fontSize);
         graphics.text(char, graphics.width / 2, graphics.height / 2);
         return graphics;
     };
-    const setupQuads = ()=>{
-        let w = sketch.width / 2;
-        let h = sketch.height / 2;
-        // Define coordinates
-        quads = [
-            {
-                vertices: [
-                    -w,
-                    -h,
-                    0,
-                    -h,
-                    0,
-                    0,
-                    -w,
-                    0
-                ],
-                centralIndex: 4
-            },
-            {
-                vertices: [
-                    0,
-                    -h,
-                    w,
-                    -h,
-                    w,
-                    0,
-                    0,
-                    0
-                ],
-                centralIndex: 6
-            },
-            {
-                vertices: [
-                    -w,
-                    0,
-                    0,
-                    0,
-                    0,
-                    h,
-                    -w,
-                    h
-                ],
-                centralIndex: 2
-            },
-            {
-                vertices: [
-                    0,
-                    0,
-                    w,
-                    0,
-                    w,
-                    h,
-                    0,
-                    h
-                ],
-                centralIndex: 0
-            }
-        ];
-    };
-    sketch.setup = ()=>{
-        sketch.createCanvas(sketch.windowWidth, sketch.windowHeight, sketch.WEBGL);
-        sketch.background(0, 106, 219);
-        // Create textures for each character
-        const chars = [
-            "H",
-            "I",
-            "E",
-            "B"
-        ];
-        chars.forEach((char)=>textures.push(createTexture(char)));
-        console.log(textures);
-        setupQuads();
-    };
-    sketch.draw = ()=>{
-        sketch.background(38, 153, 0);
-        let centerX = sketch.width / 2 + quads[0].vertices[quads[0].centralIndex];
-        let centerY = sketch.height / 2 + quads[0].vertices[quads[0].centralIndex + 1];
-        let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
-        sketch.push();
-        sketch.noStroke();
-        quads.forEach((quad, index)=>{
-            if (index < textures.length) sketch.texture(textures[index]);
-            else sketch.noFill();
-            sketch.quad(quad.vertices[0], quad.vertices[1], quad.vertices[2], quad.vertices[3], quad.vertices[4], quad.vertices[5], quad.vertices[6], quad.vertices[7]);
-        });
-        sketch.pop();
-        sketch.fill(7, 0, 40);
-        sketch.ellipse(quads[0].vertices[quads[0].centralIndex], quads[0].vertices[quads[0].centralIndex + 1], pulse, pulse);
-        if (sketch.dist(sketch.mouseX, sketch.mouseY, centerX, centerY) < 18) sketch.cursor(sketch.HAND);
-        else sketch.cursor(sketch.ARROW);
-    // sketch.push();
-    // sketch.fill(255); // Bright color for visibility
-    // sketch.textFont(type);
-    // sketch.textSize(48); // Large enough size for visibility
-    // sketch.textAlign(sketch.CENTER, sketch.CENTER); // Center alignment might help
-    // sketch.text(
-    //   "DRAG ME",
-    //   quads[0].vertices[quads[0].centralIndex],
-    //   quads[0].vertices[quads[0].centralIndex + 1]
-    // ); // Position at center for testing
-    // sketch.pop();
-    };
-    sketch.mousePressed = ()=>{
-        let ccx = sketch.width / 2 + quads[0].vertices[4];
-        let ccy = sketch.height / 2 + quads[0].vertices[5];
-        if (sketch.dist(sketch.mouseX, sketch.mouseY, ccx, ccy) < 18) dragging = true;
-    };
-    sketch.mouseDragged = ()=>{
-        if (dragging) {
-            let newCCX = sketch.mouseX - sketch.width / 2;
-            let newCCY = sketch.mouseY - sketch.height / 2;
-            quads.forEach((quad)=>{
-                quad.vertices[quad.centralIndex] = newCCX;
-                quad.vertices[quad.centralIndex + 1] = newCCY;
-            });
+    const setupGrid = ()=>{
+        const stepX = sk.width / cols;
+        const stepY = sk.height / rows;
+        const offsetX = sk.width / 2;
+        const offsetY = sk.height / 2;
+        gridVertices = [];
+        for(let col = 0; col <= cols; col++){
+            gridVertices[col] = [];
+            for(let row = 0; row <= rows; row++)gridVertices[col][row] = {
+                x: col * stepX - offsetX,
+                y: row * stepY - offsetY
+            };
         }
     };
-    sketch.mouseReleased = ()=>{
-        dragging = false;
+    sk.setup = ()=>{
+        sk.createCanvas(sk.windowWidth, sk.windowHeight, sk.WEBGL);
+        letters.forEach((char)=>textures.push(createTexture(char)));
+        setupGrid();
     };
-    sketch.windowResized = ()=>{
-        sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
-        setupQuads();
+    sk.draw = ()=>{
+        sk.background(36);
+        // Draw textured quads
+        sk.noStroke();
+        let textureIndex = 0;
+        for(let row = 0; row < rows; row++)for(let col = 0; col < cols; col++){
+            if (textureIndex < textures.length) {
+                sk.texture(textures[textureIndex]);
+                const topLeft = gridVertices[col][row];
+                const topRight = gridVertices[col + 1][row];
+                const bottomRight = gridVertices[col + 1][row + 1];
+                const bottomLeft = gridVertices[col][row + 1];
+                sk.quad(topLeft.x, topLeft.y, topRight.x, topRight.y, bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y);
+            }
+            textureIndex++;
+        }
+        // Draw handles
+        sk.fill(0);
+        const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 24);
+        for(let col = 1; col < cols; col++)for(let row = 1; row < rows; row++){
+            const vertex = gridVertices[col][row];
+            sk.ellipse(vertex.x, vertex.y, pulse, pulse);
+        }
+        // Update hovered handle
+        hoveredHandle = null;
+        const mouseX = sk.mouseX - sk.width / 2;
+        const mouseY = sk.mouseY - sk.height / 2;
+        for(let col = 1; col < cols; col++){
+            for(let row = 1; row < rows; row++){
+                const vertex = gridVertices[col][row];
+                if (sk.dist(mouseX, mouseY, vertex.x, vertex.y) < handleSize) {
+                    hoveredHandle = {
+                        col,
+                        row
+                    };
+                    break;
+                }
+            }
+            if (hoveredHandle) break;
+        }
+        // Update cursor
+        if (draggedHandle) document.body.style.cursor = "grabbing";
+        else if (hoveredHandle) document.body.style.cursor = "grab";
+        else document.body.style.cursor = "default";
+    };
+    sk.mousePressed = ()=>{
+        if (hoveredHandle) draggedHandle = {
+            col: hoveredHandle.col,
+            row: hoveredHandle.row
+        };
+    };
+    sk.mouseDragged = ()=>{
+        if (draggedHandle) {
+            const deltaX = sk.mouseX - sk.pmouseX;
+            const deltaY = sk.mouseY - sk.pmouseY;
+            gridVertices[draggedHandle.col][draggedHandle.row].x += deltaX;
+            gridVertices[draggedHandle.col][draggedHandle.row].y += deltaY;
+        }
+    };
+    sk.mouseReleased = ()=>{
+        draggedHandle = null;
+    };
+    sk.windowResized = ()=>{
+        sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
+        setupGrid();
     };
 });
 
