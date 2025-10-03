@@ -207,11 +207,11 @@
       });
     }
   }
-})({"4vEJg":[function(require,module,exports,__globalThis) {
+})({"2aZ6o":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 56667;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -719,27 +719,17 @@ var _p5 = require("p5");
 var _p5Default = parcelHelpers.interopDefault(_p5);
 var _blackSlaOtf = require("../assets/fonts/BlackSla.otf");
 var _blackSlaOtfDefault = parcelHelpers.interopDefault(_blackSlaOtf);
+var _settingsJs = require("./settings.js");
 new (0, _p5Default.default)((sk)=>{
     let draggedHandle = null;
     let hoveredHandle = null;
     let font;
     let textures = [];
     let gridVertices = [];
-    const cols = 4;
-    const letters = [
-        "D",
-        "E",
-        "F",
-        "O",
-        "R",
-        "M",
-        "T",
-        "Y",
-        "P",
-        "E"
-    ];
-    const rows = Math.ceil(letters.length / cols);
-    const fontSize = 360;
+    let cols = (0, _settingsJs.getCurrentCols)();
+    let letters = (0, _settingsJs.getCurrentMessage)().split("").filter((char)=>char !== " ");
+    let rows = Math.ceil(letters.length / cols);
+    let fontSize = (0, _settingsJs.getCurrentFontSize)();
     const handleSize = 24;
     sk.preload = ()=>{
         font = sk.loadFont((0, _blackSlaOtfDefault.default));
@@ -769,6 +759,26 @@ new (0, _p5Default.default)((sk)=>{
     };
     sk.setup = ()=>{
         sk.createCanvas(sk.windowWidth, sk.windowHeight, sk.WEBGL);
+        (0, _settingsJs.initSettings)();
+        (0, _settingsJs.setMessageChangeCallback)((newMessage)=>{
+            letters = newMessage.split("").filter((char)=>char !== " ");
+            rows = Math.ceil(letters.length / cols);
+            textures = [];
+            letters.forEach((char)=>textures.push(createTexture(char)));
+            setupGrid();
+        });
+        (0, _settingsJs.setFontSizeChangeCallback)((newFontSize)=>{
+            fontSize = newFontSize;
+            textures = [];
+            letters.forEach((char)=>textures.push(createTexture(char)));
+        });
+        (0, _settingsJs.setColsChangeCallback)((newCols)=>{
+            cols = newCols;
+            rows = Math.ceil(letters.length / cols);
+            textures = [];
+            letters.forEach((char)=>textures.push(createTexture(char)));
+            setupGrid();
+        });
         letters.forEach((char)=>textures.push(createTexture(char)));
         setupGrid();
     };
@@ -790,7 +800,7 @@ new (0, _p5Default.default)((sk)=>{
         }
         // Draw handles
         sk.fill(0);
-        const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 24);
+        const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 18);
         for(let col = 1; col < cols; col++)for(let row = 1; row < rows; row++){
             const vertex = gridVertices[col][row];
             sk.ellipse(vertex.x, vertex.y, pulse, pulse);
@@ -840,7 +850,7 @@ new (0, _p5Default.default)((sk)=>{
     };
 });
 
-},{"p5":"6IEby","../assets/fonts/BlackSla.otf":"59PO1","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6IEby":[function(require,module,exports,__globalThis) {
+},{"p5":"6IEby","../assets/fonts/BlackSla.otf":"59PO1","./settings.js":"6zYs7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6IEby":[function(require,module,exports,__globalThis) {
 /*! p5.js v1.11.10 August 23, 2025 */ var global = arguments[3];
 !function(e1) {
     module.exports = e1();
@@ -33420,7 +33430,158 @@ new (0, _p5Default.default)((sk)=>{
 },{}],"59PO1":[function(require,module,exports,__globalThis) {
 module.exports = module.bundle.resolve("BlackSla.965ebc0b.otf") + "?" + Date.now();
 
-},{}],"jnFvT":[function(require,module,exports,__globalThis) {
+},{}],"6zYs7":[function(require,module,exports,__globalThis) {
+// State
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// Initialize and set up listeners
+parcelHelpers.export(exports, "initSettings", ()=>initSettings);
+// Public method to set message change callback
+parcelHelpers.export(exports, "setMessageChangeCallback", ()=>setMessageChangeCallback);
+// Public method to set font size change callback
+parcelHelpers.export(exports, "setFontSizeChangeCallback", ()=>setFontSizeChangeCallback);
+// Public method to set columns change callback
+parcelHelpers.export(exports, "setColsChangeCallback", ()=>setColsChangeCallback);
+// Public method to get current message
+parcelHelpers.export(exports, "getCurrentMessage", ()=>getCurrentMessage);
+// Public method to get current font size
+parcelHelpers.export(exports, "getCurrentFontSize", ()=>getCurrentFontSize);
+// Public method to get current columns
+parcelHelpers.export(exports, "getCurrentCols", ()=>getCurrentCols);
+// Public method to set message programmatically
+parcelHelpers.export(exports, "setMessage", ()=>setMessage);
+// Public method to set font size programmatically
+parcelHelpers.export(exports, "setFontSize", ()=>setFontSize);
+// Public method to set columns programmatically
+parcelHelpers.export(exports, "setCols", ()=>setCols);
+let currentMessage = "DEFORM TYPE";
+let currentFontSize = 320;
+let currentCols = 4;
+let onMessageChange = null;
+let onFontSizeChange = null;
+let onColsChange = null;
+let panel = null;
+let messageInput = null;
+let fontSizeInput = null;
+let colsInput = null;
+let isOpen = false;
+function initSettings() {
+    setupEventListeners();
+}
+function setupEventListeners() {
+    panel = document.getElementById("settings-panel");
+    messageInput = document.getElementById("message-input");
+    fontSizeInput = document.getElementById("font-size-input");
+    colsInput = document.getElementById("cols-input");
+    const trigger = document.getElementById("settings-trigger");
+    // Panel toggle
+    trigger.addEventListener("click", togglePanel);
+    // Message input
+    if (messageInput) {
+        messageInput.addEventListener("input", handleMessageChange);
+        messageInput.value = currentMessage;
+    }
+    // Font size input
+    if (fontSizeInput) {
+        fontSizeInput.addEventListener("input", handleFontSizeChange);
+        fontSizeInput.value = currentFontSize;
+        updateFontSizeDisplay();
+    }
+    // Columns input
+    if (colsInput) {
+        colsInput.addEventListener("input", handleColsChange);
+        colsInput.value = currentCols;
+        updateColsDisplay();
+    }
+    // Close panel when clicking outside
+    document.addEventListener("click", (e)=>{
+        if (isOpen && !panel.contains(e.target) && !trigger.contains(e.target)) closePanel();
+    });
+}
+function togglePanel() {
+    if (isOpen) closePanel();
+    else openPanel();
+}
+function openPanel() {
+    panel.classList.add("open");
+    document.body.classList.add("has-open-panel");
+    isOpen = true;
+}
+function closePanel() {
+    panel.classList.remove("open");
+    document.body.classList.remove("has-open-panel");
+    isOpen = false;
+}
+function handleMessageChange(e) {
+    const newMessage = e.target.value;
+    setCurrentMessage(newMessage);
+}
+function handleFontSizeChange(e) {
+    const newFontSize = parseInt(e.target.value);
+    setCurrentFontSize(newFontSize);
+}
+function handleColsChange(e) {
+    const newCols = parseInt(e.target.value);
+    setCurrentCols(newCols);
+}
+function setCurrentMessage(message) {
+    currentMessage = message;
+    // Notify the main application
+    if (onMessageChange) onMessageChange(currentMessage);
+}
+function setCurrentFontSize(fontSize) {
+    currentFontSize = fontSize;
+    updateFontSizeDisplay();
+    // Notify the main application
+    if (onFontSizeChange) onFontSizeChange(currentFontSize);
+}
+function setCurrentCols(cols) {
+    currentCols = cols;
+    updateColsDisplay();
+    // Notify the main application
+    if (onColsChange) onColsChange(currentCols);
+}
+function updateFontSizeDisplay() {
+    if (fontSizeInput) fontSizeInput.value = currentFontSize;
+}
+function updateColsDisplay() {
+    if (colsInput) colsInput.value = currentCols;
+}
+function setMessageChangeCallback(callback) {
+    onMessageChange = callback;
+}
+function setFontSizeChangeCallback(callback) {
+    onFontSizeChange = callback;
+}
+function setColsChangeCallback(callback) {
+    onColsChange = callback;
+}
+function getCurrentMessage() {
+    return currentMessage;
+}
+function getCurrentFontSize() {
+    return currentFontSize;
+}
+function getCurrentCols() {
+    return currentCols;
+}
+function setMessage(message) {
+    currentMessage = message;
+    if (messageInput) messageInput.value = currentMessage;
+    if (onMessageChange) onMessageChange(currentMessage);
+}
+function setFontSize(fontSize) {
+    currentFontSize = fontSize;
+    updateFontSizeDisplay();
+    if (onFontSizeChange) onFontSizeChange(currentFontSize);
+}
+function setCols(cols) {
+    currentCols = cols;
+    updateColsDisplay();
+    if (onColsChange) onColsChange(currentCols);
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -33450,6 +33611,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["4vEJg","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
+},{}]},["2aZ6o","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
 
 //# sourceMappingURL=deform-type.c6396971.js.map
