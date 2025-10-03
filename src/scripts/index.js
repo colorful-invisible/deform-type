@@ -7,9 +7,9 @@ new p5((sketch) => {
   let textures = [];
   let quads = [];
   let cols = 4;
-  let rows = 2;
-  let letters = ["H", "I", "E", "B", "D", "R"];
-  let fontSize = 480;
+  let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+  let rows = Math.ceil(letters.length / cols);
+  let fontSize = 380;
   let vertices = [];
 
   sketch.preload = () => {
@@ -21,7 +21,7 @@ new p5((sketch) => {
       sketch.width / cols,
       sketch.height / rows
     );
-    graphics.fill(0, 106, 219);
+    graphics.fill(180);
     graphics.textFont(type);
     graphics.textAlign(graphics.CENTER, graphics.CENTER);
     graphics.textSize(fontSize);
@@ -35,39 +35,38 @@ new p5((sketch) => {
     let stepX = sketch.width / cols;
     let stepY = sketch.height / rows;
 
-    vertices = Array(cols + 1)
-      .fill()
-      .map(() =>
-        Array(rows + 1)
-          .fill()
-          .map(() => [0, 0])
-      );
-
+    // Initialize shared vertex grid
+    vertices = [];
     for (let i = 0; i <= cols; i++) {
+      vertices[i] = [];
       for (let j = 0; j <= rows; j++) {
-        vertices[i][j] = [i * stepX - w, j * stepY - h];
+        vertices[i][j] = {
+          x: i * stepX - w,
+          y: j * stepY - h,
+        };
       }
     }
 
+    // Create quads with vertex indices
     quads = [];
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
-        let quad = {
-          vertices: [
-            ...vertices[i][j],
-            ...vertices[i + 1][j],
-            ...vertices[i + 1][j + 1],
-            ...vertices[i][j + 1],
+    for (let j = 0; j < rows; j++) {
+      for (let i = 0; i < cols; i++) {
+        quads.push({
+          // Store indices to vertices
+          v: [
+            [i, j], // top-left
+            [i + 1, j], // top-right
+            [i + 1, j + 1], // bottom-right
+            [i, j + 1], // bottom-left
           ],
-        };
-        quads.push(quad);
+        });
       }
     }
   };
 
   sketch.setup = () => {
     sketch.createCanvas(sketch.windowWidth, sketch.windowHeight, sketch.WEBGL);
-    sketch.background(0, 106, 219);
+    sketch.background(36);
 
     // Create textures for each character
     letters.forEach((char) => textures.push(createTexture(char)));
@@ -78,7 +77,7 @@ new p5((sketch) => {
   };
 
   sketch.draw = () => {
-    sketch.background(38, 153, 0);
+    sketch.background(36);
 
     sketch.push();
     sketch.noStroke();
@@ -88,49 +87,45 @@ new p5((sketch) => {
       } else {
         sketch.noFill();
       }
-      sketch.quad(...quad.vertices);
+      // Get current vertex positions from the grid
+      let v0 = vertices[quad.v[0][0]][quad.v[0][1]];
+      let v1 = vertices[quad.v[1][0]][quad.v[1][1]];
+      let v2 = vertices[quad.v[2][0]][quad.v[2][1]];
+      let v3 = vertices[quad.v[3][0]][quad.v[3][1]];
+      sketch.quad(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
     });
     sketch.pop();
 
-    sketch.fill(7, 0, 40);
-    let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 36, 48);
+    sketch.fill(0);
+    let pulse = sketch.map(sketch.sin(sketch.frameCount * 0.05), -1, 1, 12, 24);
+    // Draw handles at internal vertices (shared by 4 quads)
     for (let i = 1; i < cols; i++) {
       for (let j = 1; j < rows; j++) {
-        sketch.ellipse(vertices[i][j][0], vertices[i][j][1], pulse, pulse);
+        sketch.ellipse(vertices[i][j].x, vertices[i][j].y, pulse, pulse);
       }
     }
 
     let nearHandle = false;
     for (let i = 1; i < cols; i++) {
       for (let j = 1; j < rows; j++) {
-        let vx = sketch.width / 2 + vertices[i][j][0];
-        let vy = sketch.height / 2 + vertices[i][j][1];
-        if (sketch.dist(sketch.mouseX, sketch.mouseY, vx, vy) < 18) {
+        let screenX = sketch.width / 2 + vertices[i][j].x;
+        let screenY = sketch.height / 2 + vertices[i][j].y;
+        if (sketch.dist(sketch.mouseX, sketch.mouseY, screenX, screenY) < 18) {
           nearHandle = true;
+          break;
         }
       }
+      if (nearHandle) break;
     }
     sketch.cursor(nearHandle ? sketch.HAND : sketch.ARROW);
-
-    // sketch.push();
-    // sketch.fill(255); // Bright color for visibility
-    // sketch.textFont(type);
-    // sketch.textSize(48); // Large enough size for visibility
-    // sketch.textAlign(sketch.CENTER, sketch.CENTER); // Center alignment might help
-    // sketch.text(
-    //   "DRAG ME",
-    //   quads[0].vertices[quads[0].centralIndex],
-    //   quads[0].vertices[quads[0].centralIndex + 1]
-    // ); // Position at center for testing
-    // sketch.pop();
   };
 
   sketch.mousePressed = () => {
     for (let i = 1; i < cols; i++) {
       for (let j = 1; j < rows; j++) {
-        let vx = sketch.width / 2 + vertices[i][j][0];
-        let vy = sketch.height / 2 + vertices[i][j][1];
-        if (sketch.dist(sketch.mouseX, sketch.mouseY, vx, vy) < 18) {
+        let screenX = sketch.width / 2 + vertices[i][j].x;
+        let screenY = sketch.height / 2 + vertices[i][j].y;
+        if (sketch.dist(sketch.mouseX, sketch.mouseY, screenX, screenY) < 18) {
           dragging = { i, j };
           return;
         }
@@ -139,48 +134,12 @@ new p5((sketch) => {
   };
 
   sketch.mouseDragged = () => {
-    if (dragging) {
-      vertices[dragging.i][dragging.j] = [
-        sketch.mouseX - sketch.width / 2,
-        sketch.mouseY - sketch.height / 2,
-      ];
-      // Update the vertices of the affected quads
-      let di = dragging.i;
-      let dj = dragging.j;
-      if (di > 0 && dj > 0) {
-        let qi = (di - 1) * rows + (dj - 1);
-        quads[qi].vertices = [
-          ...vertices[di - 1][dj - 1],
-          ...vertices[di][dj - 1],
-          ...vertices[di][dj],
-          ...vertices[di - 1][dj],
-        ];
-      }
-      if (dj > 0) {
-        let qi = di * rows + (dj - 1);
-        quads[qi].vertices = [
-          ...vertices[di][dj - 1],
-          ...vertices[di + 1][dj - 1],
-          ...vertices[di + 1][dj],
-          ...vertices[di][dj],
-        ];
-      }
-      if (di > 0) {
-        let qi = (di - 1) * rows + dj;
-        quads[qi].vertices = [
-          ...vertices[di - 1][dj],
-          ...vertices[di][dj],
-          ...vertices[di][dj + 1],
-          ...vertices[di - 1][dj + 1],
-        ];
-      }
-      let qi = di * rows + dj;
-      quads[qi].vertices = [
-        ...vertices[di][dj],
-        ...vertices[di + 1][dj],
-        ...vertices[di + 1][dj + 1],
-        ...vertices[di][dj + 1],
-      ];
+    if (dragging !== null) {
+      let deltaX = sketch.mouseX - sketch.pmouseX;
+      let deltaY = sketch.mouseY - sketch.pmouseY;
+      // Move the shared vertex - this automatically deforms all 4 connected quads
+      vertices[dragging.i][dragging.j].x += deltaX;
+      vertices[dragging.i][dragging.j].y += deltaY;
     }
   };
 
