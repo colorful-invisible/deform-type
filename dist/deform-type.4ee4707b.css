@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.filter {
+  z-index: 20;
+  opacity: .35;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  background-image: url("film.d60a94b7.jpg");
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/*# sourceMappingURL=deform-type.4ee4707b.css.map */
