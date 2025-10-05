@@ -25,6 +25,7 @@ new p5((sk) => {
   let rows = Math.ceil(letters.length / cols);
   let fontSize = getCurrentFontSize();
   let currentFontFamily = null;
+  let isLightTheme = false;
   const handleSize = 24;
 
   const recreateTextures = () => {
@@ -38,7 +39,7 @@ new p5((sk) => {
 
   const createTexture = (char) => {
     const graphics = sk.createGraphics(sk.width / cols, sk.height / rows);
-    graphics.fill(180);
+    graphics.fill(isLightTheme ? 0 : 180);
     if (currentFontFamily) {
       graphics.textFont(currentFontFamily);
     } else {
@@ -96,7 +97,7 @@ new p5((sk) => {
   };
 
   sk.draw = () => {
-    sk.background(36);
+    sk.background(isLightTheme ? 255 : 36);
 
     // Draw textured quads
     sk.noStroke();
@@ -181,5 +182,12 @@ new p5((sk) => {
   sk.windowResized = () => {
     sk.resizeCanvas(sk.windowWidth, sk.windowHeight);
     setupGrid();
+  };
+
+  sk.keyPressed = () => {
+    if (sk.key === "h" || sk.key === "H") {
+      isLightTheme = !isLightTheme;
+      recreateTextures();
+    }
   };
 });
