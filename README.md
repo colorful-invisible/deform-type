@@ -1,6 +1,6 @@
 # Deform Type
 
-![Deform Type Screenshot](sketch_1.png)
+![Deform Type Screenshot](./readme-images/deform-type.png)
 
 A generative art project built with p5.js that allows you to interactively deform text on a grid by dragging handles.
 
