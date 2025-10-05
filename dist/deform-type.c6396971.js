@@ -207,11 +207,11 @@
       });
     }
   }
-})({"6bvP6":[function(require,module,exports,__globalThis) {
+})({"2aZ6o":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 51311;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -864,7 +864,7 @@ new (0, _p5Default.default)((sk)=>{
             isLightTheme = !isLightTheme;
             recreateTextures();
         }
-        if (sk.key === "s" || sk.key === "S") (0, _utilsJs.saveSnapshot)(sk, defaultDensity, 4);
+        if (sk.key === "s" || sk.key === "S") (0, _utilsJs.saveSnapshot)(sk, defaultDensity, 2);
     };
 });
 
@@ -33703,6 +33703,6 @@ function pulse(sk, min, max, time) {
     return amplitude * sk.sin(currentTime % period * (sk.TWO_PI / period)) + mid;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["6bvP6","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["2aZ6o","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
 
 //# sourceMappingURL=deform-type.c6396971.js.map

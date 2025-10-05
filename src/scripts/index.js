@@ -193,7 +193,7 @@ new p5((sk) => {
       recreateTextures();
     }
     if (sk.key === "s" || sk.key === "S") {
-      saveSnapshot(sk, defaultDensity, 4);
+      saveSnapshot(sk, defaultDensity, 2);
     }
   };
 });
