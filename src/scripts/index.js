@@ -10,6 +10,7 @@ import {
   getCurrentFontSize,
   getCurrentCols,
 } from "./settings.js";
+import { saveSnapshot, pulse } from "./utils.js";
 
 new p5((sk) => {
   let draggedHandle = null;
@@ -17,6 +18,7 @@ new p5((sk) => {
   let font;
   let textures = [];
   let gridVertices = [];
+  let defaultDensity;
 
   let cols = getCurrentCols();
   let letters = getCurrentMessage()
@@ -71,6 +73,7 @@ new p5((sk) => {
 
   sk.setup = () => {
     sk.createCanvas(sk.windowWidth, sk.windowHeight, sk.WEBGL);
+    defaultDensity = sk.displayDensity();
     initSettings();
     setMessageChangeCallback((newMessage) => {
       letters = newMessage.split("").filter((char) => char !== " ");
@@ -127,11 +130,11 @@ new p5((sk) => {
 
     // Draw handles
     sk.fill(0);
-    const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 18);
+    const pulseValue = pulse(sk, 12, 18, 2);
     for (let col = 1; col < cols; col++) {
       for (let row = 1; row < rows; row++) {
         const vertex = gridVertices[col][row];
-        sk.ellipse(vertex.x, vertex.y, pulse, pulse);
+        sk.ellipse(vertex.x, vertex.y, pulseValue, pulseValue);
       }
     }
 
@@ -188,6 +191,9 @@ new p5((sk) => {
     if (sk.key === "h" || sk.key === "H") {
       isLightTheme = !isLightTheme;
       recreateTextures();
+    }
+    if (sk.key === "s" || sk.key === "S") {
+      saveSnapshot(sk, defaultDensity, 4);
     }
   };
 });

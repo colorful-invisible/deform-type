@@ -720,12 +720,14 @@ var _p5Default = parcelHelpers.interopDefault(_p5);
 var _blackSlaOtf = require("../assets/fonts/BlackSla.otf");
 var _blackSlaOtfDefault = parcelHelpers.interopDefault(_blackSlaOtf);
 var _settingsJs = require("./settings.js");
+var _utilsJs = require("./utils.js");
 new (0, _p5Default.default)((sk)=>{
     let draggedHandle = null;
     let hoveredHandle = null;
     let font;
     let textures = [];
     let gridVertices = [];
+    let defaultDensity;
     let cols = (0, _settingsJs.getCurrentCols)();
     let letters = (0, _settingsJs.getCurrentMessage)().split("").filter((char)=>char !== " ");
     let rows = Math.ceil(letters.length / cols);
@@ -766,6 +768,7 @@ new (0, _p5Default.default)((sk)=>{
     };
     sk.setup = ()=>{
         sk.createCanvas(sk.windowWidth, sk.windowHeight, sk.WEBGL);
+        defaultDensity = sk.displayDensity();
         (0, _settingsJs.initSettings)();
         (0, _settingsJs.setMessageChangeCallback)((newMessage)=>{
             letters = newMessage.split("").filter((char)=>char !== " ");
@@ -808,10 +811,10 @@ new (0, _p5Default.default)((sk)=>{
         }
         // Draw handles
         sk.fill(0);
-        const pulse = sk.map(sk.sin(sk.frameCount * 0.05), -1, 1, 12, 18);
+        const pulseValue = (0, _utilsJs.pulse)(sk, 12, 18, 2);
         for(let col = 1; col < cols; col++)for(let row = 1; row < rows; row++){
             const vertex = gridVertices[col][row];
-            sk.ellipse(vertex.x, vertex.y, pulse, pulse);
+            sk.ellipse(vertex.x, vertex.y, pulseValue, pulseValue);
         }
         // Update hovered handle
         hoveredHandle = null;
@@ -861,10 +864,11 @@ new (0, _p5Default.default)((sk)=>{
             isLightTheme = !isLightTheme;
             recreateTextures();
         }
+        if (sk.key === "s" || sk.key === "S") (0, _utilsJs.saveSnapshot)(sk, defaultDensity, 4);
     };
 });
 
-},{"p5":"6IEby","../assets/fonts/BlackSla.otf":"59PO1","./settings.js":"6zYs7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6IEby":[function(require,module,exports,__globalThis) {
+},{"p5":"6IEby","../assets/fonts/BlackSla.otf":"59PO1","./settings.js":"6zYs7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./utils.js":"1X9hu"}],"6IEby":[function(require,module,exports,__globalThis) {
 /*! p5.js v1.11.10 August 23, 2025 */ var global = arguments[3];
 !function(e1) {
     module.exports = e1();
@@ -33672,6 +33676,33 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["6bvP6","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
+},{}],"1X9hu":[function(require,module,exports,__globalThis) {
+// ---- SAVE P5 CANVAS SNAPSHOT AS PNG
+// -----------------------------------
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "saveSnapshot", ()=>saveSnapshot);
+parcelHelpers.export(exports, "pulse", ()=>pulse);
+let countSaved = 1;
+function saveSnapshot(sk, defaultDensity, densityFactor = 2) {
+    const currentDensity = sk.pixelDensity();
+    sk.pixelDensity(defaultDensity * densityFactor);
+    sk.redraw();
+    sk.saveCanvas(`sketch_${countSaved}`, "png");
+    countSaved++;
+    sk.pixelDensity(currentDensity);
+    sk.redraw();
+}
+// ---- SINOIDAL PULSE
+// -------------------
+function pulse(sk, min, max, time) {
+    const mid = (min + max) / 2;
+    const amplitude = (max - min) / 2;
+    const period = time * 1000; // Convert time from seconds to milliseconds
+    const currentTime = sk.millis();
+    return amplitude * sk.sin(currentTime % period * (sk.TWO_PI / period)) + mid;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["6bvP6","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
 
 //# sourceMappingURL=deform-type.c6396971.js.map
