@@ -207,11 +207,11 @@
       });
     }
   }
-})({"2aZ6o":[function(require,module,exports,__globalThis) {
+})({"ekTNJ":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 1234;
+var HMR_SERVER_PORT = 50270;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -730,14 +730,20 @@ new (0, _p5Default.default)((sk)=>{
     let letters = (0, _settingsJs.getCurrentMessage)().split("").filter((char)=>char !== " ");
     let rows = Math.ceil(letters.length / cols);
     let fontSize = (0, _settingsJs.getCurrentFontSize)();
+    let currentFontFamily = null;
     const handleSize = 24;
+    const recreateTextures = ()=>{
+        textures = [];
+        letters.forEach((char)=>textures.push(createTexture(char)));
+    };
     sk.preload = ()=>{
         font = sk.loadFont((0, _blackSlaOtfDefault.default));
     };
     const createTexture = (char)=>{
         const graphics = sk.createGraphics(sk.width / cols, sk.height / rows);
         graphics.fill(180);
-        graphics.textFont(font);
+        if (currentFontFamily) graphics.textFont(currentFontFamily);
+        else graphics.textFont(font);
         graphics.textAlign(graphics.CENTER, graphics.CENTER);
         graphics.textSize(fontSize);
         graphics.text(char, graphics.width / 2, graphics.height / 2);
@@ -763,23 +769,24 @@ new (0, _p5Default.default)((sk)=>{
         (0, _settingsJs.setMessageChangeCallback)((newMessage)=>{
             letters = newMessage.split("").filter((char)=>char !== " ");
             rows = Math.ceil(letters.length / cols);
-            textures = [];
-            letters.forEach((char)=>textures.push(createTexture(char)));
+            recreateTextures();
             setupGrid();
         });
         (0, _settingsJs.setFontSizeChangeCallback)((newFontSize)=>{
             fontSize = newFontSize;
-            textures = [];
-            letters.forEach((char)=>textures.push(createTexture(char)));
+            recreateTextures();
         });
         (0, _settingsJs.setColsChangeCallback)((newCols)=>{
             cols = newCols;
             rows = Math.ceil(letters.length / cols);
-            textures = [];
-            letters.forEach((char)=>textures.push(createTexture(char)));
+            recreateTextures();
             setupGrid();
         });
-        letters.forEach((char)=>textures.push(createTexture(char)));
+        (0, _settingsJs.setFontChangeCallback)((newFontFamily)=>{
+            currentFontFamily = newFontFamily;
+            recreateTextures();
+        });
+        recreateTextures();
         setupGrid();
     };
     sk.draw = ()=>{
@@ -33454,16 +33461,25 @@ parcelHelpers.export(exports, "setMessage", ()=>setMessage);
 parcelHelpers.export(exports, "setFontSize", ()=>setFontSize);
 // Public method to set columns programmatically
 parcelHelpers.export(exports, "setCols", ()=>setCols);
+// Public method to set font family programmatically
+parcelHelpers.export(exports, "setFontFamily", ()=>setFontFamily);
+// Public method to set font change callback
+parcelHelpers.export(exports, "setFontChangeCallback", ()=>setFontChangeCallback);
+// Public method to get current font family
+parcelHelpers.export(exports, "getCurrentFontFamily", ()=>getCurrentFontFamily);
 let currentMessage = "DEFORM TYPE";
 let currentFontSize = 320;
 let currentCols = 4;
+let currentFontFamily = null;
 let onMessageChange = null;
 let onFontSizeChange = null;
 let onColsChange = null;
+let onFontChange = null;
 let panel = null;
 let messageInput = null;
 let fontSizeInput = null;
 let colsInput = null;
+let fontUploadInput = null;
 let isOpen = false;
 function initSettings() {
     setupEventListeners();
@@ -33473,6 +33489,7 @@ function setupEventListeners() {
     messageInput = document.getElementById("message-input");
     fontSizeInput = document.getElementById("font-size-input");
     colsInput = document.getElementById("cols-input");
+    fontUploadInput = document.getElementById("font-upload-input");
     const trigger = document.getElementById("settings-trigger");
     // Panel toggle
     trigger.addEventListener("click", togglePanel);
@@ -33493,6 +33510,8 @@ function setupEventListeners() {
         colsInput.value = currentCols;
         updateColsDisplay();
     }
+    // Font upload input
+    if (fontUploadInput) fontUploadInput.addEventListener("change", handleFontUpload);
     // Close panel when clicking outside
     document.addEventListener("click", (e)=>{
         if (isOpen && !panel.contains(e.target) && !trigger.contains(e.target)) closePanel();
@@ -33524,6 +33543,10 @@ function handleColsChange(e) {
     const newCols = parseInt(e.target.value);
     setCurrentCols(newCols);
 }
+function handleFontUpload(e) {
+    const file = e.target.files[0];
+    if (file) loadFontFromFile(file);
+}
 function setCurrentMessage(message) {
     currentMessage = message;
     // Notify the main application
@@ -33540,6 +33563,27 @@ function setCurrentCols(cols) {
     updateColsDisplay();
     // Notify the main application
     if (onColsChange) onColsChange(currentCols);
+}
+function setCurrentFontFamily(fontFamily) {
+    currentFontFamily = fontFamily;
+    // Notify the main application
+    if (onFontChange) onFontChange(currentFontFamily);
+}
+async function loadFontFromFile(file) {
+    if (!file.type.includes("font") && !file.name.endsWith(".ttf") && !file.name.endsWith(".otf")) {
+        alert("Please select a valid TTF or OTF font file.");
+        return;
+    }
+    const arrayBuffer = await file.arrayBuffer();
+    const fontFace = new FontFace(`UploadedFont-${Date.now()}`, arrayBuffer);
+    try {
+        await fontFace.load();
+        document.fonts.add(fontFace);
+        setCurrentFontFamily(fontFace.family);
+        console.log("Uploaded font family:", fontFace.family);
+    } catch (error) {
+        alert("Failed to load font: " + error.message);
+    }
 }
 function updateFontSizeDisplay() {
     if (fontSizeInput) fontSizeInput.value = currentFontSize;
@@ -33580,6 +33624,16 @@ function setCols(cols) {
     updateColsDisplay();
     if (onColsChange) onColsChange(currentCols);
 }
+function setFontFamily(fontFamily) {
+    currentFontFamily = fontFamily;
+    if (onFontChange) onFontChange(currentFontFamily);
+}
+function setFontChangeCallback(callback) {
+    onFontChange = callback;
+}
+function getCurrentFontFamily() {
+    return currentFontFamily;
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
@@ -33611,6 +33665,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["2aZ6o","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
+},{}]},["ekTNJ","8JWvp"], "8JWvp", "parcelRequire94c2", {}, "./", "/")
 
 //# sourceMappingURL=deform-type.c6396971.js.map

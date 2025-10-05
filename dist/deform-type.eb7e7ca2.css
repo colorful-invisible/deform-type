@@ -71,7 +71,7 @@
 .hint-text {
   color: #555;
   margin-left: .1rem;
-  font-size: 1rem;
+  font-size: .75rem;
 }
 
 .panel-toggle {
@@ -122,5 +122,21 @@
   flex-direction: column;
   gap: .5rem;
   display: flex;
+}
+
+#font-upload-input {
+  margin-bottom: .5rem;
+  padding: 0;
+}
+
+#font-upload-input::file-selector-button {
+  color: #fff;
+  cursor: pointer;
+  background: #000;
+  border: none;
+  border-radius: .25rem;
+  margin-right: .75rem;
+  padding: .5rem 1rem;
+  font-size: .75rem;
 }
 /*# sourceMappingURL=deform-type.eb7e7ca2.css.map */

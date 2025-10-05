@@ -1,11 +1,10 @@
 import p5 from "p5";
-import typefaceUrl from "../assets/fonts/BlackSla.otf";
+import typeface from "../assets/fonts/Syne-ExtraBold.ttf";
 import {
   initSettings,
   setMessageChangeCallback,
   setFontSizeChangeCallback,
   setColsChangeCallback,
-  setFontChangeCallback,
   getCurrentMessage,
   getCurrentFontSize,
   getCurrentCols,
@@ -24,26 +23,16 @@ new p5((sk) => {
     .filter((char) => char !== " ");
   let rows = Math.ceil(letters.length / cols);
   let fontSize = getCurrentFontSize();
-  let currentFontFamily = null;
   const handleSize = 24;
 
-  const recreateTextures = () => {
-    textures = [];
-    letters.forEach((char) => textures.push(createTexture(char)));
-  };
-
   sk.preload = () => {
-    font = sk.loadFont(typefaceUrl);
+    font = sk.loadFont(typeface);
   };
 
   const createTexture = (char) => {
     const graphics = sk.createGraphics(sk.width / cols, sk.height / rows);
     graphics.fill(180);
-    if (currentFontFamily) {
-      graphics.textFont(currentFontFamily);
-    } else {
-      graphics.textFont(font);
-    }
+    graphics.textFont(font);
     graphics.textAlign(graphics.CENTER, graphics.CENTER);
     graphics.textSize(fontSize);
     graphics.text(char, graphics.width / 2, graphics.height / 2);
@@ -74,24 +63,23 @@ new p5((sk) => {
     setMessageChangeCallback((newMessage) => {
       letters = newMessage.split("").filter((char) => char !== " ");
       rows = Math.ceil(letters.length / cols);
-      recreateTextures();
+      textures = [];
+      letters.forEach((char) => textures.push(createTexture(char)));
       setupGrid();
     });
     setFontSizeChangeCallback((newFontSize) => {
       fontSize = newFontSize;
-      recreateTextures();
+      textures = [];
+      letters.forEach((char) => textures.push(createTexture(char)));
     });
     setColsChangeCallback((newCols) => {
       cols = newCols;
       rows = Math.ceil(letters.length / cols);
-      recreateTextures();
+      textures = [];
+      letters.forEach((char) => textures.push(createTexture(char)));
       setupGrid();
     });
-    setFontChangeCallback((newFontFamily) => {
-      currentFontFamily = newFontFamily;
-      recreateTextures();
-    });
-    recreateTextures();
+    letters.forEach((char) => textures.push(createTexture(char)));
     setupGrid();
   };
 

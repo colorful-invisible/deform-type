@@ -2,13 +2,16 @@
 let currentMessage = "DEFORM TYPE";
 let currentFontSize = 320;
 let currentCols = 4;
+let currentFontFamily = null;
 let onMessageChange = null;
 let onFontSizeChange = null;
 let onColsChange = null;
+let onFontChange = null;
 let panel = null;
 let messageInput = null;
 let fontSizeInput = null;
 let colsInput = null;
+let fontUploadInput = null;
 let isOpen = false;
 
 // Initialize and set up listeners
@@ -21,6 +24,7 @@ function setupEventListeners() {
   messageInput = document.getElementById("message-input");
   fontSizeInput = document.getElementById("font-size-input");
   colsInput = document.getElementById("cols-input");
+  fontUploadInput = document.getElementById("font-upload-input");
 
   const trigger = document.getElementById("settings-trigger");
 
@@ -45,6 +49,11 @@ function setupEventListeners() {
     colsInput.addEventListener("input", handleColsChange);
     colsInput.value = currentCols;
     updateColsDisplay();
+  }
+
+  // Font upload input
+  if (fontUploadInput) {
+    fontUploadInput.addEventListener("change", handleFontUpload);
   }
 
   // Close panel when clicking outside
@@ -90,6 +99,13 @@ function handleColsChange(e) {
   setCurrentCols(newCols);
 }
 
+function handleFontUpload(e) {
+  const file = e.target.files[0];
+  if (file) {
+    loadFontFromFile(file);
+  }
+}
+
 function setCurrentMessage(message) {
   currentMessage = message;
 
@@ -116,6 +132,38 @@ function setCurrentCols(cols) {
   // Notify the main application
   if (onColsChange) {
     onColsChange(currentCols);
+  }
+}
+
+function setCurrentFontFamily(fontFamily) {
+  currentFontFamily = fontFamily;
+
+  // Notify the main application
+  if (onFontChange) {
+    onFontChange(currentFontFamily);
+  }
+}
+
+async function loadFontFromFile(file) {
+  if (
+    !file.type.includes("font") &&
+    !file.name.endsWith(".ttf") &&
+    !file.name.endsWith(".otf")
+  ) {
+    alert("Please select a valid TTF or OTF font file.");
+    return;
+  }
+
+  const arrayBuffer = await file.arrayBuffer();
+  const fontFace = new FontFace(`UploadedFont-${Date.now()}`, arrayBuffer);
+
+  try {
+    await fontFace.load();
+    document.fonts.add(fontFace);
+    setCurrentFontFamily(fontFace.family);
+    console.log("Uploaded font family:", fontFace.family);
+  } catch (error) {
+    alert("Failed to load font: " + error.message);
   }
 }
 
@@ -188,4 +236,22 @@ export function setCols(cols) {
   if (onColsChange) {
     onColsChange(currentCols);
   }
+}
+
+// Public method to set font family programmatically
+export function setFontFamily(fontFamily) {
+  currentFontFamily = fontFamily;
+  if (onFontChange) {
+    onFontChange(currentFontFamily);
+  }
+}
+
+// Public method to set font change callback
+export function setFontChangeCallback(callback) {
+  onFontChange = callback;
+}
+
+// Public method to get current font family
+export function getCurrentFontFamily() {
+  return currentFontFamily;
 }
